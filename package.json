@@ -1,0 +1,18 @@
+{
+  "name": "physics-110-website",
+  "version": "1.1.0",
+  "description": "Physics 110 Course Website - Introductory Mechanics",
+  "main": "index.html",
+  "scripts": {
+    "dev": "python -m http.server 8000",
+    "build": "echo 'No build process needed for static site'",
+    "deploy": "echo 'Deploy via GitHub Pages'"
+  },
+  "keywords": ["physics", "education", "course-website", "github-pages"],
+  "author": "Robert Sichomba",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RobertSichombaBob/physics-110-website"
+  }
+}

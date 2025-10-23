@@ -1,0 +1,30 @@
+title: "Physics 110: Introductory Mechanics"
+description: "Course website for Physics 110 - Robert Sichomba"
+baseurl: "/physics-110-website"
+url: "https://robertsichombabob.github.io/physics-110-website"
+
+# Build settings
+markdown: kramdown
+theme: jekyll-theme-minimal
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+
+# Course information
+instructor: "Robert Sichomba"
+email: "sichombarobertbob@email.com"
+university: "Physics Department"
+semester: "Fall 2024"
+course_code: "PHYS 110"
+course_title: "Introductory Mechanics"
+
+# Repository information
+github_username: "RobertSichombaBob"
+repository: "physics-110-website"
+
+# Exclude from processing
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor

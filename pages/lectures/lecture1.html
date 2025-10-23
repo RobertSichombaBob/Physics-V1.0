@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 1: Units and Vectors | Physics 110</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            background-color: #0a0a0a;
+            color: #ffffff;
+        }
+        
+        .card {
+            background-color: #1a1a1a;
+            border: 1px solid #2a2a2a;
+        }
+        
+        .btn-primary {
+            background-color: #1a1a1a;
+            color: #ffffff;
+            border: 1px solid #2a2a2a;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background-color: #3b82f6;
+            border-color: #3b82f6;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased">
+    <!-- Navigation -->
+    <nav class="bg-dark sticky top-0 z-50 border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex items-center justify-between">
+                <a href="../index.html#lectures" class="flex items-center space-x-3 text-accent hover:text-light transition-colors">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Back to Lectures</span>
+                </a>
+                <div class="text-lg font-semibold">Physics 110 v1.1</div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="card rounded-2xl p-8 mb-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between mb-6">
+                <div>
+                    <h1 class="text-4xl font-bold text-light mb-2">Chapter 1: Units, Physical Quantities, and Vectors</h1>
+                    <div class="flex flex-wrap gap-4 text-gray-400">
+                        <span><i class="fas fa-clock mr-2"></i>Duration: 90 minutes</span>
+                        <span><i class="fas fa-calendar mr-2"></i>Week 1</span>
+                        <span><i class="fas fa-file-pdf mr-2"></i>PDF Available</span>
+                    </div>
+                </div>
+                <span class="bg-accent text-dark px-4 py-2 rounded-full font-semibold mt-4 md:mt-0">Lecture 1</span>
+            </div>
+
+            <!-- Video Placeholder -->
+            <div class="mb-8">
+                <div class="aspect-w-16 aspect-h-9 bg-dark-card rounded-2xl flex items-center justify-center border border-gray-800 p-8">
+                    <div class="text-center">
+                        <i class="fas fa-play-circle text-accent text-6xl mb-4"></i>
+                        <p class="text-light font-semibold text-xl mb-2">Lecture Video</p>
+                        <p class="text-gray-400">Chapter 1: Units, Physical Quantities, and Vectors</p>
+                        <button class="btn-primary px-6 py-3 rounded-xl font-semibold mt-4">
+                            <i class="fas fa-play mr-2"></i>Play Video
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resources Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <a href="../slides/lecture1.pdf" class="card rounded-xl p-6 text-center hover:border-accent transition-all duration-200">
+                    <i class="fas fa-file-pdf text-red-400 text-3xl mb-3"></i>
+                    <div class="font-semibold text-light text-lg">Slides PDF</div>
+                    <div class="text-gray-400 text-sm">Download Presentation</div>
+                </a>
+                <a href="../notebooks/chapter1.html" class="card rounded-xl p-6 text-center hover:border-accent transition-all duration-200">
+                    <i class="fas fa-book text-green-400 text-3xl mb-3"></i>
+                    <div class="font-semibold text-light text-lg">Notebook</div>
+                    <div class="text-gray-400 text-sm">Interactive Code</div>
+                </a>
+                <a href="../homework/hw1.html" class="card rounded-xl p-6 text-center hover:border-accent transition-all duration-200">
+                    <i class="fas fa-tasks text-yellow-400 text-3xl mb-3"></i>
+                    <div class="font-semibold text-light text-lg">Homework 1</div>
+                    <div class="text-gray-400 text-sm">Problem Set</div>
+                </a>
+            </div>
+
+            <!-- Lecture Content -->
+            <div class="prose prose-invert max-w-none">
+                <h2 class="text-2xl font-bold text-light mb-4">Lecture Outline</h2>
+                <ul class="text-gray-300 space-y-2 mb-6">
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-accent mr-3"></i>
+                        Standards of length, mass, and time
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-accent mr-3"></i>
+                        Unit consistency and conversions
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-accent mr-3"></i>
+                        Uncertainty and significant figures
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-accent mr-3"></i>
+                        Vectors and vector addition
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-accent mr-3"></i>
+                        Components of vectors
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-accent mr-3"></i>
+                        Unit vectors
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-accent mr-3"></i>
+                        Scalar and vector products
+                    </li>
+                </ul>
+
+                <h2 class="text-2xl font-bold text-light mb-4">Key Concepts</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div class="bg-dark-card p-4 rounded-xl border border-gray-800">
+                        <div class="font-semibold text-accent mb-2">SI Units</div>
+                        <div class="text-gray-300 text-sm">meter (m), kilogram (kg), second (s)</div>
+                    </div>
+                    <div class="bg-dark-card p-4 rounded-xl border border-gray-800">
+                        <div class="font-semibold text-accent mb-2">Vector Operations</div>
+                        <div class="text-gray-300 text-sm">A + B = (Aₓ + Bₓ)î + (Aᵧ + Bᵧ)ĵ</div>
+                    </div>
+                </div>
+
+                <h2 class="text-2xl font-bold text-light mb-4">Learning Objectives</h2>
+                <div class="bg-dark-card p-6 rounded-xl border border-gray-800 mb-6">
+                    <ul class="text-gray-300 space-y-2">
+                        <li>• Convert physical quantities between different units</li>
+                        <li>• Understand and use significant figures in calculations</li>
+                        <li>• Perform vector addition and subtraction graphically and analytically</li>
+                        <li>• Calculate scalar and vector products</li>
+                        <li>• Use unit vectors to express vectors in component form</li>
+                    </ul>
+                </div>
+
+                <h2 class="text-2xl font-bold text-light mb-4">Additional Resources</h2>
+                <div class="flex flex-wrap gap-4">
+                    <a href="../solutions/chapter1.html" class="btn-primary px-6 py-3 rounded-xl font-semibold">
+                        <i class="fas fa-check-circle mr-2"></i>Solutions
+                    </a>
+                    <a href="../quizzes/quiz1.html" class="btn-primary px-6 py-3 rounded-xl font-semibold">
+                        <i class="fas fa-question-circle mr-2"></i>Quiz 1
+                    </a>
+                    <a href="https://github.com/RobertSichombaBob/physics-110-website" class="btn-primary px-6 py-3 rounded-xl font-semibold">
+                        <i class="fab fa-github mr-2"></i>Source Code
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-dark border-t border-gray-800 py-8">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-400">
+            <p>© 2024 Physics 110 v1.1 - Robert Sichomba</p>
+        </div>
+    </footer>
+</body>
+</html>
