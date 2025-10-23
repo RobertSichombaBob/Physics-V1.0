@@ -22,3 +22,8 @@ A comprehensive course website for Physics 110 built with GitHub Pages.
 
 ## Deployment
 The site is automatically deployed to GitHub Pages from the main branch.
+=======
+# Physics-V1.0
+Physics for everyone 
+
+2db3e5c65b0b2acf165cc50c9c8957c58baa1247
