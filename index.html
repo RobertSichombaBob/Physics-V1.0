@@ -15,9 +15,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Source+Serif+Pro:wght@400;600;700&display=swap" rel="stylesheet">
     
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="assets/css/style.css">
-    
     <script>
         tailwind.config = {
             theme: {
@@ -29,8 +26,10 @@
                         secondary: '#8b5cf6',
                         success: '#10b981',
                         warning: '#f59e0b',
+                        danger: '#ef4444',
                         'dark-card': '#1a1a1a',
                         'dark-hover': '#2a2a2a',
+                        'dark-border': '#2a2a2a',
                     },
                     fontFamily: {
                         'sans': ['Inter', 'system-ui', 'sans-serif'],
@@ -39,14 +38,314 @@
                     animation: {
                         'float': 'float 6s ease-in-out infinite',
                         'glow': 'glow 2s ease-in-out infinite alternate',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    backgroundImage: {
+                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
                     }
                 }
             }
         }
     </script>
+    
+    <style>
+        :root {
+            --primary-dark: #0a0a0a;
+            --card-dark: #1a1a1a;
+            --accent-blue: #3b82f6;
+            --accent-purple: #8b5cf6;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: var(--primary-dark);
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #3b82f6;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #2563eb;
+        }
+        
+        /* Card Styles */
+        .card {
+            background-color: var(--card-dark);
+            transition: all 0.3s ease;
+            border: 1px solid #2a2a2a;
+            border-radius: 1rem;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: #3b82f6;
+            box-shadow: 0 10px 30px -10px rgba(59, 130, 246, 0.3);
+        }
+        
+        /* Navigation Styles */
+        .nav-link {
+            position: relative;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: #3b82f6;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .nav-link.active::after {
+            width: 100%;
+        }
+        
+        /* Button Styles */
+        .btn-primary {
+            background-color: #1a1a1a;
+            color: #ffffff;
+            border: 1px solid #2a2a2a;
+            transition: all 0.3s ease;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .btn-primary:hover {
+            background-color: #3b82f6;
+            color: #ffffff;
+            border-color: #3b82f6;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background-color: transparent;
+            color: #ffffff;
+            border: 2px solid #ffffff;
+            transition: all 0.3s ease;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #ffffff;
+            color: #0a0a0a;
+        }
+        
+        /* Resource Card Styles */
+        .resource-card {
+            background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+            border: 1px solid #2a2a2a;
+            transition: all 0.3s ease;
+            border-radius: 0.75rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+        
+        .resource-card:hover {
+            border-color: #3b82f6;
+            transform: translateY(-3px);
+        }
+        
+        /* Lecture Timeline */
+        .lecture-timeline {
+            position: relative;
+        }
+        
+        .lecture-timeline::before {
+            content: '';
+            position: absolute;
+            left: 30px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, #3b82f6, #8b5cf6);
+        }
+        
+        .timeline-dot {
+            width: 60px;
+            height: 60px;
+            background: #1a1a1a;
+            border: 2px solid #3b82f6;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* Section Management */
+        .section-active {
+            display: block;
+            animation: fadeIn 0.6s ease-in;
+        }
+        
+        .section-hidden {
+            display: none;
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(20px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+        
+        @keyframes float {
+            0%, 100% { 
+                transform: translateY(0px); 
+            }
+            50% { 
+                transform: translateY(-10px); 
+            }
+        }
+        
+        @keyframes glow {
+            from { 
+                box-shadow: 0 0 5px #3b82f6; 
+            }
+            to { 
+                box-shadow: 0 0 20px #3b82f6, 0 0 30px #3b82f6; 
+            }
+        }
+        
+        /* Gradient Text */
+        .gradient-text {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* Badge Styles */
+        .badge {
+            background-color: #2a2a2a;
+            color: #ffffff;
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            display: inline-block;
+        }
+        
+        /* Announcement Styles */
+        .announcement-item {
+            padding: 1.5rem;
+            background: #1a1a1a;
+            border-radius: 0.75rem;
+            border: 1px solid #2a2a2a;
+            transition: all 0.3s ease;
+        }
+        
+        .announcement-item:hover {
+            border-color: #3b82f6;
+            transform: translateX(5px);
+        }
+        
+        /* Progress Bar */
+        .progress-bar {
+            height: 6px;
+            background-color: #2a2a2a;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+        
+        /* Code Block Styling */
+        .code-block {
+            background-color: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+        
+        /* Physics Diagram Container */
+        .physics-diagram {
+            background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+            border: 1px solid #2a2a2a;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Responsive Improvements */
+        @media (max-width: 768px) {
+            .lecture-timeline::before {
+                left: 25px;
+            }
+            
+            .timeline-dot {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .card {
+                padding: 1.5rem;
+            }
+            
+            .resource-card {
+                padding: 1rem;
+            }
+        }
+        
+        /* Focus States for Accessibility */
+        button:focus, a:focus {
+            outline: 2px solid #3b82f6;
+            outline-offset: 2px;
+        }
+    </style>
 </head>
 
-<body class="font-sans antialiased bg-dark text-light">
+<body class="font-sans antialiased">
     <!-- Navigation -->
     <nav class="bg-dark sticky top-0 z-50 border-b border-gray-800 backdrop-blur-sm bg-opacity-90">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -59,7 +358,7 @@
                         </div>
                         <div class="hidden sm:block">
                             <h1 class="text-xl font-bold text-light">Physics 110</h1>
-                            <p class="text-xs text-gray-400 -mt-1">v1.1</p>
+                            <p class="text-xs text-gray-400 -mt-1">Introductory Mechanics</p>
                         </div>
                     </a>
                 </div>
@@ -72,7 +371,7 @@
                     <a href="#homework" class="nav-link text-light hover:text-accent font-medium transition-colors duration-200">Homework</a>
                     <a href="#quizzes" class="nav-link text-light hover:text-accent font-medium transition-colors duration-200">Quizzes</a>
                     <a href="#resources" class="nav-link text-light hover:text-accent font-medium transition-colors duration-200">Resources</a>
-                    <a href="https://github.com/RobertSichombaBob/physics-110-website" class="btn-primary px-6 py-3 rounded-xl font-semibold transition-all duration-200">
+                    <a href="https://github.com/RobertSichombaBob/physics-110" class="btn-primary px-6 py-3 rounded-xl font-semibold transition-all duration-200">
                         <i class="fab fa-github mr-2"></i>Code
                     </a>
                 </div>
@@ -107,7 +406,7 @@
                 <a href="#resources" class="block text-light hover:text-accent font-medium text-lg py-3 border-b border-gray-800" onclick="router.navigateTo('resources')">
                     <i class="fas fa-tools mr-4 w-6"></i>Resources
                 </a>
-                <a href="https://github.com/RobertSichombaBob/physics-110-website" class="block btn-primary px-6 py-4 rounded-xl font-semibold text-center mt-4">
+                <a href="https://github.com/RobertSichombaBob/physics-110" class="block btn-primary px-6 py-4 rounded-xl font-semibold text-center mt-4">
                     <i class="fab fa-github mr-2"></i>View Code
                 </a>
             </div>
@@ -120,11 +419,17 @@
         <section id="home-section" class="section-active">
             <!-- Hero Section -->
             <div class="relative overflow-hidden">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+                <!-- Animated Background Elements -->
+                <div class="absolute inset-0 overflow-hidden">
+                    <div class="absolute -top-40 -right-32 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-10 animate-pulse-slow"></div>
+                    <div class="absolute -bottom-40 -left-32 w-80 h-80 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-10 animate-pulse-slow animation-delay-2000"></div>
+                </div>
+                
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 relative z-10">
                     <div class="text-center mb-16">
                         <div class="inline-flex items-center bg-dark-card backdrop-blur-sm rounded-full px-4 py-2 mb-6 border border-gray-800">
                             <div class="w-3 h-3 bg-accent rounded-full mr-3 animate-pulse"></div>
-                            <span class="text-sm font-medium text-light">Physics 110 v1.1 • Fall 2024</span>
+                            <span class="text-sm font-medium text-light">Physics 110 v1.1 • Fall 2024 • Instructor: Robert Sichomba</span>
                         </div>
                         
                         <h1 class="text-5xl md:text-6xl font-bold mb-6 leading-tight">
@@ -132,7 +437,7 @@
                         </h1>
                         
                         <p class="text-xl md:text-2xl text-gray-300 mb-8 leading-relaxed max-w-4xl mx-auto">
-                            Explore the fundamental principles of motion, forces, and energy through 
+                            Master the fundamental principles of motion, forces, and energy through 
                             interactive computational physics and real-world applications.
                         </p>
 
@@ -141,7 +446,7 @@
                                 <i class="fas fa-play-circle mr-3 group-hover:animate-pulse"></i>
                                 Start Learning
                             </button>
-                            <button onclick="router.navigateTo('resources')" class="border-2 border-light text-light px-8 py-4 rounded-xl font-bold hover:bg-light hover:text-dark transition-all duration-200 text-center text-lg">
+                            <button onclick="router.navigateTo('resources')" class="btn-secondary px-8 py-4 rounded-xl font-bold transition-all duration-200 text-center text-lg">
                                 <i class="fas fa-download mr-3"></i>
                                 Course Materials
                             </button>
@@ -169,7 +474,7 @@
                     </div>
 
                     <!-- Course Overview -->
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start mb-16">
                         <div>
                             <h2 class="text-3xl font-bold text-light mb-6">Course Overview</h2>
                             <div class="space-y-4">
@@ -236,16 +541,55 @@
                         <div class="announcement-item">
                             <div class="flex items-center mb-2">
                                 <span class="bg-accent text-dark px-3 py-1 rounded-full text-sm font-semibold mr-4">New</span>
-                                <span class="text-gray-400 text-sm">December 2024</span>
+                                <span class="text-gray-400 text-sm">December 18, 2024</span>
                             </div>
-                            <p class="text-light">Welcome to Physics 110 v1.1! All course materials are now available. Check the lectures section to get started.</p>
+                            <p class="text-light">Welcome to Physics 110 v1.1! All course materials are now available. Check the lectures section to get started with Chapter 1.</p>
                         </div>
                         <div class="announcement-item">
                             <div class="flex items-center mb-2">
                                 <span class="bg-secondary text-light px-3 py-1 rounded-full text-sm font-semibold mr-4">Update</span>
-                                <span class="text-gray-400 text-sm">December 2024</span>
+                                <span class="text-gray-400 text-sm">December 15, 2024</span>
                             </div>
-                            <p class="text-light">Interactive Jupyter notebooks for each chapter are now available in the notebooks section.</p>
+                            <p class="text-light">Interactive Jupyter notebooks for Chapters 1-3 are now available in the notebooks section with computational physics examples.</p>
+                        </div>
+                        <div class="announcement-item">
+                            <div class="flex items-center mb-2">
+                                <span class="bg-warning text-dark px-3 py-1 rounded-full text-sm font-semibold mr-4">Reminder</span>
+                                <span class="text-gray-400 text-sm">December 10, 2024</span>
+                            </div>
+                            <p class="text-light">Homework 1 is due next Monday. Make sure to check the solutions guide after submission.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress Tracker -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                <div class="card rounded-2xl p-8">
+                    <h2 class="text-3xl font-bold text-light mb-6">📊 Your Progress</h2>
+                    <div class="space-y-6">
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-light font-medium">Course Completion</span>
+                                <span class="text-light font-semibold">15%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 15%"></div>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-accent mb-2">2/14</div>
+                                <div class="text-gray-300">Lectures Completed</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-secondary mb-2">1/6</div>
+                                <div class="text-gray-300">Quizzes Passed</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-success mb-2">3/10</div>
+                                <div class="text-gray-300">Homework Submitted</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -257,7 +601,7 @@
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
                 <div class="text-center mb-16">
                     <h1 class="text-4xl font-bold text-light mb-4">Course Lectures</h1>
-                    <p class="text-xl text-gray-300">Complete lecture series following the textbook chapters</p>
+                    <p class="text-xl text-gray-300">Complete lecture series following the textbook chapters with videos, slides, and supplementary materials</p>
                 </div>
 
                 <div class="lecture-timeline space-y-12">
@@ -274,23 +618,31 @@
                             <p class="text-gray-300 mb-6">
                                 Standards and units, unit consistency and conversions, uncertainty and significant figures, vectors and vector addition.
                             </p>
-                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
                                 <a href="pages/lectures/lecture1.html" class="resource-card rounded-xl p-4 text-center hover:border-accent transition-all duration-200">
                                     <i class="fas fa-play-circle text-accent text-2xl mb-2"></i>
                                     <div class="font-semibold text-light">Video</div>
+                                    <div class="text-gray-400 text-sm">45 min</div>
                                 </a>
                                 <a href="pages/slides/lecture1.pdf" class="resource-card rounded-xl p-4 text-center hover:border-accent transition-all duration-200">
                                     <i class="fas fa-file-pdf text-red-400 text-2xl mb-2"></i>
                                     <div class="font-semibold text-light">Slides</div>
+                                    <div class="text-gray-400 text-sm">PDF</div>
                                 </a>
                                 <a href="pages/notebooks/chapter1.html" class="resource-card rounded-xl p-4 text-center hover:border-accent transition-all duration-200">
                                     <i class="fas fa-book text-green-400 text-2xl mb-2"></i>
                                     <div class="font-semibold text-light">Notebook</div>
+                                    <div class="text-gray-400 text-sm">Python</div>
                                 </a>
                                 <a href="pages/homework/hw1.html" class="resource-card rounded-xl p-4 text-center hover:border-accent transition-all duration-200">
                                     <i class="fas fa-tasks text-yellow-400 text-2xl mb-2"></i>
                                     <div class="font-semibold text-light">Homework</div>
+                                    <div class="text-gray-400 text-sm">5 problems</div>
                                 </a>
+                            </div>
+                            <div class="flex items-center text-gray-400 text-sm">
+                                <i class="fas fa-check-circle text-success mr-2"></i>
+                                <span>Completed on Dec 15, 2024</span>
                             </div>
                         </div>
                     </div>
@@ -306,30 +658,128 @@
                                 <span class="text-gray-400 mt-2 md:mt-0">Week 2</span>
                             </div>
                             <p class="text-gray-300 mb-6">
-                                Displacement, time, average velocity, instantaneous velocity, acceleration, motion with constant acceleration.
+                                Displacement, time, average velocity, instantaneous velocity, acceleration, motion with constant acceleration, free fall.
                             </p>
-                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
                                 <a href="pages/lectures/lecture2.html" class="resource-card rounded-xl p-4 text-center hover:border-accent transition-all duration-200">
                                     <i class="fas fa-play-circle text-accent text-2xl mb-2"></i>
                                     <div class="font-semibold text-light">Video</div>
+                                    <div class="text-gray-400 text-sm">52 min</div>
                                 </a>
                                 <a href="pages/slides/lecture2.pdf" class="resource-card rounded-xl p-4 text-center hover:border-accent transition-all duration-200">
                                     <i class="fas fa-file-pdf text-red-400 text-2xl mb-2"></i>
                                     <div class="font-semibold text-light">Slides</div>
+                                    <div class="text-gray-400 text-sm">PDF</div>
                                 </a>
                                 <a href="pages/notebooks/chapter2.html" class="resource-card rounded-xl p-4 text-center hover:border-accent transition-all duration-200">
                                     <i class="fas fa-book text-green-400 text-2xl mb-2"></i>
                                     <div class="font-semibold text-light">Notebook</div>
+                                    <div class="text-gray-400 text-sm">Python</div>
                                 </a>
                                 <a href="pages/homework/hw2.html" class="resource-card rounded-xl p-4 text-center hover:border-accent transition-all duration-200">
                                     <i class="fas fa-tasks text-yellow-400 text-2xl mb-2"></i>
                                     <div class="font-semibold text-light">Homework</div>
+                                    <div class="text-gray-400 text-sm">6 problems</div>
+                                </a>
+                            </div>
+                            <div class="flex items-center text-gray-400 text-sm">
+                                <i class="fas fa-check-circle text-success mr-2"></i>
+                                <span>Completed on Dec 22, 2024</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lecture 3 -->
+                    <div class="flex items-start space-x-6">
+                        <div class="timeline-dot">
+                            <span class="text-light font-bold">03</span>
+                        </div>
+                        <div class="card rounded-2xl p-8 flex-1">
+                            <div class="flex flex-col md:flex-row md:items-center justify-between mb-4">
+                                <h2 class="text-2xl font-bold text-light">Chapter 3: Motion in Two or Three Dimensions</h2>
+                                <span class="text-gray-400 mt-2 md:mt-0">Week 3</span>
+                            </div>
+                            <p class="text-gray-300 mb-6">
+                                Position and velocity vectors, acceleration vector, projectile motion, motion in a circle, relative velocity.
+                            </p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                                <a href="pages/lectures/lecture3.html" class="resource-card rounded-xl p-4 text-center hover:border-accent transition-all duration-200">
+                                    <i class="fas fa-play-circle text-accent text-2xl mb-2"></i>
+                                    <div class="font-semibold text-light">Video</div>
+                                    <div class="text-gray-400 text-sm">58 min</div>
+                                </a>
+                                <a href="pages/slides/lecture3.pdf" class="resource-card rounded-xl p-4 text-center hover:border-accent transition-all duration-200">
+                                    <i class="fas fa-file-pdf text-red-400 text-2xl mb-2"></i>
+                                    <div class="font-semibold text-light">Slides</div>
+                                    <div class="text-gray-400 text-sm">PDF</div>
+                                </a>
+                                <a href="pages/notebooks/chapter3.html" class="resource-card rounded-xl p-4 text-center hover:border-accent transition-all duration-200">
+                                    <i class="fas fa-book text-green-400 text-2xl mb-2"></i>
+                                    <div class="font-semibold text-light">Notebook</div>
+                                    <div class="text-gray-400 text-sm">Python</div>
+                                </a>
+                                <a href="pages/homework/hw3.html" class="resource-card rounded-xl p-4 text-center hover:border-accent transition-all duration-200">
+                                    <i class="fas fa-tasks text-yellow-400 text-2xl mb-2"></i>
+                                    <div class="font-semibold text-light">Homework</div>
+                                    <div class="text-gray-400 text-sm">7 problems</div>
                                 </a>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Add more lectures following textbook chapters -->
+                    <!-- Add more lectures following the same pattern -->
+                </div>
+
+                <!-- Upcoming Lectures -->
+                <div class="mt-16">
+                    <h2 class="text-3xl font-bold text-light mb-8 text-center">Upcoming Lectures</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="card rounded-2xl p-6 opacity-70">
+                            <div class="flex items-center mb-4">
+                                <div class="w-10 h-10 bg-dark-card rounded-full flex items-center justify-center border border-gray-700 mr-4">
+                                    <span class="text-light font-bold">04</span>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-semibold text-light">Newton's Laws of Motion</h3>
+                                    <p class="text-gray-400 text-sm">Week 4</p>
+                                </div>
+                            </div>
+                            <p class="text-gray-400 text-sm mb-4">Force and interactions, Newton's first law, Newton's second law, mass and weight.</p>
+                            <div class="text-gray-500 text-sm">
+                                <i class="fas fa-clock mr-2"></i>Available Jan 5, 2025
+                            </div>
+                        </div>
+                        <div class="card rounded-2xl p-6 opacity-70">
+                            <div class="flex items-center mb-4">
+                                <div class="w-10 h-10 bg-dark-card rounded-full flex items-center justify-center border border-gray-700 mr-4">
+                                    <span class="text-light font-bold">05</span>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-semibold text-light">Applying Newton's Laws</h3>
+                                    <p class="text-gray-400 text-sm">Week 5</p>
+                                </div>
+                            </div>
+                            <p class="text-gray-400 text-sm mb-4">Using Newton's first law, using Newton's second law, friction forces, dynamics of circular motion.</p>
+                            <div class="text-gray-500 text-sm">
+                                <i class="fas fa-clock mr-2"></i>Available Jan 12, 2025
+                            </div>
+                        </div>
+                        <div class="card rounded-2xl p-6 opacity-70">
+                            <div class="flex items-center mb-4">
+                                <div class="w-10 h-10 bg-dark-card rounded-full flex items-center justify-center border border-gray-700 mr-4">
+                                    <span class="text-light font-bold">06</span>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-semibold text-light">Work and Kinetic Energy</h3>
+                                    <p class="text-gray-400 text-sm">Week 6</p>
+                                </div>
+                            </div>
+                            <p class="text-gray-400 text-sm mb-4">Work, kinetic energy, work and kinetic energy, power.</p>
+                            <div class="text-gray-500 text-sm">
+                                <i class="fas fa-clock mr-2"></i>Available Jan 19, 2025
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -339,10 +789,10 @@
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
                 <div class="text-center mb-16">
                     <h1 class="text-4xl font-bold text-light mb-4">Jupyter Notebooks</h1>
-                    <p class="text-xl text-gray-300">Interactive computational physics notebooks with Python</p>
+                    <p class="text-xl text-gray-300">Interactive computational physics notebooks with Python simulations and visualizations</p>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
                     <!-- Notebook 1 -->
                     <div class="card rounded-2xl p-6">
                         <div class="w-14 h-14 bg-dark-card rounded-2xl flex items-center justify-center mb-4 border border-gray-800">
@@ -374,7 +824,7 @@
                         </div>
                         <h3 class="text-xl font-bold text-light mb-3">Chapter 2: 1D Motion Simulation</h3>
                         <p class="text-gray-300 mb-4">
-                            Simulate and visualize motion with constant acceleration using numerical methods.
+                            Simulate and visualize motion with constant acceleration using numerical methods and differential equations.
                         </p>
                         <div class="flex flex-wrap gap-2 mb-4">
                             <span class="badge">SciPy</span>
@@ -391,13 +841,849 @@
                         </div>
                     </div>
 
-                    <!-- Add more notebooks -->
+                    <!-- Notebook 3 -->
+                    <div class="card rounded-2xl p-6">
+                        <div class="w-14 h-14 bg-dark-card rounded-2xl flex items-center justify-center mb-4 border border-gray-800">
+                            <i class="fas fa-project-diagram text-accent text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-light mb-3">Chapter 3: Projectile Motion</h3>
+                        <p class="text-gray-300 mb-4">
+                            Analyze 2D projectile motion with air resistance and different launch conditions using numerical integration.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="badge">Differential Eqs</span>
+                            <span class="badge">Trajectory</span>
+                            <span class="badge">Visualization</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <a href="pages/notebooks/chapter3.html" class="text-accent hover:text-light font-semibold flex items-center group">
+                                Open Notebook <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                            </a>
+                            <a href="https://github.com/RobertSichombaBob/physics-110-website/blob/main/code/notebooks/chapter3.ipynb" class="text-gray-400 hover:text-light transition-colors">
+                                <i class="fab fa-github text-xl"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Notebook 4 -->
+                    <div class="card rounded-2xl p-6">
+                        <div class="w-14 h-14 bg-dark-card rounded-2xl flex items-center justify-center mb-4 border border-gray-800">
+                            <i class="fas fa-weight-hanging text-secondary text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-light mb-3">Chapter 4: Force Diagrams</h3>
+                        <p class="text-gray-300 mb-4">
+                            Interactive force diagram visualizations and equilibrium calculations for various physical systems.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="badge">Free-body Diagrams</span>
+                            <span class="badge">Equilibrium</span>
+                            <span class="badge">Forces</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <a href="pages/notebooks/chapter4.html" class="text-accent hover:text-light font-semibold flex items-center group">
+                                Open Notebook <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                            </a>
+                            <a href="https://github.com/RobertSichombaBob/physics-110-website/blob/main/code/notebooks/chapter4.ipynb" class="text-gray-400 hover:text-light transition-colors">
+                                <i class="fab fa-github text-xl"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Notebook 5 -->
+                    <div class="card rounded-2xl p-6">
+                        <div class="w-14 h-14 bg-dark-card rounded-2xl flex items-center justify-center mb-4 border border-gray-800">
+                            <i class="fas fa-cogs text-accent text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-light mb-3">Chapter 5: Friction Models</h3>
+                        <p class="text-gray-300 mb-4">
+                            Model static and kinetic friction in various scenarios and analyze their effects on motion.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="badge">Friction</span>
+                            <span class="badge">Coefficients</span>
+                            <span class="badge">Motion Analysis</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <a href="pages/notebooks/chapter5.html" class="text-accent hover:text-light font-semibold flex items-center group">
+                                Open Notebook <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                            </a>
+                            <a href="https://github.com/RobertSichombaBob/physics-110-website/blob/main/code/notebooks/chapter5.ipynb" class="text-gray-400 hover:text-light transition-colors">
+                                <i class="fab fa-github text-xl"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Notebook 6 -->
+                    <div class="card rounded-2xl p-6">
+                        <div class="w-14 h-14 bg-dark-card rounded-2xl flex items-center justify-center mb-4 border border-gray-800">
+                            <i class="fas fa-sync-alt text-secondary text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-light mb-3">Chapter 6: Circular Motion</h3>
+                        <p class="text-gray-300 mb-4">
+                            Simulate uniform and non-uniform circular motion with centripetal acceleration and force analysis.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="badge">Circular Motion</span>
+                            <span class="badge">Centripetal Force</span>
+                            <span class="badge">Angular Velocity</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <a href="pages/notebooks/chapter6.html" class="text-accent hover:text-light font-semibold flex items-center group">
+                                Open Notebook <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                            </a>
+                            <a href="https://github.com/RobertSichombaBob/physics-110-website/blob/main/code/notebooks/chapter6.ipynb" class="text-gray-400 hover:text-light transition-colors">
+                                <i class="fab fa-github text-xl"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notebook Features -->
+                <div class="card rounded-2xl p-8">
+                    <h2 class="text-2xl font-bold text-light mb-6">Notebook Features</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="text-lg font-semibold text-light mb-4">Interactive Simulations</h3>
+                            <ul class="space-y-3 text-gray-300">
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-accent mr-3 mt-1"></i>
+                                    <span>Adjust parameters in real-time and see immediate results</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-accent mr-3 mt-1"></i>
+                                    <span>Visualize physical concepts with animated diagrams</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-accent mr-3 mt-1"></i>
+                                    <span>Interactive graphs that respond to user input</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-light mb-4">Computational Tools</h3>
+                            <ul class="space-y-3 text-gray-300">
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-accent mr-3 mt-1"></i>
+                                    <span>Numerical solutions to differential equations</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-accent mr-3 mt-1"></i>
+                                    <span>Data analysis and curve fitting capabilities</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-accent mr-3 mt-1"></i>
+                                    <span>Symbolic mathematics for analytical solutions</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- Add Homework, Quizzes, and Resources sections following similar patterns -->
+        <!-- Homework Section -->
+        <section id="homework-section" class="section-hidden">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+                <div class="text-center mb-16">
+                    <h1 class="text-4xl font-bold text-light mb-4">Homework Assignments</h1>
+                    <p class="text-xl text-gray-300">Weekly problem sets to reinforce concepts and develop problem-solving skills</p>
+                </div>
 
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+                    <!-- Homework 1 -->
+                    <div class="card rounded-2xl p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 bg-dark-card rounded-xl flex items-center justify-center border border-gray-800">
+                                <span class="text-light font-bold">01</span>
+                            </div>
+                            <span class="bg-success text-dark px-3 py-1 rounded-full text-sm font-semibold">Submitted</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-light mb-3">Vectors and Units</h3>
+                        <p class="text-gray-300 mb-4">
+                            Problems covering vector operations, unit conversions, and significant figures.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="badge">5 Problems</span>
+                            <span class="badge">Due: Dec 18</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <a href="pages/homework/hw1.html" class="text-accent hover:text-light font-semibold flex items-center group">
+                                View Assignment <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                            </a>
+                            <a href="pages/solutions/sol1.html" class="text-gray-400 hover:text-light transition-colors">
+                                <i class="fas fa-check-circle text-xl"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Homework 2 -->
+                    <div class="card rounded-2xl p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 bg-dark-card rounded-xl flex items-center justify-center border border-gray-800">
+                                <span class="text-light font-bold">02</span>
+                            </div>
+                            <span class="bg-success text-dark px-3 py-1 rounded-full text-sm font-semibold">Submitted</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-light mb-3">1D Kinematics</h3>
+                        <p class="text-gray-300 mb-4">
+                            Problems on constant acceleration motion, free fall, and graphical analysis.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="badge">6 Problems</span>
+                            <span class="badge">Due: Dec 25</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <a href="pages/homework/hw2.html" class="text-accent hover:text-light font-semibold flex items-center group">
+                                View Assignment <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                            </a>
+                            <a href="pages/solutions/sol2.html" class="text-gray-400 hover:text-light transition-colors">
+                                <i class="fas fa-check-circle text-xl"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Homework 3 -->
+                    <div class="card rounded-2xl p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 bg-dark-card rounded-xl flex items-center justify-center border border-gray-800">
+                                <span class="text-light font-bold">03</span>
+                            </div>
+                            <span class="bg-warning text-dark px-3 py-1 rounded-full text-sm font-semibold">In Progress</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-light mb-3">2D Kinematics</h3>
+                        <p class="text-gray-300 mb-4">
+                            Projectile motion problems with and without air resistance, relative velocity.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="badge">7 Problems</span>
+                            <span class="badge">Due: Jan 1</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <a href="pages/homework/hw3.html" class="text-accent hover:text-light font-semibold flex items-center group">
+                                View Assignment <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                            </a>
+                            <a href="pages/solutions/sol3.html" class="text-gray-400 hover:text-light transition-colors">
+                                <i class="fas fa-lock text-xl"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Homework 4 -->
+                    <div class="card rounded-2xl p-6 opacity-70">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 bg-dark-card rounded-xl flex items-center justify-center border border-gray-800">
+                                <span class="text-light font-bold">04</span>
+                            </div>
+                            <span class="bg-gray-600 text-light px-3 py-1 rounded-full text-sm font-semibold">Upcoming</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-light mb-3">Newton's Laws</h3>
+                        <p class="text-gray-300 mb-4">
+                            Force diagrams, Newton's laws applications, and equilibrium problems.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="badge">8 Problems</span>
+                            <span class="badge">Due: Jan 8</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <a href="pages/homework/hw4.html" class="text-accent hover:text-light font-semibold flex items-center group">
+                                View Assignment <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                            </a>
+                            <a href="pages/solutions/sol4.html" class="text-gray-400 hover:text-light transition-colors">
+                                <i class="fas fa-lock text-xl"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Homework 5 -->
+                    <div class="card rounded-2xl p-6 opacity-70">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 bg-dark-card rounded-xl flex items-center justify-center border border-gray-800">
+                                <span class="text-light font-bold">05</span>
+                            </div>
+                            <span class="bg-gray-600 text-light px-3 py-1 rounded-full text-sm font-semibold">Upcoming</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-light mb-3">Friction and Dynamics</h3>
+                        <p class="text-gray-300 mb-4">
+                            Problems involving static and kinetic friction, inclined planes, and connected objects.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="badge">7 Problems</span>
+                            <span class="badge">Due: Jan 15</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <a href="pages/homework/hw5.html" class="text-accent hover:text-light font-semibold flex items-center group">
+                                View Assignment <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                            </a>
+                            <a href="pages/solutions/sol5.html" class="text-gray-400 hover:text-light transition-colors">
+                                <i class="fas fa-lock text-xl"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Homework 6 -->
+                    <div class="card rounded-2xl p-6 opacity-70">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 bg-dark-card rounded-xl flex items-center justify-center border border-gray-800">
+                                <span class="text-light font-bold">06</span>
+                            </div>
+                            <span class="bg-gray-600 text-light px-3 py-1 rounded-full text-sm font-semibold">Upcoming</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-light mb-3">Circular Motion</h3>
+                        <p class="text-gray-300 mb-4">
+                            Uniform circular motion, centripetal force, banked curves, and non-uniform circular motion.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="badge">6 Problems</span>
+                            <span class="badge">Due: Jan 22</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <a href="pages/homework/hw6.html" class="text-accent hover:text-light font-semibold flex items-center group">
+                                View Assignment <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                            </a>
+                            <a href="pages/solutions/sol6.html" class="text-gray-400 hover:text-light transition-colors">
+                                <i class="fas fa-lock text-xl"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Homework Guidelines -->
+                <div class="card rounded-2xl p-8">
+                    <h2 class="text-2xl font-bold text-light mb-6">Homework Guidelines</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="text-lg font-semibold text-light mb-4">Submission Requirements</h3>
+                            <ul class="space-y-3 text-gray-300">
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-accent mr-3 mt-1"></i>
+                                    <span>Submit PDF solutions through the course portal</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-accent mr-3 mt-1"></i>
+                                    <span>Show all work clearly and systematically</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-accent mr-3 mt-1"></i>
+                                    <span>Box your final answers for each problem</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-accent mr-3 mt-1"></i>
+                                    <span>Include units in all calculations and answers</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-light mb-4">Grading Policy</h3>
+                            <ul class="space-y-3 text-gray-300">
+                                <li class="flex items-start">
+                                    <i class="fas fa-percentage text-accent mr-3 mt-1"></i>
+                                    <span>Homework counts for 30% of your final grade</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-clock text-accent mr-3 mt-1"></i>
+                                    <span>Late submissions accepted with 10% penalty per day</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-users text-accent mr-3 mt-1"></i>
+                                    <span>Collaboration allowed but write solutions independently</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-redo text-accent mr-3 mt-1"></i>
+                                    <span>One problem may be resubmitted per assignment</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quizzes Section -->
+        <section id="quizzes-section" class="section-hidden">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+                <div class="text-center mb-16">
+                    <h1 class="text-4xl font-bold text-light mb-4">Quizzes & Assessments</h1>
+                    <p class="text-xl text-gray-300">Weekly quizzes to test your understanding and prepare for exams</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+                    <!-- Quiz 1 -->
+                    <div class="card rounded-2xl p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 bg-dark-card rounded-xl flex items-center justify-center border border-gray-800">
+                                <span class="text-light font-bold">01</span>
+                            </div>
+                            <span class="bg-success text-dark px-3 py-1 rounded-full text-sm font-semibold">92%</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-light mb-3">Units & Vectors</h3>
+                        <p class="text-gray-300 mb-4">
+                            Covers unit conversions, vector operations, and significant figures.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="badge">15 Questions</span>
+                            <span class="badge">30 Minutes</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <a href="pages/quizzes/quiz1.html" class="text-accent hover:text-light font-semibold flex items-center group">
+                                Review Quiz <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                            </a>
+                            <a href="pages/quizzes/quiz1.html" class="text-gray-400 hover:text-light transition-colors">
+                                <i class="fas fa-chart-bar text-xl"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Quiz 2 -->
+                    <div class="card rounded-2xl p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 bg-dark-card rounded-xl flex items-center justify-center border border-gray-800">
+                                <span class="text-light font-bold">02</span>
+                            </div>
+                            <span class="bg-success text-dark px-3 py-1 rounded-full text-sm font-semibold">85%</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-light mb-3">1D Kinematics</h3>
+                        <p class="text-gray-300 mb-4">
+                            Constant acceleration, free fall, and graphical analysis of motion.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="badge">20 Questions</span>
+                            <span class="badge">45 Minutes</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <a href="pages/quizzes/quiz2.html" class="text-accent hover:text-light font-semibold flex items-center group">
+                                Review Quiz <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                            </a>
+                            <a href="pages/quizzes/quiz2.html" class="text-gray-400 hover:text-light transition-colors">
+                                <i class="fas fa-chart-bar text-xl"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Quiz 3 -->
+                    <div class="card rounded-2xl p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 bg-dark-card rounded-xl flex items-center justify-center border border-gray-800">
+                                <span class="text-light font-bold">03</span>
+                            </div>
+                            <span class="bg-warning text-dark px-3 py-1 rounded-full text-sm font-semibold">Available</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-light mb-3">2D Kinematics</h3>
+                        <p class="text-gray-300 mb-4">
+                            Projectile motion, relative velocity, and vector components.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="badge">18 Questions</span>
+                            <span class="badge">40 Minutes</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <a href="pages/quizzes/quiz3.html" class="text-accent hover:text-light font-semibold flex items-center group">
+                                Take Quiz <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                            </a>
+                            <a href="pages/quizzes/quiz3.html" class="text-gray-400 hover:text-light transition-colors">
+                                <i class="fas fa-play-circle text-xl"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Quiz 4 -->
+                    <div class="card rounded-2xl p-6 opacity-70">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 bg-dark-card rounded-xl flex items-center justify-center border border-gray-800">
+                                <span class="text-light font-bold">04</span>
+                            </div>
+                            <span class="bg-gray-600 text-light px-3 py-1 rounded-full text-sm font-semibold">Locked</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-light mb-3">Newton's Laws</h3>
+                        <p class="text-gray-300 mb-4">
+                            Force diagrams, Newton's laws applications, and equilibrium.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="badge">22 Questions</span>
+                            <span class="badge">50 Minutes</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <a href="pages/quizzes/quiz4.html" class="text-accent hover:text-light font-semibold flex items-center group">
+                                Take Quiz <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                            </a>
+                            <a href="pages/quizzes/quiz4.html" class="text-gray-400 hover:text-light transition-colors">
+                                <i class="fas fa-lock text-xl"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Quiz 5 -->
+                    <div class="card rounded-2xl p-6 opacity-70">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 bg-dark-card rounded-xl flex items-center justify-center border border-gray-800">
+                                <span class="text-light font-bold">05</span>
+                            </div>
+                            <span class="bg-gray-600 text-light px-3 py-1 rounded-full text-sm font-semibold">Locked</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-light mb-3">Friction & Dynamics</h3>
+                        <p class="text-gray-300 mb-4">
+                            Static and kinetic friction, inclined planes, and connected systems.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="badge">20 Questions</span>
+                            <span class="badge">45 Minutes</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <a href="pages/quizzes/quiz5.html" class="text-accent hover:text-light font-semibold flex items-center group">
+                                Take Quiz <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                            </a>
+                            <a href="pages/quizzes/quiz5.html" class="text-gray-400 hover:text-light transition-colors">
+                                <i class="fas fa-lock text-xl"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Quiz 6 -->
+                    <div class="card rounded-2xl p-6 opacity-70">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 bg-dark-card rounded-xl flex items-center justify-center border border-gray-800">
+                                <span class="text-light font-bold">06</span>
+                            </div>
+                            <span class="bg-gray-600 text-light px-3 py-1 rounded-full text-sm font-semibold">Locked</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-light mb-3">Circular Motion</h3>
+                        <p class="text-gray-300 mb-4">
+                            Uniform circular motion, centripetal force, and rotational dynamics.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="badge">18 Questions</span>
+                            <span class="badge">40 Minutes</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <a href="pages/quizzes/quiz6.html" class="text-accent hover:text-light font-semibold flex items-center group">
+                                Take Quiz <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                            </a>
+                            <a href="pages/quizzes/quiz6.html" class="text-gray-400 hover:text-light transition-colors">
+                                <i class="fas fa-lock text-xl"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quiz Performance -->
+                <div class="card rounded-2xl p-8 mb-16">
+                    <h2 class="text-2xl font-bold text-light mb-6">Quiz Performance</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="text-lg font-semibold text-light mb-4">Overall Statistics</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-light">Average Score</span>
+                                        <span class="text-light font-semibold">88.5%</span>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 88.5%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-light">Completion Rate</span>
+                                        <span class="text-light font-semibold">100%</span>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 100%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-light">Time Spent</span>
+                                        <span class="text-light font-semibold">2.3 hours</span>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 65%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-light mb-4">Topic Mastery</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-light">Vectors & Units</span>
+                                        <span class="text-light font-semibold">92%</span>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 92%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-light">1D Kinematics</span>
+                                        <span class="text-light font-semibold">85%</span>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 85%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-light">2D Kinematics</span>
+                                        <span class="text-light font-semibold">--</span>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quiz Guidelines -->
+                <div class="card rounded-2xl p-8">
+                    <h2 class="text-2xl font-bold text-light mb-6">Quiz Guidelines</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="text-lg font-semibold text-light mb-4">Taking Quizzes</h3>
+                            <ul class="space-y-3 text-gray-300">
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-accent mr-3 mt-1"></i>
+                                    <span>Quizzes are timed and must be completed in one session</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-accent mr-3 mt-1"></i>
+                                    <span>You can pause and resume within the time limit</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-accent mr-3 mt-1"></i>
+                                    <span>Use a calculator and scratch paper for calculations</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-accent mr-3 mt-1"></i>
+                                    <span>Review your answers before submitting</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-light mb-4">Grading & Retakes</h3>
+                            <ul class="space-y-3 text-gray-300">
+                                <li class="flex items-start">
+                                    <i class="fas fa-percentage text-accent mr-3 mt-1"></i>
+                                    <span>Quizzes count for 20% of your final grade</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-redo text-accent mr-3 mt-1"></i>
+                                    <span>One retake allowed per quiz (highest score counts)</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-eye text-accent mr-3 mt-1"></i>
+                                    <span>Detailed solutions available after submission</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-calendar text-accent mr-3 mt-1"></i>
+                                    <span>Quizzes must be completed by Sunday midnight</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Resources Section -->
+        <section id="resources-section" class="section-hidden">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+                <div class="text-center mb-16">
+                    <h1 class="text-4xl font-bold text-light mb-4">Course Resources</h1>
+                    <p class="text-xl text-gray-300">Additional materials, tools, and references to support your learning</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+                    <!-- Textbook -->
+                    <div class="card rounded-2xl p-6">
+                        <div class="w-14 h-14 bg-dark-card rounded-2xl flex items-center justify-center mb-4 border border-gray-800">
+                            <i class="fas fa-book text-accent text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-light mb-3">Textbook</h3>
+                        <p class="text-gray-300 mb-4">
+                            University Physics with Modern Physics (15th Edition) - The primary textbook for this course.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="badge">PDF</span>
+                            <span class="badge">Solutions</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <a href="resources/textbook.html" class="text-accent hover:text-light font-semibold flex items-center group">
+                                Access Textbook <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                            </a>
+                            <a href="resources/textbook.html" class="text-gray-400 hover:text-light transition-colors">
+                                <i class="fas fa-external-link-alt text-xl"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Formula Sheet -->
+                    <div class="card rounded-2xl p-6">
+                        <div class="w-14 h-14 bg-dark-card rounded-2xl flex items-center justify-center mb-4 border border-gray-800">
+                            <i class="fas fa-file-alt text-secondary text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-light mb-3">Formula Sheet</h3>
+                        <p class="text-gray-300 mb-4">
+                            Comprehensive collection of all formulas, constants, and conversion factors used in the course.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="badge">PDF</span>
+                            <span class="badge">Printable</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <a href="resources/formula-sheet.html" class="text-accent hover:text-light font-semibold flex items-center group">
+                                Download <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                            </a>
+                            <a href="resources/formula-sheet.html" class="text-gray-400 hover:text-light transition-colors">
+                                <i class="fas fa-download text-xl"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Python Setup -->
+                    <div class="card rounded-2xl p-6">
+                        <div class="w-14 h-14 bg-dark-card rounded-2xl flex items-center justify-center mb-4 border border-gray-800">
+                            <i class="fas fa-laptop-code text-accent text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-light mb-3">Python Setup Guide</h3>
+                        <p class="text-gray-300 mb-4">
+                            Step-by-step instructions for installing Python, Jupyter, and required libraries for computational physics.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="badge">Tutorial</span>
+                            <span class="badge">Installation</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <a href="resources/python-setup.html" class="text-accent hover:text-light font-semibold flex items-center group">
+                                View Guide <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                            </a>
+                            <a href="resources/python-setup.html" class="text-gray-400 hover:text-light transition-colors">
+                                <i class="fas fa-code text-xl"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Video Library -->
+                    <div class="card rounded-2xl p-6">
+                        <div class="w-14 h-14 bg-dark-card rounded-2xl flex items-center justify-center mb-4 border border-gray-800">
+                            <i class="fas fa-video text-secondary text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-light mb-3">Video Library</h3>
+                        <p class="text-gray-300 mb-4">
+                            Additional video explanations, demonstrations, and solved examples for challenging topics.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="badge">Videos</span>
+                            <span class="badge">Tutorials</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <a href="resources/video-library.html" class="text-accent hover:text-light font-semibold flex items-center group">
+                                Browse Videos <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                            </a>
+                            <a href="resources/video-library.html" class="text-gray-400 hover:text-light transition-colors">
+                                <i class="fas fa-play-circle text-xl"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Office Hours -->
+                    <div class="card rounded-2xl p-6">
+                        <div class="w-14 h-14 bg-dark-card rounded-2xl flex items-center justify-center mb-4 border border-gray-800">
+                            <i class="fas fa-clock text-accent text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-light mb-3">Office Hours</h3>
+                        <p class="text-gray-300 mb-4">
+                            Schedule and links for virtual office hours with the instructor and teaching assistants.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="badge">Schedule</span>
+                            <span class="badge">Zoom</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <a href="resources/office-hours.html" class="text-accent hover:text-light font-semibold flex items-center group">
+                                View Schedule <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                            </a>
+                            <a href="resources/office-hours.html" class="text-gray-400 hover:text-light transition-colors">
+                                <i class="fas fa-calendar text-xl"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Discussion Forum -->
+                    <div class="card rounded-2xl p-6">
+                        <div class="w-14 h-14 bg-dark-card rounded-2xl flex items-center justify-center mb-4 border border-gray-800">
+                            <i class="fas fa-comments text-secondary text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-light mb-3">Discussion Forum</h3>
+                        <p class="text-gray-300 mb-4">
+                            Ask questions, share insights, and collaborate with classmates on course material.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="badge">Community</span>
+                            <span class="badge">Q&A</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <a href="resources/forum.html" class="text-accent hover:text-light font-semibold flex items-center group">
+                                Join Discussion <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                            </a>
+                            <a href="resources/forum.html" class="text-gray-400 hover:text-light transition-colors">
+                                <i class="fas fa-users text-xl"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional Resources -->
+                <div class="card rounded-2xl p-8">
+                    <h2 class="text-2xl font-bold text-light mb-6">Additional Learning Resources</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="text-lg font-semibold text-light mb-4">External References</h3>
+                            <ul class="space-y-3 text-gray-300">
+                                <li class="flex items-start">
+                                    <i class="fas fa-external-link-alt text-accent mr-3 mt-1"></i>
+                                    <a href="#" class="hover:text-accent transition-colors">PhET Interactive Simulations</a>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-external-link-alt text-accent mr-3 mt-1"></i>
+                                    <a href="#" class="hover:text-accent transition-colors">Khan Academy Physics</a>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-external-link-alt text-accent mr-3 mt-1"></i>
+                                    <a href="#" class="hover:text-accent transition-colors">MIT OpenCourseWare - Physics I</a>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-external-link-alt text-accent mr-3 mt-1"></i>
+                                    <a href="#" class="hover:text-accent transition-colors">Wolfram Alpha for Physics</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-light mb-4">Software Tools</h3>
+                            <ul class="space-y-3 text-gray-300">
+                                <li class="flex items-start">
+                                    <i class="fas fa-download text-accent mr-3 mt-1"></i>
+                                    <a href="#" class="hover:text-accent transition-colors">Anaconda Python Distribution</a>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-download text-accent mr-3 mt-1"></i>
+                                    <a href="#" class="hover:text-accent transition-colors">Google Colab</a>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-download text-accent mr-3 mt-1"></i>
+                                    <a href="#" class="hover:text-accent transition-colors">Desmos Graphing Calculator</a>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-download text-accent mr-3 mt-1"></i>
+                                    <a href="#" class="hover:text-accent transition-colors">VS Code with Python Extension</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -412,12 +1698,11 @@
                         </div>
                         <div>
                             <h3 class="text-lg font-bold text-light">Physics 110</h3>
-                            <p class="text-gray-400 text-sm">v1.1</p>
+                            <p class="text-gray-400 text-sm">Introductory Mechanics</p>
                         </div>
                     </div>
                     <p class="text-gray-400 text-sm">
-                        Introductory Mechanics Course<br>
-                        Computational Physics Approach
+                        A comprehensive course in classical mechanics with computational physics integration.
                     </p>
                 </div>
 
@@ -438,7 +1723,7 @@
                     <ul class="space-y-2 text-sm text-gray-400">
                         <li><a href="#quizzes" class="hover:text-accent transition-colors" onclick="router.navigateTo('quizzes')">Quizzes</a></li>
                         <li><a href="#resources" class="hover:text-accent transition-colors" onclick="router.navigateTo('resources')">All Resources</a></li>
-                        <li><a href="https://github.com/RobertSichombaBob/physics-110-website" class="hover:text-accent transition-colors">GitHub Repo</a></li>
+                        <li><a href="https://github.com/RobertSichombaBob/physics-110" class="hover:text-accent transition-colors">GitHub Repo</a></li>
                         <li><a href="pages/solutions/index.html" class="hover:text-accent transition-colors">Solutions</a></li>
                     </ul>
                 </div>
@@ -457,41 +1742,200 @@
                             <i class="fas fa-envelope text-light"></i>
                         </a>
                     </div>
+                    <div class="mt-4 text-sm text-gray-400">
+                        <p>Instructor: Robert Sichomba</p>
+                        <p>Email: sichombarobertbob@email.com</p>
+                    </div>
                 </div>
             </div>
 
             <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400 text-sm">
-                <p>© 2024 Physics 110 v1.1 - Robert Sichomba. Built with GitHub Pages.</p>
+                <p>© 2024 Physics 110: Introductory Mechanics - Robert Sichomba. This work is licensed under a <a href="#" class="hover:text-accent transition-colors">Creative Commons Attribution-NonCommercial 4.0 International License</a>.</p>
             </div>
         </div>
     </footer>
 
     <!-- JavaScript -->
-    <script src="assets/js/router.js"></script>
     <script>
+        // Physics Router Class
+        class PhysicsRouter {
+            constructor() {
+                this.routes = {
+                    'home': 'home-section',
+                    'lectures': 'lectures-section', 
+                    'notebooks': 'notebooks-section',
+                    'homework': 'homework-section',
+                    'quizzes': 'quizzes-section',
+                    'resources': 'resources-section'
+                };
+                
+                this.currentSection = 'home';
+                this.init();
+            }
+
+            init() {
+                console.log('Physics Router v1.1 initialized');
+                
+                // Handle initial load
+                this.handleRouteChange();
+                
+                // Handle browser back/forward
+                window.addEventListener('popstate', (e) => {
+                    this.handleRouteChange();
+                });
+
+                // Handle anchor clicks
+                document.addEventListener('click', (e) => {
+                    const anchor = e.target.closest('a[href^="#"]');
+                    if (anchor) {
+                        e.preventDefault();
+                        const target = anchor.getAttribute('href').substring(1);
+                        this.navigateTo(target);
+                    }
+                });
+
+                // Close mobile menu on navigation
+                this.setupMobileMenu();
+            }
+
+            navigateTo(section) {
+                if (this.routes[section]) {
+                    // Update URL without page reload
+                    history.pushState({}, '', `#${section}`);
+                    this.handleRouteChange();
+                    
+                    // Close mobile menu if open
+                    this.closeMobileMenu();
+                } else {
+                    console.warn(`Route not found: ${section}`);
+                    this.navigateTo('home');
+                }
+            }
+
+            handleRouteChange() {
+                const hash = window.location.hash.substring(1) || 'home';
+                const targetSection = this.routes[hash] || this.routes['home'];
+                
+                this.showSection(targetSection);
+                this.updateActiveNav(hash);
+                this.currentSection = hash;
+                
+                // Update page title
+                this.updatePageTitle(hash);
+            }
+
+            showSection(sectionId) {
+                // Hide all sections
+                document.querySelectorAll('[id$="-section"]').forEach(section => {
+                    section.classList.remove('section-active');
+                    section.classList.add('section-hidden');
+                });
+                
+                // Show target section with animation
+                const targetElement = document.getElementById(sectionId);
+                if (targetElement) {
+                    targetElement.classList.remove('section-hidden');
+                    targetElement.classList.add('section-active');
+                    
+                    // Scroll to top for better UX
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            }
+
+            updateActiveNav(currentRoute) {
+                // Remove active class from all nav links
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.classList.remove('active');
+                });
+                
+                // Add active class to current route
+                const activeLink = document.querySelector(`a[href="#${currentRoute}"]`);
+                if (activeLink) {
+                    activeLink.classList.add('active');
+                }
+            }
+
+            updatePageTitle(section) {
+                const baseTitle = 'Physics 110: Introductory Mechanics';
+                const sectionTitles = {
+                    'home': baseTitle,
+                    'lectures': `Lectures - ${baseTitle}`,
+                    'notebooks': `Notebooks - ${baseTitle}`,
+                    'homework': `Homework - ${baseTitle}`,
+                    'quizzes': `Quizzes - ${baseTitle}`,
+                    'resources': `Resources - ${baseTitle}`
+                };
+                
+                document.title = sectionTitles[section] || baseTitle;
+            }
+
+            setupMobileMenu() {
+                const mobileMenuButton = document.getElementById('mobile-menu-button');
+                const mobileMenu = document.getElementById('mobile-menu');
+                
+                if (mobileMenuButton && mobileMenu) {
+                    mobileMenuButton.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        mobileMenu.classList.toggle('hidden');
+                    });
+                }
+            }
+
+            closeMobileMenu() {
+                const mobileMenu = document.getElementById('mobile-menu');
+                if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                    mobileMenu.classList.add('hidden');
+                }
+            }
+
+            // Utility method to get current route
+            getCurrentRoute() {
+                return this.currentSection;
+            }
+
+            // Utility method to check if route exists
+            routeExists(route) {
+                return this.routes.hasOwnProperty(route);
+            }
+        }
+
+        // Global helper function for navigation
+        function navigateTo(section) {
+            if (window.router && window.router.navigateTo) {
+                window.router.navigateTo(section);
+            } else {
+                // Fallback for direct anchor navigation
+                window.location.hash = section;
+            }
+        }
+
         // Initialize the application
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize router
-            if (typeof PhysicsRouter !== 'undefined') {
-                window.router = new PhysicsRouter();
-            }
+            window.router = new PhysicsRouter();
             
-            // Mobile menu functionality
-            const mobileMenuButton = document.getElementById('mobile-menu-button');
-            const mobileMenu = document.getElementById('mobile-menu');
+            // Add animation to cards on scroll
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
             
-            if (mobileMenuButton && mobileMenu) {
-                mobileMenuButton.addEventListener('click', function() {
-                    mobileMenu.classList.toggle('hidden');
-                });
-                
-                // Close mobile menu when clicking outside
-                document.addEventListener('click', function(event) {
-                    if (!mobileMenu.contains(event.target) && !mobileMenuButton.contains(event.target)) {
-                        mobileMenu.classList.add('hidden');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
                     }
                 });
-            }
+            }, observerOptions);
+            
+            // Observe all cards for animation
+            document.querySelectorAll('.card').forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(card);
+            });
         });
     </script>
 </body>
