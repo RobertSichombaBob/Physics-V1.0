@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homework 1: Units & Vectors - Physics 110</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#0a0a0a',
+                        light: '#ffffff',
+                        accent: '#3b82f6',
+                        secondary: '#8b5cf6',
+                        success: '#10b981',
+                        warning: '#f59e0b',
+                        danger: '#ef4444',
+                        'dark-card': '#1a1a1a',
+                        'dark-hover': '#2a2a2a',
+                        'dark-border': '#2a2a2a',
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif'],
+                        'serif': ['Source Serif Pro', 'Georgia', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: #0a0a0a;
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+        }
+        
+        .content-card {
+            background-color: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .problem-card {
+            background-color: #2a2a2a;
+            border: 1px solid #374151;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .equation {
+            background-color: #1a1a1a;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            border: 1px solid #374151;
+        }
+        
+        .nav-link {
+            position: relative;
+            color: #ffffff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: #3b82f6;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: #3b82f6;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .btn-primary {
+            background-color: #1a1a1a;
+            color: #ffffff;
+            border: 1px solid #2a2a2a;
+            transition: all 0.3s ease;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+        }
+        
+        .btn-primary:hover {
+            background-color: #3b82f6;
+            color: #ffffff;
+            border-color: #3b82f6;
+            transform: translateY(-2px);
+        }
+        
+        .input-field {
+            background-color: #2a2a2a;
+            border: 1px solid #374151;
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            color: #ffffff;
+            width: 100%;
+            margin: 0.5rem 0;
+        }
+        
+        .input-field:focus {
+            border-color: #3b82f6;
+            outline: none;
+        }
+        
+        .submit-btn {
+            background-color: #10b981;
+            color: #ffffff;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .submit-btn:hover {
+            background-color: #059669;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-dark bg-opacity-90 backdrop-blur-sm border-b border-gray-800 py-4 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center">
+                <a href="../../../index.html" class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-dark-card rounded-xl flex items-center justify-center border border-gray-800">
+                        <i class="fas fa-atom text-accent text-lg"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-lg font-bold text-light">Physics 110</h1>
+                        <p class="text-xs text-gray-400 -mt-1">Introductory Mechanics</p>
+                    </div>
+                </a>
+                
+                <div class="flex items-center space-x-6">
+                    <a href="../../../index.html" class="nav-link">Home</a>
+                    <a href="../lectures/lecture1.html" class="nav-link">Lecture</a>
+                    <a href="../solutions/sol1.html" class="nav-link">Solutions</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Homework Content -->
+    <div class="max-w-4xl mx-auto px-4 py-8">
+        <div class="content-card">
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <h1 class="text-4xl font-bold text-light mb-2">Homework 1: Units & Vectors</h1>
+                    <p class="text-gray-400">Problems covering vector operations, unit conversions, and significant figures.</p>
+                </div>
+                <div class="text-right">
+                    <span class="bg-warning text-dark px-3 py-1 rounded-full text-sm font-semibold">Due: Dec 18, 2024</span>
+                    <p class="text-gray-400 text-sm mt-2">5 problems • 100 points</p>
+                </div>
+            </div>
+
+            <!-- Instructions -->
+            <div class="bg-yellow-900 bg-opacity-20 border border-yellow-700 rounded-xl p-6 mb-8">
+                <h3 class="text-xl font-semibold text-light mb-3 flex items-center">
+                    <i class="fas fa-info-circle text-yellow-400 mr-2"></i>
+                    Homework Instructions
+                </h3>
+                <ul class="text-gray-300 space-y-2">
+                    <li>• Show all your work clearly and systematically</li>
+                    <li>• Box your final answers for each problem</li>
+                    <li>• Include units in all calculations and answers</li>
+                    <li>• Submit PDF solutions through the course portal</li>
+                    <li>• This homework counts for 5% of your final grade</li>
+                </ul>
+            </div>
+
+            <!-- Problem 1 -->
+            <div class="problem-card">
+                <div class="flex justify-between items-start mb-4">
+                    <h3 class="text-xl font-semibold text-light">Problem 1: Unit Conversions (20 points)</h3>
+                    <span class="bg-accent text-dark px-3 py-1 rounded-full text-sm font-semibold">20 pts</span>
+                </div>
+                
+                <p class="text-gray-300 mb-4">
+                    Convert the following quantities to SI units (meters, kilograms, seconds):
+                </p>
+                
+                <div class="space-y-3 mb-6">
+                    <div class="flex items-center">
+                        <span class="text-gray-300 mr-4 w-8">(a)</span>
+                        <span class="text-gray-300">15.6 km to meters</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-gray-300 mr-4 w-8">(b)</span>
+                        <span class="text-gray-300">45 mph to m/s</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-gray-300 mr-4 w-8">(c)</span>
+                        <span class="text-gray-300">2.3 × 10⁴ g to kg</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-gray-300 mr-4 w-8">(d)</span>
+                        <span class="text-gray-300">1.5 days to seconds</span>
+                    </div>
+                </div>
+
+                <!-- Answer Input -->
+                <div class="mt-4">
+                    <label class="block text-light font-semibold mb-2">Your Answer:</label>
+                    <textarea class="input-field" rows="4" placeholder="Show your work and final answers here..."></textarea>
+                </div>
+            </div>
+
+            <!-- Problem 2 -->
+            <div class="problem-card">
+                <div class="flex justify-between items-start mb-4">
+                    <h3 class="text-xl font-semibold text-light">Problem 2: Scientific Notation & Prefixes (20 points)</h3>
+                    <span class="bg-accent text-dark px-3 py-1 rounded-full text-sm font-semibold">20 pts</span>
+                </div>
+                
+                <p class="text-gray-300 mb-4">
+                    Express the following using appropriate SI prefixes:
+                </p>
+                
+                <div class="space-y-3 mb-6">
+                    <div class="flex items-center">
+                        <span class="text-gray-300 mr-4 w-8">(a)</span>
+                        <span class="text-gray-300">3.2 × 10⁹ watts</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-gray-300 mr-4 w-8">(b)</span>
+                        <span class="text-gray-300">4.7 × 10⁻⁶ meters</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-gray-300 mr-4 w-8">(c)</span>
+                        <span class="text-gray-300">8.9 × 10³ grams</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-gray-300 mr-4 w-8">(d)</span>
+                        <span class="text-gray-300">5.6 × 10⁻¹² seconds</span>
+                    </div>
+                </div>
+
+                <p class="text-gray-300 mb-4">
+                    Also, write the following prefix expressions in scientific notation:
+                </p>
+                
+                <div class="space-y-3 mb-6">
+                    <div class="flex items-center">
+                        <span class="text-gray-300 mr-4 w-8">(e)</span>
+                        <span class="text-gray-300">15.3 MW</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-gray-300 mr-4 w-8">(f)</span>
+                        <span class="text-gray-300">0.45 ns</span>
+                    </div>
+                </div>
+
+                <!-- Answer Input -->
+                <div class="mt-4">
+                    <label class="block text-light font-semibold mb-2">Your Answer:</label>
+                    <textarea class="input-field" rows="6" placeholder="Show your work and final answers here..."></textarea>
+                </div>
+            </div>
+
+            <!-- Problem 3 -->
+            <div class="problem-card">
+                <div class="flex justify-between items-start mb-4">
+                    <h3 class="text-xl font-semibold text-light">Problem 3: Dimensional Analysis (20 points)</h3>
+                    <span class="bg-accent text-dark px-3 py-1 rounded-full text-sm font-semibold">20 pts</span>
+                </div>
+                
+                <p class="text-gray-300 mb-4">
+                    Using dimensional analysis, determine if the following equations are dimensionally consistent. Show your reasoning.
+                </p>
+                
+                <div class="space-y-4 mb-6">
+                    <div>
+                        <p class="text-gray-300 font-semibold mb-2">(a) v² = v₀² + 2as</p>
+                        <p class="text-gray-400 text-sm">where v and v₀ are velocities, a is acceleration, and s is distance</p>
+                    </div>
+                    
+                    <div>
+                        <p class="text-gray-300 font-semibold mb-2">(b) T = 2π√(L/g)</p>
+                        <p class="text-gray-400 text-sm">where T is time, L is length, and g is acceleration</p>
+                    </div>
+                    
+                    <div>
+                        <p class="text-gray-300 font-semibold mb-2">(c) F = mv²/r</p>
+                        <p class="text-gray-400 text-sm">where F is force, m is mass, v is velocity, and r is distance</p>
+                    </div>
+                </div>
+
+                <!-- Answer Input -->
+                <div class="mt-4">
+                    <label class="block text-light font-semibold mb-2">Your Answer:</label>
+                    <textarea class="input-field" rows="6" placeholder="Show your dimensional analysis for each equation..."></textarea>
+                </div>
+            </div>
+
+            <!-- Problem 4 -->
+            <div class="problem-card">
+                <div class="flex justify-between items-start mb-4">
+                    <h3 class="text-xl font-semibold text-light">Problem 4: Vector Operations (20 points)</h3>
+                    <span class="bg-accent text-dark px-3 py-1 rounded-full text-sm font-semibold">20 pts</span>
+                </div>
+                
+                <p class="text-gray-300 mb-4">
+                    Given two vectors: <strong>A</strong> = 3<strong>i</strong> + 4<strong>j</strong> and <strong>B</strong> = -2<strong>i</strong> + 6<strong>j</strong>
+                </p>
+                
+                <div class="space-y-3 mb-6">
+                    <div class="flex items-center">
+                        <span class="text-gray-300 mr-4 w-8">(a)</span>
+                        <span class="text-gray-300">Calculate the magnitude of vector <strong>A</strong></span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-gray-300 mr-4 w-8">(b)</span>
+                        <span class="text-gray-300">Calculate the dot product <strong>A</strong> · <strong>B</strong></span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-gray-300 mr-4 w-8">(c)</span>
+                        <span class="text-gray-300">Calculate the cross product <strong>A</strong> × <strong>B</strong> (assume 2D vectors in xy-plane)</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="text-gray-300 mr-4 w-8">(d)</span>
+                        <span class="text-gray-300">Find the angle between vectors <strong>A</strong> and <strong>B</strong></span>
+                    </div>
+                </div>
+
+                <!-- Answer Input -->
+                <div class="mt-4">
+                    <label class="block text-light font-semibold mb-2">Your Answer:</label>
+                    <textarea class="input-field" rows="6" placeholder="Show your calculations and final answers..."></textarea>
+                </div>
+            </div>
+
+            <!-- Problem 5 -->
+            <div class="problem-card">
+                <div class="flex justify-between items-start mb-4">
+                    <h3 class="text-xl font-semibold text-light">Problem 5: Physical Applications (20 points)</h3>
+                    <span class="bg-accent text-dark px-3 py-1 rounded-full text-sm font-semibold">20 pts</span>
+                </div>
+                
+                <p class="text-gray-300 mb-4">
+                    A particle moves in a circular path of radius 5 meters with a constant speed of 10 m/s.
+                </p>
+                
+                <div class="space-y-4 mb-6">
+                    <div>
+                        <p class="text-gray-300 mb-2">(a) Using dimensional analysis, show that the centripetal acceleration a is proportional to v²/r, where v is speed and r is radius.</p>
+                    </div>
+                    
+                    <div>
+                        <p class="text-gray-300 mb-2">(b) Calculate the centripetal acceleration of the particle.</p>
+                    </div>
+                    
+                    <div>
+                        <p class="text-gray-300 mb-2">(c) If the particle has a mass of 2 kg, calculate the centripetal force required to maintain this motion.</p>
+                    </div>
+                    
+                    <div>
+                        <p class="text-gray-300 mb-2">(d) Express your answer from part (c) in both newtons and kilonewtons.</p>
+                    </div>
+                </div>
+
+                <!-- Answer Input -->
+                <div class="mt-4">
+                    <label class="block text-light font-semibold mb-2">Your Answer:</label>
+                    <textarea class="input-field" rows="8" placeholder="Show your work and final answers..."></textarea>
+                </div>
+            </div>
+
+            <!-- Submission Section -->
+            <div class="bg-dark-card rounded-xl p-6 mt-8 border border-gray-800">
+                <h3 class="text-xl font-semibold text-light mb-4">Submit Your Homework</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="text-lg font-semibold text-light mb-3">Online Submission</h4>
+                        <p class="text-gray-300 mb-4">You can submit your answers directly through this form:</p>
+                        <button class="submit-btn w-full">
+                            <i class="fas fa-paper-plane mr-2"></i>
+                            Submit Answers
+                        </button>
+                    </div>
+                    
+                    <div>
+                        <h4 class="text-lg font-semibold text-light mb-3">PDF Submission</h4>
+                        <p class="text-gray-300 mb-4">Or upload a PDF of your handwritten solutions:</p>
+                        <div class="border-2 border-dashed border-gray-600 rounded-lg p-6 text-center">
+                            <i class="fas fa-file-pdf text-3xl text-gray-500 mb-2"></i>
+                            <p class="text-gray-400">Drag and drop your PDF here</p>
+                            <p class="text-gray-500 text-sm">or</p>
+                            <button class="btn-primary mt-2">
+                                <i class="fas fa-upload mr-2"></i>
+                                Choose File
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-6 pt-6 border-t border-gray-800">
+                    <h4 class="text-lg font-semibold text-light mb-3">Need Help?</h4>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="../lectures/lecture1.html" class="btn-primary">
+                            <i class="fas fa-video mr-2"></i>
+                            Review Lecture
+                        </a>
+                        <a href="../solutions/sol1.html" class="btn-primary">
+                            <i class="fas fa-lightbulb mr-2"></i>
+                            View Solutions
+                        </a>
+                        <a href="../../../index.html#resources" class="btn-primary">
+                            <i class="fas fa-question-circle mr-2"></i>
+                            Office Hours
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="py-8 border-t border-gray-800 mt-8">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <p class="text-gray-400 text-sm">© 2024 Physics 110: Introductory Mechanics - Robert Sichomba</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add functionality for the submit button
+            const submitBtn = document.querySelector('.submit-btn');
+            if (submitBtn) {
+                submitBtn.addEventListener('click', function() {
+                    // Check if user is logged in
+                    const currentUser = JSON.parse(localStorage.getItem('physics110_currentUser') || 'null');
+                    
+                    if (!currentUser) {
+                        alert('Please log in to submit your homework.');
+                        return;
+                    }
+                    
+                    // Show confirmation dialog
+                    const confirmed = confirm('Are you sure you want to submit your homework? You cannot make changes after submission.');
+                    
+                    if (confirmed) {
+                        // In a real application, this would send data to a server
+                        // For now, we'll just show a success message
+                        this.innerHTML = '<i class="fas fa-check mr-2"></i>Submitted!';
+                        this.style.backgroundColor = '#10b981';
+                        this.disabled = true;
+                        
+                        // Update user progress
+                        const users = JSON.parse(localStorage.getItem('physics110_users') || '[]');
+                        const userIndex = users.findIndex(u => u.email === currentUser.email);
+                        
+                        if (userIndex !== -1) {
+                            users[userIndex].progress.submittedHomework += 1;
+                            localStorage.setItem('physics110_users', JSON.stringify(users));
+                            localStorage.setItem('physics110_currentUser', JSON.stringify(users[userIndex]));
+                        }
+                        
+                        alert('Homework submitted successfully! You can view the solutions now.');
+                    }
+                });
+            }
+            
+            // Add progress tracking
+            const progressContainer = document.createElement('div');
+            progressContainer.className = 'fixed bottom-4 right-4 bg-dark-card p-4 rounded-xl border border-gray-800 shadow-lg';
+            progressContainer.innerHTML = `
+                <div class="text-sm text-gray-300 mb-2">Homework Progress</div>
+                <div class="w-32 bg-gray-700 rounded-full h-2">
+                    <div id="homework-progress" class="bg-accent h-2 rounded-full" style="width: 0%"></div>
+                </div>
+                <div class="text-xs text-gray-400 mt-1" id="homework-progress-text">0/5 problems</div>
+            `;
+            document.body.appendChild(progressContainer);
+            
+            // Update progress as user types in textareas
+            const textareas = document.querySelectorAll('textarea');
+            textareas.forEach(textarea => {
+                textarea.addEventListener('input', updateHomeworkProgress);
+            });
+            
+            function updateHomeworkProgress() {
+                let completed = 0;
+                textareas.forEach(textarea => {
+                    if (textarea.value.trim().length > 10) { // Consider completed if they've typed something meaningful
+                        completed++;
+                    }
+                });
+                
+                const progress = (completed / textareas.length) * 100;
+                document.getElementById('homework-progress').style.width = progress + '%';
+                document.getElementById('homework-progress-text').textContent = `${completed}/${textareas.length} problems`;
+            }
+            
+            // Initial call
+            updateHomeworkProgress();
+        });
+    </script>
+</body>
+</html>

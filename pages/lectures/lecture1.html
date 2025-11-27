@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chapter 1: Units and Vectors | Physics 110</title>
+    <title>Lecture 1: Units, Physical Quantities, and Vectors - Physics 110</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -13,16 +13,121 @@
     
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#0a0a0a',
+                        light: '#ffffff',
+                        accent: '#3b82f6',
+                        secondary: '#8b5cf6',
+                        success: '#10b981',
+                        warning: '#f59e0b',
+                        danger: '#ef4444',
+                        'dark-card': '#1a1a1a',
+                        'dark-hover': '#2a2a2a',
+                        'dark-border': '#2a2a2a',
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif'],
+                        'serif': ['Source Serif Pro', 'Georgia', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
     
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
             background-color: #0a0a0a;
             color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
         }
         
-        .card {
+        .content-card {
             background-color: #1a1a1a;
             border: 1px solid #2a2a2a;
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .equation {
+            background-color: #2a2a2a;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+        }
+        
+        .example-box {
+            background-color: rgba(59, 130, 246, 0.1);
+            border-left: 4px solid #3b82f6;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+        
+        .definition-box {
+            background-color: rgba(139, 92, 246, 0.1);
+            border-left: 4px solid #8b5cf6;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+        
+        th, td {
+            border: 1px solid #374151;
+            padding: 0.75rem;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #2a2a2a;
+            font-weight: 600;
+        }
+        
+        .nav-link {
+            position: relative;
+            color: #ffffff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: #3b82f6;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: #3b82f6;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
         }
         
         .btn-primary {
@@ -30,152 +135,633 @@
             color: #ffffff;
             border: 1px solid #2a2a2a;
             transition: all 0.3s ease;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
         }
         
         .btn-primary:hover {
             background-color: #3b82f6;
+            color: #ffffff;
             border-color: #3b82f6;
+            transform: translateY(-2px);
         }
     </style>
 </head>
-<body class="font-sans antialiased">
+<body class="min-h-screen">
     <!-- Navigation -->
-    <nav class="bg-dark sticky top-0 z-50 border-b border-gray-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <div class="flex items-center justify-between">
-                <a href="../index.html#lectures" class="flex items-center space-x-3 text-accent hover:text-light transition-colors">
-                    <i class="fas fa-arrow-left"></i>
-                    <span>Back to Lectures</span>
+    <nav class="bg-dark bg-opacity-90 backdrop-blur-sm border-b border-gray-800 py-4 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center">
+                <a href="../../../index.html" class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-dark-card rounded-xl flex items-center justify-center border border-gray-800">
+                        <i class="fas fa-atom text-accent text-lg"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-lg font-bold text-light">Physics 110</h1>
+                        <p class="text-xs text-gray-400 -mt-1">Introductory Mechanics</p>
+                    </div>
                 </a>
-                <div class="text-lg font-semibold">Physics 110 v1.1</div>
+                
+                <div class="flex items-center space-x-6">
+                    <a href="../../../index.html" class="nav-link">Home</a>
+                    <a href="../notebooks/chapter1.html" class="nav-link">Notebook</a>
+                    <a href="../homework/hw1.html" class="nav-link">Homework</a>
+                </div>
             </div>
         </div>
     </nav>
 
-    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div class="card rounded-2xl p-8 mb-8">
-            <div class="flex flex-col md:flex-row md:items-center justify-between mb-6">
+    <!-- Lecture Content -->
+    <div class="max-w-6xl mx-auto px-4 py-8">
+        <div class="content-card">
+            <div class="flex items-center justify-between mb-6">
                 <div>
                     <h1 class="text-4xl font-bold text-light mb-2">Chapter 1: Units, Physical Quantities, and Vectors</h1>
-                    <div class="flex flex-wrap gap-4 text-gray-400">
-                        <span><i class="fas fa-clock mr-2"></i>Duration: 90 minutes</span>
-                        <span><i class="fas fa-calendar mr-2"></i>Week 1</span>
-                        <span><i class="fas fa-file-pdf mr-2"></i>PDF Available</span>
-                    </div>
+                    <p class="text-gray-400">Standards and units, unit consistency and conversions, uncertainty and significant figures, vectors and vector addition.</p>
                 </div>
-                <span class="bg-accent text-dark px-4 py-2 rounded-full font-semibold mt-4 md:mt-0">Lecture 1</span>
+                <div class="text-right">
+                    <span class="bg-accent text-dark px-3 py-1 rounded-full text-sm font-semibold">Week 1</span>
+                    <p class="text-gray-400 text-sm mt-2">Estimated time: 45 minutes</p>
+                </div>
             </div>
 
             <!-- Video Placeholder -->
-            <div class="mb-8">
-                <div class="aspect-w-16 aspect-h-9 bg-dark-card rounded-2xl flex items-center justify-center border border-gray-800 p-8">
-                    <div class="text-center">
-                        <i class="fas fa-play-circle text-accent text-6xl mb-4"></i>
-                        <p class="text-light font-semibold text-xl mb-2">Lecture Video</p>
-                        <p class="text-gray-400">Chapter 1: Units, Physical Quantities, and Vectors</p>
-                        <button class="btn-primary px-6 py-3 rounded-xl font-semibold mt-4">
-                            <i class="fas fa-play mr-2"></i>Play Video
-                        </button>
-                    </div>
-                </div>
+            <div class="bg-black rounded-xl p-8 mb-8 text-center border border-gray-800">
+                <i class="fas fa-play-circle text-6xl text-gray-600 mb-4"></i>
+                <h3 class="text-xl font-semibold text-light mb-2">Lecture Video</h3>
+                <p class="text-gray-400 mb-4">Video content will be available here</p>
+                <button class="btn-primary">
+                    <i class="fas fa-play mr-2"></i>
+                    Play Lecture
+                </button>
             </div>
 
-            <!-- Resources Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <a href="../slides/lecture1.pdf" class="card rounded-xl p-6 text-center hover:border-accent transition-all duration-200">
-                    <i class="fas fa-file-pdf text-red-400 text-3xl mb-3"></i>
-                    <div class="font-semibold text-light text-lg">Slides PDF</div>
-                    <div class="text-gray-400 text-sm">Download Presentation</div>
-                </a>
-                <a href="../notebooks/chapter1.html" class="card rounded-xl p-6 text-center hover:border-accent transition-all duration-200">
-                    <i class="fas fa-book text-green-400 text-3xl mb-3"></i>
-                    <div class="font-semibold text-light text-lg">Notebook</div>
-                    <div class="text-gray-400 text-sm">Interactive Code</div>
-                </a>
-                <a href="../homework/hw1.html" class="card rounded-xl p-6 text-center hover:border-accent transition-all duration-200">
-                    <i class="fas fa-tasks text-yellow-400 text-3xl mb-3"></i>
-                    <div class="font-semibold text-light text-lg">Homework 1</div>
-                    <div class="text-gray-400 text-sm">Problem Set</div>
-                </a>
-            </div>
-
-            <!-- Lecture Content -->
-            <div class="prose prose-invert max-w-none">
-                <h2 class="text-2xl font-bold text-light mb-4">Lecture Outline</h2>
-                <ul class="text-gray-300 space-y-2 mb-6">
+            <!-- Table of Contents -->
+            <div class="bg-dark-card rounded-xl p-6 mb-8 border border-gray-800">
+                <h2 class="text-xl font-bold text-light mb-4">Table of Contents</h2>
+                <ul class="space-y-2 text-gray-300">
                     <li class="flex items-center">
-                        <i class="fas fa-check text-accent mr-3"></i>
-                        Standards of length, mass, and time
+                        <i class="fas fa-chevron-right text-accent mr-3 text-sm"></i>
+                        <a href="#section1" class="hover:text-accent transition-colors">1.1 The International System of Units</a>
                     </li>
                     <li class="flex items-center">
-                        <i class="fas fa-check text-accent mr-3"></i>
-                        Unit consistency and conversions
+                        <i class="fas fa-chevron-right text-accent mr-3 text-sm"></i>
+                        <a href="#section2" class="hover:text-accent transition-colors">1.2 Standards of Length, Time, and Mass</a>
                     </li>
                     <li class="flex items-center">
-                        <i class="fas fa-check text-accent mr-3"></i>
-                        Uncertainty and significant figures
+                        <i class="fas fa-chevron-right text-accent mr-3 text-sm"></i>
+                        <a href="#section3" class="hover:text-accent transition-colors">1.3 Dimensional Analysis</a>
                     </li>
                     <li class="flex items-center">
-                        <i class="fas fa-check text-accent mr-3"></i>
-                        Vectors and vector addition
-                    </li>
-                    <li class="flex items-center">
-                        <i class="fas fa-check text-accent mr-3"></i>
-                        Components of vectors
-                    </li>
-                    <li class="flex items-center">
-                        <i class="fas fa-check text-accent mr-3"></i>
-                        Unit vectors
-                    </li>
-                    <li class="flex items-center">
-                        <i class="fas fa-check text-accent mr-3"></i>
-                        Scalar and vector products
+                        <i class="fas fa-chevron-right text-accent mr-3 text-sm"></i>
+                        <a href="#section4" class="hover:text-accent transition-colors">1.4 Exercises</a>
                     </li>
                 </ul>
-
-                <h2 class="text-2xl font-bold text-light mb-4">Key Concepts</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                    <div class="bg-dark-card p-4 rounded-xl border border-gray-800">
-                        <div class="font-semibold text-accent mb-2">SI Units</div>
-                        <div class="text-gray-300 text-sm">meter (m), kilogram (kg), second (s)</div>
-                    </div>
-                    <div class="bg-dark-card p-4 rounded-xl border border-gray-800">
-                        <div class="font-semibold text-accent mb-2">Vector Operations</div>
-                        <div class="text-gray-300 text-sm">A + B = (Aₓ + Bₓ)î + (Aᵧ + Bᵧ)ĵ</div>
-                    </div>
-                </div>
-
-                <h2 class="text-2xl font-bold text-light mb-4">Learning Objectives</h2>
-                <div class="bg-dark-card p-6 rounded-xl border border-gray-800 mb-6">
-                    <ul class="text-gray-300 space-y-2">
-                        <li>• Convert physical quantities between different units</li>
-                        <li>• Understand and use significant figures in calculations</li>
-                        <li>• Perform vector addition and subtraction graphically and analytically</li>
-                        <li>• Calculate scalar and vector products</li>
-                        <li>• Use unit vectors to express vectors in component form</li>
-                    </ul>
-                </div>
-
-                <h2 class="text-2xl font-bold text-light mb-4">Additional Resources</h2>
-                <div class="flex flex-wrap gap-4">
-                    <a href="../solutions/chapter1.html" class="btn-primary px-6 py-3 rounded-xl font-semibold">
-                        <i class="fas fa-check-circle mr-2"></i>Solutions
-                    </a>
-                    <a href="../quizzes/quiz1.html" class="btn-primary px-6 py-3 rounded-xl font-semibold">
-                        <i class="fas fa-question-circle mr-2"></i>Quiz 1
-                    </a>
-                    <a href="https://github.com/RobertSichombaBob/physics-110-website" class="btn-primary px-6 py-3 rounded-xl font-semibold">
-                        <i class="fab fa-github mr-2"></i>Source Code
-                    </a>
-                </div>
             </div>
-        </div>
-    </main>
 
-    <footer class="bg-dark border-t border-gray-800 py-8">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-400">
-            <p>© 2024 Physics 110 v1.1 - Robert Sichomba</p>
+            <!-- Section 1: The International System of Units -->
+            <section id="section1" class="mb-12">
+                <h2 class="text-3xl font-bold text-light mb-6 border-b border-gray-800 pb-2">1.1 The International System of Units</h2>
+                
+                <p class="text-gray-300 mb-4">
+                    The laws of physics are expressed in terms of basic quantities that require a clear definition for the purpose of measurements. Among these measured quantities are length, time, mass, temperature, etc.
+                </p>
+                
+                <p class="text-gray-300 mb-6">
+                    In order to describe any physical quantity, we first have to define a unit of measurement (which was among the earliest tools invented by humans), i.e. a measure that is defined to be exactly 1.0. After that, we define a standard for this quantity, i.e. a reference to compare all other examples of the same physical quantity.
+                </p>
+                
+                <div class="definition-box">
+                    <h3 class="text-xl font-semibold text-light mb-3">SI Base Units</h3>
+                    <p class="text-gray-300 mb-4">
+                        Seven physical quantities have been selected as base quantities in the 14th General Conference on Weights and Measurements, held in France in 1971. These quantities form the basis of the International System of Units, abbreviated SI (from its French name Système International) and popularly known as the metric system.
+                    </p>
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="text-light">Quantity</th>
+                                <th class="text-light">Unit Name</th>
+                                <th class="text-light">Unit Symbol</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="text-gray-300">Length</td>
+                                <td class="text-gray-300">Meter</td>
+                                <td class="text-gray-300">m</td>
+                            </tr>
+                            <tr>
+                                <td class="text-gray-300">Time</td>
+                                <td class="text-gray-300">Second</td>
+                                <td class="text-gray-300">s</td>
+                            </tr>
+                            <tr>
+                                <td class="text-gray-300">Mass</td>
+                                <td class="text-gray-300">Kilogram</td>
+                                <td class="text-gray-300">kg</td>
+                            </tr>
+                            <tr>
+                                <td class="text-gray-300">Temperature</td>
+                                <td class="text-gray-300">Kelvin</td>
+                                <td class="text-gray-300">K</td>
+                            </tr>
+                            <tr>
+                                <td class="text-gray-300">Electric current</td>
+                                <td class="text-gray-300">Ampere</td>
+                                <td class="text-gray-300">A</td>
+                            </tr>
+                            <tr>
+                                <td class="text-gray-300">Amount of substance</td>
+                                <td class="text-gray-300">Mole</td>
+                                <td class="text-gray-300">mol</td>
+                            </tr>
+                            <tr>
+                                <td class="text-gray-300">Luminous intensity</td>
+                                <td class="text-gray-300">Candela</td>
+                                <td class="text-gray-300">cd</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <p class="text-gray-300 mb-4">
+                    Many SI derived units are defined in terms of the first three quantities of Table 1.1. For example, the SI unit for force, called the newton (abbreviated N), is defined in terms of the base units of mass, length, and time. Thus, as we will see from the study of Newton's second law, the unit of force is given by:
+                </p>
+                
+                <div class="equation">
+                    1 N = 1 kg·m/s²
+                </div>
+                
+                <p class="text-gray-300 mb-4">
+                    When dealing with very large or very small numbers in physics, we use the so-called scientific notation which employs powers of 10, such as:
+                </p>
+                
+                <div class="equation">
+                    3,210,000,000 m = 3.21 × 10⁹ m
+                </div>
+                
+                <div class="equation">
+                    0.000000789 s = 7.89 × 10⁻⁷ s
+                </div>
+                
+                <div class="definition-box">
+                    <h3 class="text-xl font-semibold text-light mb-3">SI Prefixes</h3>
+                    <p class="text-gray-300 mb-4">
+                        An additional convenient way to deal with very large or very small numbers in physics is to use prefixes. Each one of these prefixes represents a certain power of 10.
+                    </p>
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="text-light">Factor</th>
+                                <th class="text-light">Prefix</th>
+                                <th class="text-light">Symbol</th>
+                                <th class="text-light">Factor</th>
+                                <th class="text-light">Prefix</th>
+                                <th class="text-light">Symbol</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="text-gray-300">10²⁴</td>
+                                <td class="text-gray-300">yotta</td>
+                                <td class="text-gray-300">Y</td>
+                                <td class="text-gray-300">10⁻²⁴</td>
+                                <td class="text-gray-300">yocto</td>
+                                <td class="text-gray-300">y</td>
+                            </tr>
+                            <tr>
+                                <td class="text-gray-300">10²¹</td>
+                                <td class="text-gray-300">zetta</td>
+                                <td class="text-gray-300">Z</td>
+                                <td class="text-gray-300">10⁻²¹</td>
+                                <td class="text-gray-300">zepto</td>
+                                <td class="text-gray-300">z</td>
+                            </tr>
+                            <tr>
+                                <td class="text-gray-300">10¹⁸</td>
+                                <td class="text-gray-300">exa</td>
+                                <td class="text-gray-300">E</td>
+                                <td class="text-gray-300">10⁻¹⁸</td>
+                                <td class="text-gray-300">atto</td>
+                                <td class="text-gray-300">a</td>
+                            </tr>
+                            <tr>
+                                <td class="text-gray-300">10¹⁵</td>
+                                <td class="text-gray-300">peta</td>
+                                <td class="text-gray-300">P</td>
+                                <td class="text-gray-300">10⁻¹⁵</td>
+                                <td class="text-gray-300">femto</td>
+                                <td class="text-gray-300">f</td>
+                            </tr>
+                            <tr>
+                                <td class="text-gray-300">10¹²</td>
+                                <td class="text-gray-300">tera</td>
+                                <td class="text-gray-300">T</td>
+                                <td class="text-gray-300">10⁻¹²</td>
+                                <td class="text-gray-300">pico</td>
+                                <td class="text-gray-300">p</td>
+                            </tr>
+                            <tr>
+                                <td class="text-gray-300">10⁹</td>
+                                <td class="text-gray-300">giga</td>
+                                <td class="text-gray-300">G</td>
+                                <td class="text-gray-300">10⁻⁹</td>
+                                <td class="text-gray-300">nano</td>
+                                <td class="text-gray-300">n</td>
+                            </tr>
+                            <tr>
+                                <td class="text-gray-300">10⁶</td>
+                                <td class="text-gray-300">mega</td>
+                                <td class="text-gray-300">M</td>
+                                <td class="text-gray-300">10⁻⁶</td>
+                                <td class="text-gray-300">micro</td>
+                                <td class="text-gray-300">μ</td>
+                            </tr>
+                            <tr>
+                                <td class="text-gray-300">10³</td>
+                                <td class="text-gray-300">kilo</td>
+                                <td class="text-gray-300">k</td>
+                                <td class="text-gray-300">10⁻³</td>
+                                <td class="text-gray-300">milli</td>
+                                <td class="text-gray-300">m</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <p class="text-gray-300 mb-4">
+                    Accordingly, we can express a particular magnitude of force as:
+                </p>
+                
+                <div class="equation">
+                    1.23 × 10⁶ N = 1.23 mega newtons = 1.23 MN
+                </div>
+                
+                <p class="text-gray-300 mb-4">
+                    or a particular time interval as:
+                </p>
+                
+                <div class="equation">
+                    1.23 × 10⁻⁹ s = 1.23 nano seconds = 1.23 ns
+                </div>
+                
+                <p class="text-gray-300 mb-4">
+                    We often need to change units in which a physical quantity is expressed. We do that by using a method called chain-link conversion, in which we multiply by a conversion factor that equals unity. For example, because 1 minute and 60 seconds are identical time intervals, then we can write:
+                </p>
+                
+                <div class="equation">
+                    1 min / 60 s = 1 and 60 s / 1 min = 1
+                </div>
+                
+                <div class="example-box">
+                    <h3 class="text-xl font-semibold text-light mb-3">Example 1.1</h3>
+                    <p class="text-gray-300 mb-4">
+                        Convert the following: (a) 1 kilometer per hour to meter per second, (b) 1 mile per hour to meter per second, and (c) 1 mile per hour to kilometer per hour [to a good approximation 1 mi = 1.609 km].
+                    </p>
+                    
+                    <h4 class="text-lg font-semibold text-light mb-2">Solution:</h4>
+                    <p class="text-gray-300 mb-2">(a) To convert the speed from the kilometers per hour unit to meters per second unit, we write:</p>
+                    <div class="equation">
+                        1 km/h = (1 km/h) × (1000 m / 1 km) × (1 h / 3600 s) = 0.278 m/s
+                    </div>
+                    
+                    <p class="text-gray-300 mb-2">(b) To convert from miles per hour to meters per second, we write:</p>
+                    <div class="equation">
+                        1 mi/h = (1 mi/h) × (1609 m / 1 mi) × (1 h / 3600 s) = 0.447 m/s
+                    </div>
+                    
+                    <p class="text-gray-300 mb-2">(c) To convert from miles per hour to kilometers per hour, we write:</p>
+                    <div class="equation">
+                        1 mi/h = (1 mi/h) × (1.609 km / 1 mi) = 1.609 km/h
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 2: Standards of Length, Time, and Mass -->
+            <section id="section2" class="mb-12">
+                <h2 class="text-3xl font-bold text-light mb-6 border-b border-gray-800 pb-2">1.2 Standards of Length, Time, and Mass</h2>
+                
+                <p class="text-gray-300 mb-6">
+                    Definitions of the units of length, time, and mass are under constant review and are changed from time to time. We only present in this section the latest definitions of those quantities.
+                </p>
+                
+                <h3 class="text-2xl font-semibold text-light mb-4">Length (L)</h3>
+                
+                <p class="text-gray-300 mb-4">
+                    In 1983, the precision of the meter was redefined as the distance traveled by a light wave in vacuum in a specified time interval. The reason is that the measurement of the speed of light has become extremely precise, so it made sense to adopt the speed of light as a defined quantity and to use it to redefine the meter.
+                </p>
+                
+                <div class="definition-box">
+                    <h4 class="text-xl font-semibold text-light mb-2">One Meter</h4>
+                    <p class="text-gray-300">
+                        One meter is the distance traveled by light in vacuum during the time interval of 1/299,792,458 of a second.
+                    </p>
+                </div>
+                
+                <p class="text-gray-300 mb-4">
+                    This time interval number was chosen so that the speed of light in vacuum c will be exactly given by:
+                </p>
+                
+                <div class="equation">
+                    c = 299,792,458 m/s
+                </div>
+                
+                <p class="text-gray-300 mb-6">
+                    For educational purposes we usually consider the value c = 3 × 10⁸ m/s.
+                </p>
+                
+                <h3 class="text-2xl font-semibold text-light mb-4">Time (T)</h3>
+                
+                <p class="text-gray-300 mb-4">
+                    Recently, the standard of time was redefined to take advantage of the high-precision measurements that could be obtained by using a device known as an atomic clock. Cesium is most common element that is typically used in the construction of atomic clocks because it allows us to attain high accuracy.
+                </p>
+                
+                <div class="definition-box">
+                    <h4 class="text-xl font-semibold text-light mb-2">One Second</h4>
+                    <p class="text-gray-300">
+                        One second is the time taken for the cesium atom ¹³³Cs to perform 9,192,631,770 oscillations to emit radiation of a specific wavelength.
+                    </p>
+                </div>
+                
+                <p class="text-gray-300 mb-6">
+                    Since 1967, the International System of Measurements has been basing its unit of time, the second, on the properties of the isotope cesium-133. One of the transitions between two energy levels of the ground state of ¹³³Cs has an oscillation frequency of 9,192,631,770 Hz, which is used to define the second in SI units.
+                </p>
+                
+                <h3 class="text-2xl font-semibold text-light mb-4">Mass (M)</h3>
+                
+                <div class="definition-box">
+                    <h4 class="text-xl font-semibold text-light mb-2">One Kilogram</h4>
+                    <p class="text-gray-300">
+                        The SI unit of mass, 1 kilogram, is defined as the mass of a platinum-iridium alloy cylinder kept at the International Bureau of Weights and Measures in France.
+                    </p>
+                </div>
+                
+                <p class="text-gray-300 mb-4">
+                    A cylindrical mass of 3.9 cm in diameter and of 3.9 cm in height and made of an unusually stable platinum-iridium alloy is kept at the International Bureau of Weights and Measures near Paris and assigned in the SI units a mass of 1 kilogram by international agreement.
+                </p>
+                
+                <p class="text-gray-300 mb-4">
+                    Accurate copies of this standard 1 kilogram have been sent to standardizing laboratories in other countries.
+                </p>
+                
+                <div class="definition-box">
+                    <h4 class="text-xl font-semibold text-light mb-2">A Second Standard Mass</h4>
+                    <p class="text-gray-300">
+                        Atomic masses can be compared with each other more precisely than the kilogram. By international agreement, the carbon-12 atom, ¹²C, has been assigned a mass of 12 atomic mass units (u), where:
+                    </p>
+                    <div class="equation">
+                        1 u = (1.6605402 ± 0.0000010) × 10⁻²⁷ kg
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 3: Dimensional Analysis -->
+            <section id="section3" class="mb-12">
+                <h2 class="text-3xl font-bold text-light mb-6 border-b border-gray-800 pb-2">1.3 Dimensional Analysis</h2>
+                
+                <p class="text-gray-300 mb-4">
+                    Throughout your experience, you have been exposed to a variety of units of length; the SI meter, kilometer, and millimeter; the English units of inches, feet, yards, and miles, etc. All of these derived units are said to have dimensions of length, symbolized by L.
+                </p>
+                
+                <p class="text-gray-300 mb-4">
+                    Likewise, all time units, such as seconds, minutes, hours, days, years, and centuries are said to have dimensions of time, symbolized by T. The kilogram and all other mass units have dimensions of mass, symbolized by M.
+                </p>
+                
+                <p class="text-gray-300 mb-6">
+                    In general, we may take the dimension (length, time, and mass) as the concept of the physical quantity.
+                </p>
+                
+                <p class="text-gray-300 mb-4">
+                    From the three fundamental physical quantities of length L, time T, and mass M, we can derive a variety of useful quantities. Derived quantities have different dimensions from the fundamental quantities. For example:
+                </p>
+                
+                <ul class="list-disc list-inside text-gray-300 mb-6 space-y-2">
+                    <li>Area has dimension L²</li>
+                    <li>Volume has dimension L³</li>
+                    <li>Mass density has dimension M/L³</li>
+                    <li>Speed has dimension L/T</li>
+                </ul>
+                
+                <p class="text-gray-300 mb-4">
+                    The concept of dimensionality is important in understanding physics and in solving physics problems. For example, the addition or subtraction of quantities with different dimensions makes no sense, i.e. 2 kg plus 8 s is meaningless.
+                </p>
+                
+                <p class="text-gray-300 mb-4">
+                    Actually, physical equations must be dimensionally consistent. For example, the equation giving the position of a freely falling body is given by:
+                </p>
+                
+                <div class="equation">
+                    x = v₀t + ½gt²
+                </div>
+                
+                <p class="text-gray-300 mb-4">
+                    where x is the position (length), v₀ the initial speed (length/time), g is the acceleration due to gravity (length/time²), and t is time. If we analyze the equation dimensionally, we have:
+                </p>
+                
+                <div class="equation">
+                    L = (L/T) × T + (L/T²) × T² = L + L
+                </div>
+                
+                <p class="text-gray-300 mb-4">
+                    Note that every term of this equation has the dimension of length L. Also note that numerical factors, such as ½ in the equation, are ignored in dimensional analysis because they have no dimension.
+                </p>
+                
+                <div class="example-box">
+                    <h3 class="text-xl font-semibold text-light mb-3">Example 1.2</h3>
+                    <p class="text-gray-300 mb-4">
+                        Use dimensional analysis to show that the expression v = v₀ + at is dimensionally correct, where v and v₀ represent velocities, a is acceleration, and t is a time interval.
+                    </p>
+                    
+                    <h4 class="text-lg font-semibold text-light mb-2">Solution:</h4>
+                    <p class="text-gray-300 mb-2">Since L/T is the dimension of v and v₀, and the dimension of a is L/T², then when we analyze the equation v = v₀ + at dimensionally, we have:</p>
+                    <div class="equation">
+                        L/T = L/T + (L/T²) × T = L/T + L/T
+                    </div>
+                    <p class="text-gray-300">Thus, the expression v = v₀ + at is dimensionally correct.</p>
+                </div>
+                
+                <div class="example-box">
+                    <h3 class="text-xl font-semibold text-light mb-3">Example 1.3</h3>
+                    <p class="text-gray-300 mb-4">
+                        A particle moves with a constant speed v in a circular orbit of radius r. Given that the magnitude of the acceleration a is proportional to some power of r, say rᵐ, and some power of v, say vⁿ, then determine the powers of r and v.
+                    </p>
+                    
+                    <h4 class="text-lg font-semibold text-light mb-2">Solution:</h4>
+                    <p class="text-gray-300 mb-2">Assume that the variables of the problem can be expressed mathematically by the following relation:</p>
+                    <div class="equation">
+                        a = k rᵐvⁿ
+                    </div>
+                    <p class="text-gray-300 mb-2">where k is a dimensionless proportionality constant. With the known dimensions of r, v, and a we analyze the dimensions of the above relation as follows:</p>
+                    <div class="equation">
+                        L/T² = Lᵐ × (L/T)ⁿ = Lᵐ⁺ⁿ/Tⁿ
+                    </div>
+                    <p class="text-gray-300 mb-2">This dimensional equation would be balanced only when:</p>
+                    <div class="equation">
+                        m + n = 1 and n = 2
+                    </div>
+                    <p class="text-gray-300 mb-2">Thus:</p>
+                    <div class="equation">
+                        m = -1
+                    </div>
+                    <p class="text-gray-300">Therefore, we can rewrite the acceleration as follows: a = k r⁻¹v² = k v²/r</p>
+                </div>
+            </section>
+
+            <!-- Section 4: Exercises -->
+            <section id="section4">
+                <h2 class="text-3xl font-bold text-light mb-6 border-b border-gray-800 pb-2">1.4 Exercises</h2>
+                
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-light mb-4">Section 1.1: The International System of Units</h3>
+                    
+                    <ol class="list-decimal list-inside text-gray-300 space-y-4">
+                        <li class="pl-4">
+                            Use the prefixes introduced in Table 1.2 to express the following: 
+                            <ul class="list-disc list-inside ml-6 mt-2 space-y-1">
+                                <li>10³ lambs</li>
+                                <li>10⁶ bytes</li>
+                                <li>10⁹ cars</li>
+                                <li>10¹² stars</li>
+                                <li>10⁻¹ Kelvin</li>
+                                <li>10⁻² meter</li>
+                                <li>10⁻³ ampere</li>
+                                <li>10⁻⁶ newton</li>
+                                <li>10⁻⁹ kilogram</li>
+                                <li>10⁻¹⁵ second</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+                
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-light mb-4">Section 1.2: Standards of Length, Time, and Mass</h3>
+                    
+                    <ol class="list-decimal list-inside text-gray-300 space-y-4" start="2">
+                        <li class="pl-4">
+                            The original definition of the meter was based on distance from the North pole to the Earth's equator (measures along the surface) and was taken to be 10⁷ m. 
+                            <ul class="list-disc list-inside ml-6 mt-2 space-y-1">
+                                <li>What is the circumference of the Earth in meters?</li>
+                                <li>What is the radius of the Earth in meters?</li>
+                                <li>Give your answer to part (a) and part (b) in miles.</li>
+                                <li>What is the circumference of the Earth in meters assuming it to be a sphere of radius 6.4 × 10⁶ m? Compare your answer to part (a)</li>
+                            </ul>
+                        </li>
+                        
+                        <li class="pl-4">
+                            The time of flight of a laser pulse sent from the Earth to the Moon was measured in order to calculate the Earth-Moon distance, and it was found to be 3.8 × 10⁵ km.
+                            <ul class="list-disc list-inside ml-6 mt-2 space-y-1">
+                                <li>Express this distance in miles, meters, centimeters, and millimeters.</li>
+                            </ul>
+                        </li>
+                        
+                        <li class="pl-4">
+                            A unit of area, often used in measuring land areas, is the hectare, defined as 10⁴ m². An open-pit coal mine excavates 75 hectares of land, down to a depth of 26 m, each year. What volume of Earth, in cubic kilometers, is removed during this time?
+                        </li>
+                    </ol>
+                </div>
+                
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-light mb-4">Section 1.3: Dimensional Analysis</h3>
+                    
+                    <ol class="list-decimal list-inside text-gray-300 space-y-4" start="19">
+                        <li class="pl-4">
+                            A simple pendulum has periodic time T given by the relation: T = 2π√(L/g) where L is the length of the pendulum and g is the acceleration due to gravity in units of length divided by the square of time. Show that this equation is dimensionally correct.
+                        </li>
+                        
+                        <li class="pl-4">
+                            Suppose the displacements of an object moving in a straight line under uniform acceleration a is giving as a function of time by the relation s = kaᵐtⁿ, where k is a dimensionless constant. Use dimensional analysis to find the values of the powers m and n.
+                        </li>
+                        
+                        <li class="pl-4">
+                            Using dimensional analysis, determine if the following equations are dimensionally correct or incorrect:
+                            <ul class="list-disc list-inside ml-6 mt-2 space-y-1">
+                                <li>v² = v₀² + 2as</li>
+                                <li>s = s₀ + v₀t + ½at²</li>
+                                <li>s = s₀ cos(kt), where k is a constant that has the dimension of the inverse of time.</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+                
+                <div class="bg-accent bg-opacity-10 border border-accent rounded-xl p-6 mt-8">
+                    <h3 class="text-xl font-semibold text-light mb-3">Ready to Practice?</h3>
+                    <p class="text-gray-300 mb-4">Now that you've completed this lecture, test your understanding with the homework problems and interactive notebook.</p>
+                    <div class="flex space-x-4">
+                        <a href="../homework/hw1.html" class="btn-primary">
+                            <i class="fas fa-tasks mr-2"></i>
+                            Homework 1
+                        </a>
+                        <a href="../notebooks/chapter1.html" class="btn-primary">
+                            <i class="fas fa-book mr-2"></i>
+                            Chapter 1 Notebook
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="py-8 border-t border-gray-800 mt-8">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <p class="text-gray-400 text-sm">© 2024 Physics 110: Introductory Mechanics - Robert Sichomba</p>
         </div>
     </footer>
+
+    <script>
+        // Simple functionality for the page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add smooth scrolling for table of contents links
+            const tocLinks = document.querySelectorAll('a[href^="#"]');
+            tocLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 100,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // Add a simple progress tracker
+            const progressContainer = document.createElement('div');
+            progressContainer.className = 'fixed bottom-4 right-4 bg-dark-card p-4 rounded-xl border border-gray-800 shadow-lg';
+            progressContainer.innerHTML = `
+                <div class="text-sm text-gray-300 mb-2">Lecture Progress</div>
+                <div class="w-32 bg-gray-700 rounded-full h-2">
+                    <div id="progress-bar" class="bg-accent h-2 rounded-full" style="width: 0%"></div>
+                </div>
+                <div class="text-xs text-gray-400 mt-1" id="progress-text">0%</div>
+            `;
+            document.body.appendChild(progressContainer);
+            
+            // Update progress as user scrolls
+            window.addEventListener('scroll', updateProgress);
+            
+            function updateProgress() {
+                const winHeight = window.innerHeight;
+                const docHeight = document.documentElement.scrollHeight;
+                const scrollTop = window.pageYOffset;
+                const trackLength = docHeight - winHeight;
+                const progress = Math.floor((scrollTop / trackLength) * 100);
+                
+                document.getElementById('progress-bar').style.width = progress + '%';
+                document.getElementById('progress-text').textContent = progress + '%';
+            }
+            
+            // Initial call
+            updateProgress();
+        });
+    </script>
 </body>
 </html>
