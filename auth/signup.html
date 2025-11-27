@@ -3,11 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up - Physics 110: Introductory Mechanics</title>
+    <title>Sign Up - Physics 110: Introductory Mechanics | Robert Sichomba</title>
     
-    <!-- Same assets as main site -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Source+Serif+Pro:wght@400;600;700&display=swap" rel="stylesheet">
     
@@ -30,6 +34,11 @@
                     fontFamily: {
                         'sans': ['Inter', 'system-ui', 'sans-serif'],
                         'serif': ['Source Serif Pro', 'Georgia', 'serif'],
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                     }
                 }
             }
@@ -37,6 +46,13 @@
     </script>
     
     <style>
+        :root {
+            --primary-dark: #0a0a0a;
+            --card-dark: #1a1a1a;
+            --accent-blue: #3b82f6;
+            --accent-purple: #8b5cf6;
+        }
+        
         * {
             margin: 0;
             padding: 0;
@@ -44,35 +60,56 @@
         }
         
         body {
-            background-color: #0a0a0a;
+            background-color: var(--primary-dark);
             color: #ffffff;
             font-family: 'Inter', sans-serif;
             min-height: 100vh;
+            overflow-x: hidden;
         }
         
-        .gradient-bg {
-            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #3730a3 100%);
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
         }
         
-        .form-card {
+        ::-webkit-scrollbar-track {
             background: #1a1a1a;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #3b82f6;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #2563eb;
+        }
+        
+        /* Card Styles */
+        .card {
+            background-color: var(--card-dark);
+            transition: all 0.3s ease;
             border: 1px solid #2a2a2a;
             border-radius: 1rem;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
         }
         
+        /* Button Styles */
         .btn-primary {
-            background-color: #3b82f6;
-            border: none;
-            padding: 12px 20px;
-            font-weight: 600;
-            border-radius: 0.75rem;
-            transition: all 0.3s ease;
+            background-color: #1a1a1a;
             color: #ffffff;
+            border: 1px solid #2a2a2a;
+            transition: all 0.3s ease;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .btn-primary:hover {
-            background-color: #2563eb;
+            background-color: #3b82f6;
+            color: #ffffff;
+            border-color: #3b82f6;
             transform: translateY(-2px);
             box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.4);
         }
@@ -80,10 +117,12 @@
         .form-control {
             background: #2a2a2a;
             border: 1px solid #374151;
-            border-radius: 0.5rem;
-            padding: 12px 15px;
+            border-radius: 0.75rem;
+            padding: 14px 16px;
             color: #ffffff;
             transition: all 0.3s ease;
+            font-size: 16px;
+            width: 100%;
         }
         
         .form-control:focus {
@@ -92,32 +131,18 @@
             outline: none;
         }
         
-        .role-option {
-            border: 2px solid #374151;
-            border-radius: 0.5rem;
-            padding: 15px;
-            margin-bottom: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .role-option:hover {
-            border-color: #3b82f6;
-            background-color: rgba(59, 130, 246, 0.1);
-        }
-        
-        .role-option.selected {
-            border-color: #3b82f6;
-            background-color: rgba(59, 130, 246, 0.2);
-        }
-        
         .password-toggle {
             position: absolute;
-            right: 15px;
+            right: 16px;
             top: 50%;
             transform: translateY(-50%);
             cursor: pointer;
             color: #9ca3af;
+            transition: color 0.3s ease;
+        }
+        
+        .password-toggle:hover {
+            color: #3b82f6;
         }
         
         .link-primary {
@@ -157,11 +182,116 @@
         .nav-link:hover::after {
             width: 100%;
         }
+        
+        /* Gradient Background */
+        .gradient-bg {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #312e81 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .gradient-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(16, 185, 129, 0.05) 0%, transparent 50%);
+            z-index: 0;
+        }
+        
+        /* Form Card */
+        .form-card {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 1.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Progress Bar */
+        .progress-bar {
+            height: 4px;
+            background-color: #2a2a2a;
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            border-radius: 2px;
+            transition: width 0.5s ease;
+        }
+        
+        /* Toast Notifications */
+        .toast {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            background-color: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 0.75rem;
+            color: #ffffff;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+            max-width: 350px;
+        }
+        
+        .toast.show {
+            transform: translateX(0);
+        }
+        
+        .toast.success {
+            border-left: 4px solid #10b981;
+        }
+        
+        .toast.error {
+            border-left: 4px solid #ef4444;
+        }
+        
+        .toast.info {
+            border-left: 4px solid #3b82f6;
+        }
+        
+        /* Animations */
+        @keyframes float {
+            0%, 100% { 
+                transform: translateY(0px); 
+            }
+            50% { 
+                transform: translateY(-10px); 
+            }
+        }
+        
+        @keyframes glow {
+            from { 
+                box-shadow: 0 0 5px #3b82f6; 
+            }
+            to { 
+                box-shadow: 0 0 20px #3b82f6, 0 0 30px #3b82f6; 
+            }
+        }
+        
+        /* Focus States for Accessibility */
+        button:focus, a:focus {
+            outline: 2px solid #3b82f6;
+            outline-offset: 2px;
+        }
     </style>
 </head>
-<body class="gradient-bg">
+<body class="gradient-bg min-h-screen flex flex-col">
     <!-- Navigation -->
-    <nav class="bg-dark bg-opacity-90 backdrop-blur-sm border-b border-gray-800 py-4">
+    <nav class="bg-dark bg-opacity-90 backdrop-blur-sm border-b border-gray-800 py-4 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4">
             <div class="flex justify-between items-center">
                 <a href="../index.html" class="flex items-center space-x-3">
@@ -183,112 +313,118 @@
     </nav>
 
     <!-- Signup Section -->
-    <section class="py-16 min-h-screen flex items-center">
+    <section class="py-8 flex-grow flex items-center">
         <div class="max-w-md mx-auto px-4 w-full">
             <div class="form-card p-8">
-                <div class="text-center mb-2">
-                    <div class="w-16 h-16 bg-dark-card rounded-2xl flex items-center justify-center border border-gray-800 mx-auto mb-4">
-                        <i class="fas fa-user-plus text-accent text-2xl"></i>
+                <div class="text-center mb-6">
+                    <div class="w-20 h-20 bg-dark-card rounded-2xl flex items-center justify-center border border-gray-800 mx-auto mb-4 animate-float">
+                        <i class="fas fa-user-plus text-accent text-3xl"></i>
                     </div>
-                    <h2 class="text-2xl font-bold text-light mb-2">Create Your Account</h2>
-                    <p class="text-gray-400">Join Physics 110 to start learning</p>
+                    <h2 class="text-3xl font-bold text-light mb-2">Create Your Account</h2>
+                    <p class="text-gray-400">Join Physics 110 to start your learning journey</p>
                 </div>
                 
                 <div id="messageContainer" class="hidden mb-4 p-4 rounded-lg"></div>
 
-                <form id="signupForm" novalidate class="space-y-4">
+                <form id="signupForm" novalidate class="space-y-5">
+                    <!-- Name Fields -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="firstName" class="block text-light font-semibold mb-2">First Name</label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="firstName" 
+                                   name="firstName" 
+                                   placeholder="First name" 
+                                   required>
+                        </div>
+                        <div>
+                            <label for="lastName" class="block text-light font-semibold mb-2">Last Name</label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="lastName" 
+                                   name="lastName" 
+                                   placeholder="Last name" 
+                                   required>
+                        </div>
+                    </div>
+
                     <!-- Email Field -->
                     <div>
                         <label for="email" class="block text-light font-semibold mb-2">Email Address</label>
                         <input type="email" 
-                               class="form-control w-full" 
+                               class="form-control" 
                                id="email" 
                                name="email" 
                                placeholder="Enter your email address" 
                                required>
-                        <div class="text-gray-400 text-sm mt-1">We'll never share your email with anyone else.</div>
-                    </div>
-
-                    <!-- First Name Field -->
-                    <div>
-                        <label for="firstName" class="block text-light font-semibold mb-2">First Name</label>
-                        <input type="text" 
-                               class="form-control w-full" 
-                               id="firstName" 
-                               name="firstName" 
-                               placeholder="Enter your first name" 
-                               required>
-                    </div>
-
-                    <!-- Last Name Field -->
-                    <div>
-                        <label for="lastName" class="block text-light font-semibold mb-2">Last Name</label>
-                        <input type="text" 
-                               class="form-control w-full" 
-                               id="lastName" 
-                               name="lastName" 
-                               placeholder="Enter your last name" 
-                               required>
+                        <div class="text-gray-400 text-sm mt-2">We'll never share your email with anyone else.</div>
                     </div>
 
                     <!-- Password Field -->
-                    <div class="relative">
+                    <div>
                         <label for="password" class="block text-light font-semibold mb-2">Password</label>
-                        <input type="password" 
-                               class="form-control w-full" 
-                               id="password" 
-                               name="password" 
-                               placeholder="Create a strong password" 
-                               required>
-                        <i class="fas fa-eye password-toggle" onclick="togglePassword('password')"></i>
-                        <div class="text-gray-400 text-sm mt-1">
+                        <div class="relative">
+                            <input type="password" 
+                                   class="form-control" 
+                                   id="password" 
+                                   name="password" 
+                                   placeholder="Create a strong password" 
+                                   required
+                                   oninput="checkPasswordStrength(this.value)">
+                            <i class="fas fa-eye password-toggle" onclick="togglePassword('password')"></i>
+                        </div>
+                        <div class="text-gray-400 text-sm mt-2">
                             Must be at least 8 characters with uppercase, lowercase, and numbers.
                         </div>
+                        <div class="progress-bar">
+                            <div id="password-strength" class="progress-fill" style="width: 0%"></div>
+                        </div>
+                        <div id="password-feedback" class="text-sm mt-2"></div>
                     </div>
 
                     <!-- Confirm Password Field -->
-                    <div class="relative">
+                    <div>
                         <label for="confirmPassword" class="block text-light font-semibold mb-2">Confirm Password</label>
-                        <input type="password" 
-                               class="form-control w-full" 
-                               id="confirmPassword" 
-                               name="confirmPassword" 
-                               placeholder="Confirm your password" 
-                               required>
-                        <i class="fas fa-eye password-toggle" onclick="togglePassword('confirmPassword')"></i>
+                        <div class="relative">
+                            <input type="password" 
+                                   class="form-control" 
+                                   id="confirmPassword" 
+                                   name="confirmPassword" 
+                                   placeholder="Confirm your password" 
+                                   required>
+                            <i class="fas fa-eye password-toggle" onclick="togglePassword('confirmPassword')"></i>
+                        </div>
+                        <div id="confirm-feedback" class="text-sm mt-2"></div>
                     </div>
 
                     <!-- Role Selection -->
                     <div>
-                        <label class="block text-light font-semibold mb-2">I am a:</label>
-                        <div class="space-y-2">
-                            <label class="role-option block" for="role_student">
+                        <label class="block text-light font-semibold mb-3">I am a:</label>
+                        <div class="grid grid-cols-2 gap-3">
+                            <label class="role-option card p-4 cursor-pointer transition-all duration-200" for="role_student">
                                 <input type="radio" id="role_student" name="role" value="student" checked class="hidden">
-                                <div class="flex items-center">
-                                    <i class="fas fa-user-graduate mr-3 text-accent"></i>
-                                    <div>
-                                        <div class="font-semibold text-light">Student</div>
-                                        <div class="text-sm text-gray-400">I want to learn and take courses</div>
-                                    </div>
+                                <div class="flex flex-col items-center text-center">
+                                    <i class="fas fa-user-graduate text-2xl text-accent mb-2"></i>
+                                    <div class="font-semibold text-light">Student</div>
+                                    <div class="text-xs text-gray-400 mt-1">I want to learn and take courses</div>
                                 </div>
                             </label>
                             
-                            <label class="role-option block" for="role_instructor">
+                            <label class="role-option card p-4 cursor-pointer transition-all duration-200" for="role_instructor">
                                 <input type="radio" id="role_instructor" name="role" value="instructor" class="hidden">
-                                <div class="flex items-center">
-                                    <i class="fas fa-chalkboard-teacher mr-3 text-secondary"></i>
-                                    <div>
-                                        <div class="font-semibold text-light">Instructor</div>
-                                        <div class="text-sm text-gray-400">I want to create and teach courses</div>
-                                    </div>
+                                <div class="flex flex-col items-center text-center">
+                                    <i class="fas fa-chalkboard-teacher text-2xl text-secondary mb-2"></i>
+                                    <div class="font-semibold text-light">Instructor</div>
+                                    <div class="text-xs text-gray-400 mt-1">I want to teach and create courses</div>
                                 </div>
                             </label>
                         </div>
                     </div>
 
                     <!-- Terms and Conditions -->
-                    <div class="flex items-start space-x-2">
-                        <input type="checkbox" class="mt-1 form-checkbox h-4 w-4 text-accent bg-dark-card border-gray-600 rounded" id="terms" required>
+                    <div class="flex items-start space-x-3">
+                        <input type="checkbox" class="mt-1 h-5 w-5 text-accent bg-dark-card border-gray-600 rounded focus:ring-accent" id="terms" required>
                         <label for="terms" class="text-gray-300 text-sm">
                             I agree to the <a href="#" class="link-primary">Terms of Service</a> and <a href="#" class="link-primary">Privacy Policy</a>
                         </label>
@@ -296,19 +432,30 @@
 
                     <!-- Submit Button -->
                     <div>
-                        <button type="submit" class="btn-primary w-full py-3 font-semibold text-lg">
+                        <button type="submit" class="btn-primary w-full py-4 font-semibold text-lg">
+                            <i class="fas fa-user-plus mr-2"></i>
                             Create Account
                         </button>
                     </div>
                 </form>
 
                 <!-- Login Link -->
-                <div class="text-center mt-6 pt-6 border-t border-gray-800">
+                <div class="text-center mt-8 pt-6 border-t border-gray-800">
                     <p class="text-gray-400">Already have an account? <a href="login.html" class="link-primary">Log In</a></p>
                 </div>
             </div>
         </div>
     </section>
+
+    <!-- Footer -->
+    <footer class="py-8 border-t border-gray-800 mt-8">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <p class="text-gray-400 text-sm">© 2024 Physics 110: Introductory Mechanics - Robert Sichomba</p>
+        </div>
+    </footer>
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
 
     <script>
         // Password toggle functionality
@@ -324,16 +471,107 @@
             }
         }
 
+        // Password strength checker
+        function checkPasswordStrength(password) {
+            const strengthBar = document.getElementById('password-strength');
+            const feedback = document.getElementById('password-feedback');
+            
+            let strength = 0;
+            let feedbackText = '';
+            let barColor = '#ef4444'; // red
+            
+            // Check password length
+            if (password.length >= 8) {
+                strength += 25;
+            } else {
+                feedbackText = 'Password should be at least 8 characters';
+            }
+            
+            // Check for lowercase letters
+            if (/[a-z]/.test(password)) {
+                strength += 25;
+            } else {
+                feedbackText = 'Add lowercase letters';
+            }
+            
+            // Check for uppercase letters
+            if (/[A-Z]/.test(password)) {
+                strength += 25;
+            } else {
+                feedbackText = 'Add uppercase letters';
+            }
+            
+            // Check for numbers
+            if (/[0-9]/.test(password)) {
+                strength += 25;
+            } else {
+                feedbackText = 'Add numbers';
+            }
+            
+            // Update strength bar and feedback
+            strengthBar.style.width = `${strength}%`;
+            
+            if (strength === 100) {
+                barColor = '#10b981'; // green
+                feedbackText = 'Strong password!';
+            } else if (strength >= 75) {
+                barColor = '#3b82f6'; // blue
+                feedbackText = 'Good password';
+            } else if (strength >= 50) {
+                barColor = '#f59e0b'; // yellow
+                feedbackText = 'Fair password';
+            } else {
+                barColor = '#ef4444'; // red
+            }
+            
+            strengthBar.style.backgroundColor = barColor;
+            feedback.textContent = feedbackText;
+            feedback.className = `text-sm mt-2 ${strength === 100 ? 'text-green-400' : strength >= 50 ? 'text-yellow-400' : 'text-red-400'}`;
+            
+            // Check password confirmation
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            if (confirmPassword) {
+                checkPasswordMatch(password, confirmPassword);
+            }
+        }
+        
+        // Password match checker
+        function checkPasswordMatch(password, confirmPassword) {
+            const feedback = document.getElementById('confirm-feedback');
+            if (password === confirmPassword && password.length > 0) {
+                feedback.textContent = 'Passwords match!';
+                feedback.className = 'text-sm mt-2 text-green-400';
+            } else if (confirmPassword.length > 0) {
+                feedback.textContent = 'Passwords do not match';
+                feedback.className = 'text-sm mt-2 text-red-400';
+            } else {
+                feedback.textContent = '';
+            }
+        }
+
         // Role selection styling
         document.addEventListener('DOMContentLoaded', function() {
             const roleOptions = document.querySelectorAll('.role-option');
             roleOptions.forEach(option => {
                 option.addEventListener('click', function() {
-                    roleOptions.forEach(opt => opt.classList.remove('selected'));
-                    this.classList.add('selected');
+                    roleOptions.forEach(opt => {
+                        opt.classList.remove('border-accent', 'bg-blue-900', 'bg-opacity-20');
+                        opt.classList.add('border-gray-700');
+                    });
+                    this.classList.remove('border-gray-700');
+                    this.classList.add('border-accent', 'bg-blue-900', 'bg-opacity-20');
                     const radio = this.querySelector('input[type="radio"]');
                     radio.checked = true;
                 });
+            });
+
+            // Auto-select first role option
+            document.querySelector('.role-option').classList.add('border-accent', 'bg-blue-900', 'bg-opacity-20');
+
+            // Password confirmation listener
+            document.getElementById('confirmPassword').addEventListener('input', function() {
+                const password = document.getElementById('password').value;
+                checkPasswordMatch(password, this.value);
             });
 
             // Form submission handling
@@ -344,8 +582,57 @@
                 messageContainer.className = `p-4 rounded-lg mb-4 ${
                     type === 'success' ? 'bg-green-900 text-green-200 border border-green-700' : 'bg-red-900 text-red-200 border border-red-700'
                 }`;
-                messageContainer.innerHTML = message;
+                messageContainer.innerHTML = `
+                    <div class="flex items-center">
+                        <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'} mr-3"></i>
+                        <span>${message}</span>
+                    </div>
+                `;
                 messageContainer.classList.remove('hidden');
+            }
+
+            // Toast notification function
+            function showToast(message, type = 'info') {
+                const toastContainer = document.getElementById('toast-container');
+                const toastId = 'toast-' + Date.now();
+                
+                const toast = document.createElement('div');
+                toast.id = toastId;
+                toast.className = `toast ${type}`;
+                toast.innerHTML = `
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 pt-0.5">
+                            ${type === 'success' ? '<i class="fas fa-check-circle text-green-400"></i>' : ''}
+                            ${type === 'error' ? '<i class="fas fa-exclamation-circle text-red-400"></i>' : ''}
+                            ${type === 'info' ? '<i class="fas fa-info-circle text-blue-400"></i>' : ''}
+                        </div>
+                        <div class="ml-3 flex-1">
+                            <p class="text-sm font-medium">${message}</p>
+                        </div>
+                        <button class="ml-4 flex-shrink-0 text-gray-400 hover:text-light transition-colors" onclick="document.getElementById('${toastId}').remove()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                `;
+                
+                toastContainer.appendChild(toast);
+                
+                // Show toast
+                setTimeout(() => {
+                    toast.classList.add('show');
+                }, 10);
+                
+                // Auto remove after 5 seconds
+                setTimeout(() => {
+                    if (document.getElementById(toastId)) {
+                        toast.classList.remove('show');
+                        setTimeout(() => {
+                            if (document.getElementById(toastId)) {
+                                document.getElementById(toastId).remove();
+                            }
+                        }, 300);
+                    }
+                }, 5000);
             }
 
             signupForm.addEventListener('submit', function(e) {
@@ -387,6 +674,7 @@
 
                 // Create user object
                 const user = {
+                    id: Date.now().toString(),
                     email,
                     firstName,
                     lastName,
@@ -415,13 +703,15 @@
                 
                 // Store current session
                 localStorage.setItem('physics110_currentUser', JSON.stringify({
+                    id: user.id,
                     email: user.email,
                     firstName: user.firstName,
                     lastName: user.lastName,
-                    role: user.role
+                    role: user.role,
+                    progress: user.progress
                 }));
 
-                showMessage('🎉 Account created successfully! Redirecting to your dashboard...', 'success');
+                showToast('🎉 Account created successfully! Redirecting to your dashboard...', 'success');
                 
                 // Redirect to home page
                 setTimeout(() => {
@@ -429,8 +719,17 @@
                 }, 2000);
             });
 
-            // Auto-select first role option
-            document.querySelector('.role-option').classList.add('selected');
+            // Add some visual feedback for form interactions
+            const inputs = document.querySelectorAll('.form-control');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.parentElement.classList.add('ring-2', 'ring-blue-500', 'ring-opacity-50');
+                });
+                
+                input.addEventListener('blur', function() {
+                    this.parentElement.classList.remove('ring-2', 'ring-blue-500', 'ring-opacity-50');
+                });
+            });
         });
     </script>
 </body>

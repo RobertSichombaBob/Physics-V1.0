@@ -218,6 +218,43 @@
             display: none;
         }
         
+        /* Auth Modal */
+        .auth-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .auth-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .auth-content {
+            background-color: #1a1a1a;
+            border-radius: 1rem;
+            padding: 2rem;
+            width: 90%;
+            max-width: 500px;
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+            border: 1px solid #2a2a2a;
+        }
+        
+        .auth-modal.active .auth-content {
+            transform: translateY(0);
+        }
+        
         /* Animations */
         @keyframes fadeIn {
             from { 
@@ -317,6 +354,45 @@
             justify-content: center;
         }
         
+        /* User Profile Dropdown */
+        .user-dropdown {
+            position: relative;
+        }
+        
+        .user-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 0.75rem;
+            padding: 0.5rem 0;
+            min-width: 200px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+        
+        .user-dropdown.active .user-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .user-menu-item {
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: center;
+            color: #ffffff;
+            transition: background-color 0.2s ease;
+        }
+        
+        .user-menu-item:hover {
+            background-color: #2a2a2a;
+        }
+        
         /* Responsive Improvements */
         @media (max-width: 768px) {
             .lecture-timeline::before {
@@ -335,12 +411,58 @@
             .resource-card {
                 padding: 1rem;
             }
+            
+            .user-dropdown {
+                position: static;
+            }
+            
+            .user-menu {
+                position: static;
+                opacity: 1;
+                visibility: visible;
+                transform: none;
+                border: none;
+                background: transparent;
+            }
         }
         
         /* Focus States for Accessibility */
         button:focus, a:focus {
             outline: 2px solid #3b82f6;
             outline-offset: 2px;
+        }
+        
+        /* Toast Notifications */
+        .toast {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            background-color: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 0.75rem;
+            color: #ffffff;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+            max-width: 350px;
+        }
+        
+        .toast.show {
+            transform: translateX(0);
+        }
+        
+        .toast.success {
+            border-left: 4px solid #10b981;
+        }
+        
+        .toast.error {
+            border-left: 4px solid #ef4444;
+        }
+        
+        .toast.info {
+            border-left: 4px solid #3b82f6;
         }
     </style>
 </head>
@@ -363,34 +485,24 @@
                     </a>
                 </div>
 
-
-
-
-<!-- In the desktop navigation -->
-<div class="hidden md:flex items-center space-x-4">
-    <a href="#home" class="nav-link text-light hover:text-accent font-medium transition-colors duration-200 active">Home</a>
-    <a href="#lectures" class="nav-link text-light hover:text-accent font-medium transition-colors duration-200">Lectures</a>
-    <a href="#notebooks" class="nav-link text-light hover:text-accent font-medium transition-colors duration-200">Notebooks</a>
-    <a href="#homework" class="nav-link text-light hover:text-accent font-medium transition-colors duration-200">Homework</a>
-    <a href="#quizzes" class="nav-link text-light hover:text-accent font-medium transition-colors duration-200">Quizzes</a>
-    <a href="#resources" class="nav-link text-light hover:text-accent font-medium transition-colors duration-200">Resources</a>
-    
-    <!-- Authentication Links -->
-    <div id="auth-links" class="flex items-center space-x-3">
-        <a href="auth/login.html" class="text-light hover:text-accent font-medium transition-colors duration-200">Login</a>
-        <a href="auth/signup.html" class="btn-primary px-6 py-3 rounded-xl font-semibold transition-all duration-200">
-            Sign Up
-        </a>
-    </div>
-    
-    <a href="https://github.com/RobertSichombaBob/physics-110" class="text-light hover:text-accent transition-colors">
-        <i class="fab fa-github text-xl"></i>
-    </a>
-</div>
-
-
-
-
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center space-x-4">
+                    <a href="#home" class="nav-link text-light hover:text-accent font-medium transition-colors duration-200 active">Home</a>
+                    <a href="#lectures" class="nav-link text-light hover:text-accent font-medium transition-colors duration-200">Lectures</a>
+                    <a href="#notebooks" class="nav-link text-light hover:text-accent font-medium transition-colors duration-200">Notebooks</a>
+                    <a href="#homework" class="nav-link text-light hover:text-accent font-medium transition-colors duration-200">Homework</a>
+                    <a href="#quizzes" class="nav-link text-light hover:text-accent font-medium transition-colors duration-200">Quizzes</a>
+                    <a href="#resources" class="nav-link text-light hover:text-accent font-medium transition-colors duration-200">Resources</a>
+                    
+                    <!-- Authentication Links - Dynamic -->
+                    <div id="auth-links" class="flex items-center space-x-3">
+                        <!-- Will be populated by JavaScript -->
+                    </div>
+                    
+                    <a href="https://github.com/RobertSichombaBob/physics-110" class="text-light hover:text-accent transition-colors">
+                        <i class="fab fa-github text-xl"></i>
+                    </a>
+                </div>
 
                 <!-- Mobile menu button -->
                 <div class="md:hidden flex items-center">
@@ -422,6 +534,12 @@
                 <a href="#resources" class="block text-light hover:text-accent font-medium text-lg py-3 border-b border-gray-800" onclick="router.navigateTo('resources')">
                     <i class="fas fa-tools mr-4 w-6"></i>Resources
                 </a>
+                
+                <!-- Mobile Auth Links -->
+                <div id="mobile-auth-links" class="pt-4 border-t border-gray-800">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+                
                 <a href="https://github.com/RobertSichombaBob/physics-110" class="block btn-primary px-6 py-4 rounded-xl font-semibold text-center mt-4">
                     <i class="fab fa-github mr-2"></i>View Code
                 </a>
@@ -579,34 +697,57 @@
                 </div>
             </div>
 
-            <!-- Progress Tracker -->
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <!-- Progress Tracker - Only for logged in users -->
+            <div id="progress-tracker" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
                 <div class="card rounded-2xl p-8">
                     <h2 class="text-3xl font-bold text-light mb-6">📊 Your Progress</h2>
                     <div class="space-y-6">
                         <div>
                             <div class="flex justify-between mb-2">
                                 <span class="text-light font-medium">Course Completion</span>
-                                <span class="text-light font-semibold">15%</span>
+                                <span class="text-light font-semibold" id="course-completion">0%</span>
                             </div>
                             <div class="progress-bar">
-                                <div class="progress-fill" style="width: 15%"></div>
+                                <div id="course-progress" class="progress-fill" style="width: 0%"></div>
                             </div>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                             <div class="text-center">
-                                <div class="text-2xl font-bold text-accent mb-2">2/14</div>
+                                <div class="text-2xl font-bold text-accent mb-2" id="lectures-completed">0/14</div>
                                 <div class="text-gray-300">Lectures Completed</div>
                             </div>
                             <div class="text-center">
-                                <div class="text-2xl font-bold text-secondary mb-2">1/6</div>
+                                <div class="text-2xl font-bold text-secondary mb-2" id="quizzes-passed">0/6</div>
                                 <div class="text-gray-300">Quizzes Passed</div>
                             </div>
                             <div class="text-center">
-                                <div class="text-2xl font-bold text-success mb-2">3/10</div>
+                                <div class="text-2xl font-bold text-success mb-2" id="homework-submitted">0/10</div>
                                 <div class="text-gray-300">Homework Submitted</div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Login Prompt for non-logged in users -->
+            <div id="login-prompt" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 hidden">
+                <div class="card rounded-2xl p-8 text-center">
+                    <div class="w-20 h-20 bg-dark-card rounded-full flex items-center justify-center mx-auto mb-6 border border-gray-800">
+                        <i class="fas fa-user-lock text-accent text-3xl"></i>
+                    </div>
+                    <h2 class="text-3xl font-bold text-light mb-4">Track Your Progress</h2>
+                    <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+                        Create an account or log in to track your learning progress, save your work, and access all course materials.
+                    </p>
+                    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6 justify-center">
+                        <button onclick="auth.showModal('signup')" class="btn-primary px-8 py-4 rounded-xl font-bold transition-all duration-200 text-center text-lg">
+                            <i class="fas fa-user-plus mr-3"></i>
+                            Create Account
+                        </button>
+                        <button onclick="auth.showModal('login')" class="btn-secondary px-8 py-4 rounded-xl font-bold transition-all duration-200 text-center text-lg">
+                            <i class="fas fa-sign-in-alt mr-3"></i>
+                            Log In
+                        </button>
                     </div>
                 </div>
             </div>
@@ -1525,10 +1666,10 @@
                             <span class="badge">Solutions</span>
                         </div>
                         <div class="flex justify-between items-center">
-                            <a href="resources/textbook.html" class="text-accent hover:text-light font-semibold flex items-center group">
+                            <a href="#" onclick="auth.requireAuth('resources/textbook.html')" class="text-accent hover:text-light font-semibold flex items-center group">
                                 Access Textbook <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
                             </a>
-                            <a href="resources/textbook.html" class="text-gray-400 hover:text-light transition-colors">
+                            <a href="#" onclick="auth.requireAuth('resources/textbook.html')" class="text-gray-400 hover:text-light transition-colors">
                                 <i class="fas fa-external-link-alt text-xl"></i>
                             </a>
                         </div>
@@ -1548,10 +1689,10 @@
                             <span class="badge">Printable</span>
                         </div>
                         <div class="flex justify-between items-center">
-                            <a href="resources/formula-sheet.html" class="text-accent hover:text-light font-semibold flex items-center group">
+                            <a href="#" onclick="auth.requireAuth('resources/formula-sheet.html')" class="text-accent hover:text-light font-semibold flex items-center group">
                                 Download <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
                             </a>
-                            <a href="resources/formula-sheet.html" class="text-gray-400 hover:text-light transition-colors">
+                            <a href="#" onclick="auth.requireAuth('resources/formula-sheet.html')" class="text-gray-400 hover:text-light transition-colors">
                                 <i class="fas fa-download text-xl"></i>
                             </a>
                         </div>
@@ -1571,10 +1712,10 @@
                             <span class="badge">Installation</span>
                         </div>
                         <div class="flex justify-between items-center">
-                            <a href="resources/python-setup.html" class="text-accent hover:text-light font-semibold flex items-center group">
+                            <a href="#" onclick="auth.requireAuth('resources/python-setup.html')" class="text-accent hover:text-light font-semibold flex items-center group">
                                 View Guide <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
                             </a>
-                            <a href="resources/python-setup.html" class="text-gray-400 hover:text-light transition-colors">
+                            <a href="#" onclick="auth.requireAuth('resources/python-setup.html')" class="text-gray-400 hover:text-light transition-colors">
                                 <i class="fas fa-code text-xl"></i>
                             </a>
                         </div>
@@ -1594,10 +1735,10 @@
                             <span class="badge">Tutorials</span>
                         </div>
                         <div class="flex justify-between items-center">
-                            <a href="resources/video-library.html" class="text-accent hover:text-light font-semibold flex items-center group">
+                            <a href="#" onclick="auth.requireAuth('resources/video-library.html')" class="text-accent hover:text-light font-semibold flex items-center group">
                                 Browse Videos <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
                             </a>
-                            <a href="resources/video-library.html" class="text-gray-400 hover:text-light transition-colors">
+                            <a href="#" onclick="auth.requireAuth('resources/video-library.html')" class="text-gray-400 hover:text-light transition-colors">
                                 <i class="fas fa-play-circle text-xl"></i>
                             </a>
                         </div>
@@ -1617,10 +1758,10 @@
                             <span class="badge">Zoom</span>
                         </div>
                         <div class="flex justify-between items-center">
-                            <a href="resources/office-hours.html" class="text-accent hover:text-light font-semibold flex items-center group">
+                            <a href="#" onclick="auth.requireAuth('resources/office-hours.html')" class="text-accent hover:text-light font-semibold flex items-center group">
                                 View Schedule <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
                             </a>
-                            <a href="resources/office-hours.html" class="text-gray-400 hover:text-light transition-colors">
+                            <a href="#" onclick="auth.requireAuth('resources/office-hours.html')" class="text-gray-400 hover:text-light transition-colors">
                                 <i class="fas fa-calendar text-xl"></i>
                             </a>
                         </div>
@@ -1640,10 +1781,10 @@
                             <span class="badge">Q&A</span>
                         </div>
                         <div class="flex justify-between items-center">
-                            <a href="resources/forum.html" class="text-accent hover:text-light font-semibold flex items-center group">
+                            <a href="#" onclick="auth.requireAuth('resources/forum.html')" class="text-accent hover:text-light font-semibold flex items-center group">
                                 Join Discussion <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
                             </a>
-                            <a href="resources/forum.html" class="text-gray-400 hover:text-light transition-colors">
+                            <a href="#" onclick="auth.requireAuth('resources/forum.html')" class="text-gray-400 hover:text-light transition-colors">
                                 <i class="fas fa-users text-xl"></i>
                             </a>
                         </div>
@@ -1701,6 +1842,83 @@
             </div>
         </section>
     </main>
+
+    <!-- Auth Modal -->
+    <div id="auth-modal" class="auth-modal">
+        <div class="auth-content">
+            <div class="flex justify-between items-center mb-6">
+                <h2 id="auth-modal-title" class="text-2xl font-bold text-light">Sign In</h2>
+                <button id="auth-modal-close" class="text-gray-400 hover:text-light transition-colors">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <!-- Login Form -->
+            <form id="login-form" class="space-y-4">
+                <div>
+                    <label for="login-email" class="block text-light font-medium mb-2">Email Address</label>
+                    <input type="email" id="login-email" required class="w-full bg-dark-card border border-gray-800 rounded-xl px-4 py-3 text-light focus:outline-none focus:border-accent transition-colors">
+                </div>
+                <div>
+                    <label for="login-password" class="block text-light font-medium mb-2">Password</label>
+                    <input type="password" id="login-password" required class="w-full bg-dark-card border border-gray-800 rounded-xl px-4 py-3 text-light focus:outline-none focus:border-accent transition-colors">
+                </div>
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <input type="checkbox" id="remember-me" class="h-4 w-4 text-accent focus:ring-accent border-gray-800 rounded bg-dark-card">
+                        <label for="remember-me" class="ml-2 text-gray-300 text-sm">Remember me</label>
+                    </div>
+                    <a href="#" class="text-accent hover:text-light text-sm transition-colors">Forgot password?</a>
+                </div>
+                <button type="submit" class="w-full btn-primary py-3 rounded-xl font-semibold transition-all duration-200">
+                    Sign In
+                </button>
+            </form>
+            
+            <!-- Signup Form -->
+            <form id="signup-form" class="space-y-4 hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="signup-firstname" class="block text-light font-medium mb-2">First Name</label>
+                        <input type="text" id="signup-firstname" required class="w-full bg-dark-card border border-gray-800 rounded-xl px-4 py-3 text-light focus:outline-none focus:border-accent transition-colors">
+                    </div>
+                    <div>
+                        <label for="signup-lastname" class="block text-light font-medium mb-2">Last Name</label>
+                        <input type="text" id="signup-lastname" required class="w-full bg-dark-card border border-gray-800 rounded-xl px-4 py-3 text-light focus:outline-none focus:border-accent transition-colors">
+                    </div>
+                </div>
+                <div>
+                    <label for="signup-email" class="block text-light font-medium mb-2">Email Address</label>
+                    <input type="email" id="signup-email" required class="w-full bg-dark-card border border-gray-800 rounded-xl px-4 py-3 text-light focus:outline-none focus:border-accent transition-colors">
+                </div>
+                <div>
+                    <label for="signup-password" class="block text-light font-medium mb-2">Password</label>
+                    <input type="password" id="signup-password" required class="w-full bg-dark-card border border-gray-800 rounded-xl px-4 py-3 text-light focus:outline-none focus:border-accent transition-colors">
+                </div>
+                <div>
+                    <label for="signup-confirm-password" class="block text-light font-medium mb-2">Confirm Password</label>
+                    <input type="password" id="signup-confirm-password" required class="w-full bg-dark-card border border-gray-800 rounded-xl px-4 py-3 text-light focus:outline-none focus:border-accent transition-colors">
+                </div>
+                <div class="flex items-center">
+                    <input type="checkbox" id="agree-terms" class="h-4 w-4 text-accent focus:ring-accent border-gray-800 rounded bg-dark-card">
+                    <label for="agree-terms" class="ml-2 text-gray-300 text-sm">I agree to the <a href="#" class="text-accent hover:text-light transition-colors">Terms of Service</a> and <a href="#" class="text-accent hover:text-light transition-colors">Privacy Policy</a></label>
+                </div>
+                <button type="submit" class="w-full btn-primary py-3 rounded-xl font-semibold transition-all duration-200">
+                    Create Account
+                </button>
+            </form>
+            
+            <div class="mt-6 text-center">
+                <p id="auth-switch-text" class="text-gray-300">
+                    Don't have an account? 
+                    <a href="#" id="auth-switch-link" class="text-accent hover:text-light font-medium transition-colors">Sign up</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container"></div>
 
     <!-- Footer -->
     <footer class="py-12 border-t border-gray-800 mt-20">
@@ -1915,6 +2133,385 @@
             }
         }
 
+        // Authentication Management
+        class AuthManager {
+            constructor() {
+                this.currentUser = null;
+                this.init();
+            }
+
+            init() {
+                // Check for existing session
+                this.checkAuthState();
+                
+                // Setup auth modal
+                this.setupAuthModal();
+                
+                // Setup form handlers
+                this.setupFormHandlers();
+                
+                // Setup user dropdown
+                this.setupUserDropdown();
+            }
+
+            checkAuthState() {
+                const userData = localStorage.getItem('physics110_currentUser');
+                if (userData) {
+                    this.currentUser = JSON.parse(userData);
+                    this.updateUI();
+                } else {
+                    this.currentUser = null;
+                    this.updateUI();
+                }
+            }
+
+            setupAuthModal() {
+                const modal = document.getElementById('auth-modal');
+                const closeBtn = document.getElementById('auth-modal-close');
+                const switchLink = document.getElementById('auth-switch-link');
+                
+                // Close modal when clicking X or outside
+                closeBtn.addEventListener('click', () => this.hideModal());
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) this.hideModal();
+                });
+                
+                // Switch between login and signup
+                switchLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.toggleAuthMode();
+                });
+            }
+
+            setupFormHandlers() {
+                const loginForm = document.getElementById('login-form');
+                const signupForm = document.getElementById('signup-form');
+                
+                loginForm.addEventListener('submit', (e) => this.handleLogin(e));
+                signupForm.addEventListener('submit', (e) => this.handleSignup(e));
+            }
+
+            setupUserDropdown() {
+                const userDropdown = document.getElementById('user-dropdown');
+                if (userDropdown) {
+                    userDropdown.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        userDropdown.classList.toggle('active');
+                    });
+                    
+                    // Close dropdown when clicking outside
+                    document.addEventListener('click', () => {
+                        userDropdown.classList.remove('active');
+                    });
+                }
+            }
+
+            showModal(mode = 'login') {
+                const modal = document.getElementById('auth-modal');
+                modal.classList.add('active');
+                
+                if (mode === 'signup') {
+                    this.toggleAuthMode(true);
+                } else {
+                    this.toggleAuthMode(false);
+                }
+            }
+
+            hideModal() {
+                const modal = document.getElementById('auth-modal');
+                modal.classList.remove('active');
+                
+                // Reset forms
+                document.getElementById('login-form').reset();
+                document.getElementById('signup-form').reset();
+            }
+
+            toggleAuthMode(isSignup = false) {
+                const loginForm = document.getElementById('login-form');
+                const signupForm = document.getElementById('signup-form');
+                const modalTitle = document.getElementById('auth-modal-title');
+                const switchText = document.getElementById('auth-switch-text');
+                const switchLink = document.getElementById('auth-switch-link');
+                
+                if (isSignup) {
+                    loginForm.classList.add('hidden');
+                    signupForm.classList.remove('hidden');
+                    modalTitle.textContent = 'Create Account';
+                    switchText.innerHTML = 'Already have an account? ';
+                    switchLink.textContent = 'Sign in';
+                } else {
+                    loginForm.classList.remove('hidden');
+                    signupForm.classList.add('hidden');
+                    modalTitle.textContent = 'Sign In';
+                    switchText.innerHTML = "Don't have an account? ";
+                    switchLink.textContent = 'Sign up';
+                }
+            }
+
+            handleLogin(e) {
+                e.preventDefault();
+                
+                const email = document.getElementById('login-email').value;
+                const password = document.getElementById('login-password').value;
+                
+                // Get users from localStorage
+                const users = JSON.parse(localStorage.getItem('physics110_users') || '[]');
+                const user = users.find(u => u.email === email && u.password === password);
+                
+                if (user) {
+                    // Successful login
+                    this.currentUser = user;
+                    localStorage.setItem('physics110_currentUser', JSON.stringify(user));
+                    this.updateUI();
+                    this.hideModal();
+                    this.showToast('Successfully logged in!', 'success');
+                } else {
+                    // Failed login
+                    this.showToast('Invalid email or password', 'error');
+                }
+            }
+
+            handleSignup(e) {
+                e.preventDefault();
+                
+                const firstName = document.getElementById('signup-firstname').value;
+                const lastName = document.getElementById('signup-lastname').value;
+                const email = document.getElementById('signup-email').value;
+                const password = document.getElementById('signup-password').value;
+                const confirmPassword = document.getElementById('signup-confirm-password').value;
+                const agreeTerms = document.getElementById('agree-terms').checked;
+                
+                // Validation
+                if (password !== confirmPassword) {
+                    this.showToast('Passwords do not match', 'error');
+                    return;
+                }
+                
+                if (!agreeTerms) {
+                    this.showToast('Please agree to the terms and conditions', 'error');
+                    return;
+                }
+                
+                // Get existing users
+                const users = JSON.parse(localStorage.getItem('physics110_users') || '[]');
+                
+                // Check if user already exists
+                if (users.find(u => u.email === email)) {
+                    this.showToast('An account with this email already exists', 'error');
+                    return;
+                }
+                
+                // Create new user
+                const newUser = {
+                    id: Date.now().toString(),
+                    firstName,
+                    lastName,
+                    email,
+                    password, // In a real app, this would be hashed
+                    createdAt: new Date().toISOString(),
+                    progress: {
+                        completedLectures: 0,
+                        completedQuizzes: 0,
+                        submittedHomework: 0
+                    }
+                };
+                
+                // Save user
+                users.push(newUser);
+                localStorage.setItem('physics110_users', JSON.stringify(users));
+                
+                // Log in the new user
+                this.currentUser = newUser;
+                localStorage.setItem('physics110_currentUser', JSON.stringify(newUser));
+                
+                // Update UI and show success
+                this.updateUI();
+                this.hideModal();
+                this.showToast('Account created successfully!', 'success');
+            }
+
+            logout() {
+                this.currentUser = null;
+                localStorage.removeItem('physics110_currentUser');
+                this.updateUI();
+                this.showToast('You have been logged out', 'info');
+            }
+
+            requireAuth(resourceUrl) {
+                if (this.currentUser) {
+                    // User is logged in, allow access
+                    window.location.href = resourceUrl;
+                } else {
+                    // User is not logged in, show auth modal
+                    this.showToast('Please log in to access this resource', 'info');
+                    this.showModal('login');
+                }
+            }
+
+            updateUI() {
+                const authLinks = document.getElementById('auth-links');
+                const mobileAuthLinks = document.getElementById('mobile-auth-links');
+                const progressTracker = document.getElementById('progress-tracker');
+                const loginPrompt = document.getElementById('login-prompt');
+                
+                if (this.currentUser) {
+                    // User is logged in
+                    authLinks.innerHTML = `
+                        <div class="user-dropdown" id="user-dropdown">
+                            <button class="flex items-center space-x-2 text-light hover:text-accent transition-colors cursor-pointer">
+                                <div class="w-8 h-8 bg-accent rounded-full flex items-center justify-center">
+                                    <span class="text-sm font-semibold">${this.currentUser.firstName.charAt(0)}${this.currentUser.lastName.charAt(0)}</span>
+                                </div>
+                                <span>${this.currentUser.firstName}</span>
+                                <i class="fas fa-chevron-down text-xs"></i>
+                            </button>
+                            <div class="user-menu">
+                                <div class="user-menu-item">
+                                    <i class="fas fa-user mr-3"></i>
+                                    <span>Profile</span>
+                                </div>
+                                <div class="user-menu-item">
+                                    <i class="fas fa-cog mr-3"></i>
+                                    <span>Settings</span>
+                                </div>
+                                <div class="user-menu-item" onclick="auth.logout()">
+                                    <i class="fas fa-sign-out-alt mr-3"></i>
+                                    <span>Logout</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    mobileAuthLinks.innerHTML = `
+                        <div class="flex flex-col space-y-4">
+                            <div class="flex items-center space-x-3 py-3 border-b border-gray-800">
+                                <div class="w-10 h-10 bg-accent rounded-full flex items-center justify-center">
+                                    <span class="text-sm font-semibold">${this.currentUser.firstName.charAt(0)}${this.currentUser.lastName.charAt(0)}</span>
+                                </div>
+                                <div>
+                                    <div class="text-light font-medium">${this.currentUser.firstName} ${this.currentUser.lastName}</div>
+                                    <div class="text-gray-400 text-sm">${this.currentUser.email}</div>
+                                </div>
+                            </div>
+                            <a href="#" class="block text-light hover:text-accent font-medium text-lg py-3 border-b border-gray-800">
+                                <i class="fas fa-user mr-4 w-6"></i>Profile
+                            </a>
+                            <a href="#" class="block text-light hover:text-accent font-medium text-lg py-3 border-b border-gray-800">
+                                <i class="fas fa-cog mr-4 w-6"></i>Settings
+                            </a>
+                            <button onclick="auth.logout()" class="block text-light hover:text-accent font-medium text-lg py-3 text-left">
+                                <i class="fas fa-sign-out-alt mr-4 w-6"></i>Logout
+                            </button>
+                        </div>
+                    `;
+                    
+                    // Show progress tracker for logged in users
+                    if (progressTracker) progressTracker.classList.remove('hidden');
+                    if (loginPrompt) loginPrompt.classList.add('hidden');
+                    
+                    // Update progress data
+                    this.updateProgressUI();
+                    
+                    // Re-setup user dropdown for the new element
+                    this.setupUserDropdown();
+                } else {
+                    // User is not logged in
+                    authLinks.innerHTML = `
+                        <a href="#" onclick="auth.showModal('login')" class="text-light hover:text-accent font-medium transition-colors duration-200">Login</a>
+                        <a href="#" onclick="auth.showModal('signup')" class="btn-primary px-6 py-3 rounded-xl font-semibold transition-all duration-200">
+                            Sign Up
+                        </a>
+                    `;
+                    
+                    mobileAuthLinks.innerHTML = `
+                        <div class="flex flex-col space-y-4 pt-4 border-t border-gray-800">
+                            <button onclick="auth.showModal('login')" class="block text-light hover:text-accent font-medium text-lg py-3 border-b border-gray-800">
+                                <i class="fas fa-sign-in-alt mr-4 w-6"></i>Login
+                            </button>
+                            <button onclick="auth.showModal('signup')" class="block btn-primary px-6 py-4 rounded-xl font-semibold text-center mt-4">
+                                <i class="fas fa-user-plus mr-2"></i>Sign Up
+                            </button>
+                        </div>
+                    `;
+                    
+                    // Show login prompt for non-logged in users
+                    if (progressTracker) progressTracker.classList.add('hidden');
+                    if (loginPrompt) loginPrompt.classList.remove('hidden');
+                }
+            }
+
+            updateProgressUI() {
+                if (!this.currentUser) return;
+                
+                const progress = this.currentUser.progress;
+                const totalLectures = 14;
+                const totalQuizzes = 6;
+                const totalHomework = 10;
+                
+                // Calculate completion percentage
+                const completion = Math.round(
+                    ((progress.completedLectures + progress.completedQuizzes + progress.submittedHomework) / 
+                    (totalLectures + totalQuizzes + totalHomework)) * 100
+                );
+                
+                // Update progress elements
+                const courseCompletion = document.getElementById('course-completion');
+                const courseProgress = document.getElementById('course-progress');
+                const lecturesCompleted = document.getElementById('lectures-completed');
+                const quizzesPassed = document.getElementById('quizzes-passed');
+                const homeworkSubmitted = document.getElementById('homework-submitted');
+                
+                if (courseCompletion) courseCompletion.textContent = `${completion}%`;
+                if (courseProgress) courseProgress.style.width = `${completion}%`;
+                if (lecturesCompleted) lecturesCompleted.textContent = `${progress.completedLectures}/${totalLectures}`;
+                if (quizzesPassed) quizzesPassed.textContent = `${progress.completedQuizzes}/${totalQuizzes}`;
+                if (homeworkSubmitted) homeworkSubmitted.textContent = `${progress.submittedHomework}/${totalHomework}`;
+            }
+
+            showToast(message, type = 'info') {
+                const toastContainer = document.getElementById('toast-container');
+                const toastId = 'toast-' + Date.now();
+                
+                const toast = document.createElement('div');
+                toast.id = toastId;
+                toast.className = `toast ${type}`;
+                toast.innerHTML = `
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                            ${type === 'success' ? '<i class="fas fa-check-circle text-success"></i>' : ''}
+                            ${type === 'error' ? '<i class="fas fa-exclamation-circle text-danger"></i>' : ''}
+                            ${type === 'info' ? '<i class="fas fa-info-circle text-accent"></i>' : ''}
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-medium">${message}</p>
+                        </div>
+                        <button class="ml-auto text-gray-400 hover:text-light transition-colors" onclick="document.getElementById('${toastId}').remove()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                `;
+                
+                toastContainer.appendChild(toast);
+                
+                // Show toast
+                setTimeout(() => {
+                    toast.classList.add('show');
+                }, 10);
+                
+                // Auto remove after 5 seconds
+                setTimeout(() => {
+                    if (document.getElementById(toastId)) {
+                        toast.classList.remove('show');
+                        setTimeout(() => {
+                            if (document.getElementById(toastId)) {
+                                document.getElementById(toastId).remove();
+                            }
+                        }, 300);
+                    }
+                }, 5000);
+            }
+        }
+
         // Global helper function for navigation
         function navigateTo(section) {
             if (window.router && window.router.navigateTo) {
@@ -1930,6 +2527,9 @@
             // Initialize router
             window.router = new PhysicsRouter();
             
+            // Initialize auth manager
+            window.auth = new AuthManager();
+            
             // Add animation to cards on scroll
             const observerOptions = {
                 threshold: 0.1,
@@ -1944,67 +2544,6 @@
                     }
                 });
             }, observerOptions);
-
-
-
-
-            // Add this to your existing JavaScript in index.html
-
-// Authentication state management
-function checkAuthState() {
-    const currentUser = JSON.parse(localStorage.getItem('physics110_currentUser'));
-    const authLinks = document.getElementById('auth-links');
-    
-    if (currentUser) {
-        // User is logged in
-        authLinks.innerHTML = `
-            <div class="flex items-center space-x-4">
-                <span class="text-light">Welcome, ${currentUser.firstName}</span>
-                <button onclick="logout()" class="text-light hover:text-accent font-medium transition-colors duration-200">
-                    Logout
-                </button>
-            </div>
-        `;
-        
-        // Update progress with user data if available
-        updateUserProgress(currentUser);
-    }
-}
-
-function logout() {
-    localStorage.removeItem('physics110_currentUser');
-    window.location.reload();
-}
-
-function updateUserProgress(user) {
-    // You can fetch user progress from localStorage and update the UI
-    const users = JSON.parse(localStorage.getItem('physics110_users') || '[]');
-    const userData = users.find(u => u.email === user.email);
-    
-    if (userData && userData.progress) {
-        // Update progress bars and stats
-        const progressFill = document.querySelector('.progress-fill');
-        if (progressFill) {
-            const completion = (userData.progress.completedLectures / 14) * 100;
-            progressFill.style.width = `${completion}%`;
-        }
-    }
-}
-
-// Call this when the page loads
-document.addEventListener('DOMContentLoaded', function() {
-    checkAuthState();
-});
-            
-
-
-
-
-
-
-
-
-
 
             // Observe all cards for animation
             document.querySelectorAll('.card').forEach(card => {

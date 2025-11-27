@@ -3,11 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Physics 110: Introductory Mechanics</title>
+    <title>Login - Physics 110: Introductory Mechanics | Robert Sichomba</title>
     
-    <!-- Same assets as main site -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Source+Serif+Pro:wght@400;600;700&display=swap" rel="stylesheet">
     
@@ -30,6 +34,11 @@
                     fontFamily: {
                         'sans': ['Inter', 'system-ui', 'sans-serif'],
                         'serif': ['Source Serif Pro', 'Georgia', 'serif'],
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                     }
                 }
             }
@@ -37,6 +46,13 @@
     </script>
     
     <style>
+        :root {
+            --primary-dark: #0a0a0a;
+            --card-dark: #1a1a1a;
+            --accent-blue: #3b82f6;
+            --accent-purple: #8b5cf6;
+        }
+        
         * {
             margin: 0;
             padding: 0;
@@ -44,35 +60,56 @@
         }
         
         body {
-            background-color: #0a0a0a;
+            background-color: var(--primary-dark);
             color: #ffffff;
             font-family: 'Inter', sans-serif;
             min-height: 100vh;
+            overflow-x: hidden;
         }
         
-        .gradient-bg {
-            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #3730a3 100%);
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
         }
         
-        .form-card {
+        ::-webkit-scrollbar-track {
             background: #1a1a1a;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #3b82f6;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #2563eb;
+        }
+        
+        /* Card Styles */
+        .card {
+            background-color: var(--card-dark);
+            transition: all 0.3s ease;
             border: 1px solid #2a2a2a;
             border-radius: 1rem;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
         }
         
+        /* Button Styles */
         .btn-primary {
-            background-color: #3b82f6;
-            border: none;
-            padding: 12px 20px;
-            font-weight: 600;
-            border-radius: 0.75rem;
-            transition: all 0.3s ease;
+            background-color: #1a1a1a;
             color: #ffffff;
+            border: 1px solid #2a2a2a;
+            transition: all 0.3s ease;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .btn-primary:hover {
-            background-color: #2563eb;
+            background-color: #3b82f6;
+            color: #ffffff;
+            border-color: #3b82f6;
             transform: translateY(-2px);
             box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.4);
         }
@@ -80,10 +117,12 @@
         .form-control {
             background: #2a2a2a;
             border: 1px solid #374151;
-            border-radius: 0.5rem;
-            padding: 12px 15px;
+            border-radius: 0.75rem;
+            padding: 14px 16px;
             color: #ffffff;
             transition: all 0.3s ease;
+            font-size: 16px;
+            width: 100%;
         }
         
         .form-control:focus {
@@ -94,11 +133,16 @@
         
         .password-toggle {
             position: absolute;
-            right: 15px;
+            right: 16px;
             top: 50%;
             transform: translateY(-50%);
             cursor: pointer;
             color: #9ca3af;
+            transition: color 0.3s ease;
+        }
+        
+        .password-toggle:hover {
+            color: #3b82f6;
         }
         
         .link-primary {
@@ -139,25 +183,116 @@
             width: 100%;
         }
         
+        /* Gradient Background */
+        .gradient-bg {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #312e81 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .gradient-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(16, 185, 129, 0.05) 0%, transparent 50%);
+            z-index: 0;
+        }
+        
+        /* Form Card */
+        .form-card {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 1.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Demo Account Cards */
         .demo-account {
             cursor: pointer;
-            padding: 12px;
-            border-radius: 0.5rem;
+            padding: 16px;
+            border-radius: 0.75rem;
             transition: all 0.3s ease;
             border: 1px solid #374151;
             background: #2a2a2a;
+            text-align: center;
         }
         
         .demo-account:hover {
             background: rgba(59, 130, 246, 0.1);
             border-color: #3b82f6;
-            transform: translateY(-1px);
+            transform: translateY(-2px);
+        }
+        
+        /* Toast Notifications */
+        .toast {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            background-color: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 0.75rem;
+            color: #ffffff;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+            max-width: 350px;
+        }
+        
+        .toast.show {
+            transform: translateX(0);
+        }
+        
+        .toast.success {
+            border-left: 4px solid #10b981;
+        }
+        
+        .toast.error {
+            border-left: 4px solid #ef4444;
+        }
+        
+        .toast.info {
+            border-left: 4px solid #3b82f6;
+        }
+        
+        /* Animations */
+        @keyframes float {
+            0%, 100% { 
+                transform: translateY(0px); 
+            }
+            50% { 
+                transform: translateY(-10px); 
+            }
+        }
+        
+        @keyframes glow {
+            from { 
+                box-shadow: 0 0 5px #3b82f6; 
+            }
+            to { 
+                box-shadow: 0 0 20px #3b82f6, 0 0 30px #3b82f6; 
+            }
+        }
+        
+        /* Focus States for Accessibility */
+        button:focus, a:focus {
+            outline: 2px solid #3b82f6;
+            outline-offset: 2px;
         }
     </style>
 </head>
-<body class="gradient-bg">
+<body class="gradient-bg min-h-screen flex flex-col">
     <!-- Navigation -->
-    <nav class="bg-dark bg-opacity-90 backdrop-blur-sm border-b border-gray-800 py-4">
+    <nav class="bg-dark bg-opacity-90 backdrop-blur-sm border-b border-gray-800 py-4 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4">
             <div class="flex justify-between items-center">
                 <a href="../index.html" class="flex items-center space-x-3">
@@ -179,40 +314,46 @@
     </nav>
 
     <!-- Login Section -->
-    <section class="py-16 min-h-screen flex items-center">
+    <section class="py-8 flex-grow flex items-center">
         <div class="max-w-md mx-auto px-4 w-full">
             <div class="form-card p-8">
-                <div class="text-center mb-2">
-                    <div class="w-16 h-16 bg-dark-card rounded-2xl flex items-center justify-center border border-gray-800 mx-auto mb-4">
-                        <i class="fas fa-sign-in-alt text-accent text-2xl"></i>
+                <div class="text-center mb-6">
+                    <div class="w-20 h-20 bg-dark-card rounded-2xl flex items-center justify-center border border-gray-800 mx-auto mb-4 animate-float">
+                        <i class="fas fa-sign-in-alt text-accent text-3xl"></i>
                     </div>
-                    <h2 class="text-2xl font-bold text-light mb-2">Welcome Back</h2>
+                    <h2 class="text-3xl font-bold text-light mb-2">Welcome Back</h2>
                     <p class="text-gray-400">Sign in to continue your learning journey</p>
                 </div>
 
                 <div id="messageContainer" class="hidden mb-4 p-4 rounded-lg"></div>
 
                 <!-- Demo Accounts -->
-                <div class="bg-dark-card rounded-lg p-4 mb-6 border border-gray-700">
+                <div class="card p-5 mb-6">
                     <h6 class="font-semibold text-light mb-3 text-center">Demo Accounts</h6>
                     <div class="grid grid-cols-2 gap-3">
-                        <div class="demo-account text-center" onclick="fillDemoCredentials('student@example.com', 'Physics110!')">
-                            <div class="font-semibold text-sm text-light">Student</div>
-                            <div class="text-xs text-gray-400">student@example.com</div>
+                        <div class="demo-account" onclick="fillDemoCredentials('student@example.com', 'Physics110!')">
+                            <div class="flex flex-col items-center">
+                                <i class="fas fa-user-graduate text-xl text-accent mb-2"></i>
+                                <div class="font-semibold text-sm text-light">Student</div>
+                                <div class="text-xs text-gray-400">student@example.com</div>
+                            </div>
                         </div>
-                        <div class="demo-account text-center" onclick="fillDemoCredentials('instructor@example.com', 'Physics110!')">
-                            <div class="font-semibold text-sm text-light">Instructor</div>
-                            <div class="text-xs text-gray-400">instructor@example.com</div>
+                        <div class="demo-account" onclick="fillDemoCredentials('instructor@example.com', 'Physics110!')">
+                            <div class="flex flex-col items-center">
+                                <i class="fas fa-chalkboard-teacher text-xl text-secondary mb-2"></i>
+                                <div class="font-semibold text-sm text-light">Instructor</div>
+                                <div class="text-xs text-gray-400">instructor@example.com</div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <form id="loginForm" class="space-y-4">
+                <form id="loginForm" class="space-y-5">
                     <!-- Email Field -->
                     <div>
                         <label for="email" class="block text-light font-semibold mb-2">Email Address</label>
                         <input type="email" 
-                               class="form-control w-full" 
+                               class="form-control" 
                                id="email" 
                                name="email" 
                                placeholder="Enter your email" 
@@ -221,22 +362,24 @@
                     </div>
 
                     <!-- Password Field -->
-                    <div class="relative">
+                    <div>
                         <label for="password" class="block text-light font-semibold mb-2">Password</label>
-                        <input type="password" 
-                               class="form-control w-full" 
-                               id="password" 
-                               name="password" 
-                               placeholder="Enter your password" 
-                               required>
-                        <i class="fas fa-eye password-toggle" onclick="togglePassword('password')"></i>
+                        <div class="relative">
+                            <input type="password" 
+                                   class="form-control" 
+                                   id="password" 
+                                   name="password" 
+                                   placeholder="Enter your password" 
+                                   required>
+                            <i class="fas fa-eye password-toggle" onclick="togglePassword('password')"></i>
+                        </div>
                     </div>
 
                     <!-- Remember Me Checkbox -->
                     <div class="flex items-center justify-between">
-                        <label class="flex items-center space-x-2">
-                            <input type="checkbox" class="form-checkbox h-4 w-4 text-accent bg-dark-card border-gray-600 rounded" id="remember">
-                            <span class="text-gray-300 text-sm">Remember me for 30 days</span>
+                        <label class="flex items-center space-x-3">
+                            <input type="checkbox" class="h-5 w-5 text-accent bg-dark-card border-gray-600 rounded focus:ring-accent" id="remember">
+                            <span class="text-gray-300">Remember me for 30 days</span>
                         </label>
                         
                         <a href="#" class="link-primary text-sm">Forgot Password?</a>
@@ -244,7 +387,8 @@
 
                     <!-- Submit Button -->
                     <div>
-                        <button type="submit" class="btn-primary w-full py-3 font-semibold text-lg">
+                        <button type="submit" class="btn-primary w-full py-4 font-semibold text-lg">
+                            <i class="fas fa-sign-in-alt mr-2"></i>
                             Sign In
                         </button>
                     </div>
@@ -268,6 +412,16 @@
         </div>
     </section>
 
+    <!-- Footer -->
+    <footer class="py-8 border-t border-gray-800 mt-8">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <p class="text-gray-400 text-sm">© 2024 Physics 110: Introductory Mechanics - Robert Sichomba</p>
+        </div>
+    </footer>
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
     <script>
         // Password toggle functionality
         function togglePassword(fieldId) {
@@ -290,13 +444,57 @@
             // Show confirmation
             const submitBtn = document.querySelector('#loginForm button[type="submit"]');
             const originalText = submitBtn.innerHTML;
-            submitBtn.innerHTML = 'Credentials Filled!';
-            submitBtn.classList.add('bg-green-600');
+            submitBtn.innerHTML = '<i class="fas fa-check mr-2"></i>Credentials Filled!';
+            submitBtn.classList.add('bg-green-600', 'border-green-600');
             
             setTimeout(() => {
                 submitBtn.innerHTML = originalText;
-                submitBtn.classList.remove('bg-green-600');
+                submitBtn.classList.remove('bg-green-600', 'border-green-600');
             }, 2000);
+        }
+
+        // Toast notification function
+        function showToast(message, type = 'info') {
+            const toastContainer = document.getElementById('toast-container');
+            const toastId = 'toast-' + Date.now();
+            
+            const toast = document.createElement('div');
+            toast.id = toastId;
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <div class="flex items-start">
+                    <div class="flex-shrink-0 pt-0.5">
+                        ${type === 'success' ? '<i class="fas fa-check-circle text-green-400"></i>' : ''}
+                        ${type === 'error' ? '<i class="fas fa-exclamation-circle text-red-400"></i>' : ''}
+                        ${type === 'info' ? '<i class="fas fa-info-circle text-blue-400"></i>' : ''}
+                    </div>
+                    <div class="ml-3 flex-1">
+                        <p class="text-sm font-medium">${message}</p>
+                    </div>
+                    <button class="ml-4 flex-shrink-0 text-gray-400 hover:text-light transition-colors" onclick="document.getElementById('${toastId}').remove()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            
+            toastContainer.appendChild(toast);
+            
+            // Show toast
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 10);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                if (document.getElementById(toastId)) {
+                    toast.classList.remove('show');
+                    setTimeout(() => {
+                        if (document.getElementById(toastId)) {
+                            document.getElementById(toastId).remove();
+                        }
+                    }, 300);
+                }
+            }, 5000);
         }
 
         // Form submission handling
@@ -308,7 +506,12 @@
                 messageContainer.className = `p-4 rounded-lg mb-4 ${
                     type === 'success' ? 'bg-green-900 text-green-200 border border-green-700' : 'bg-red-900 text-red-200 border border-red-700'
                 }`;
-                messageContainer.innerHTML = message;
+                messageContainer.innerHTML = `
+                    <div class="flex items-center">
+                        <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'} mr-3"></i>
+                        <span>${message}</span>
+                    </div>
+                `;
                 messageContainer.classList.remove('hidden');
             }
 
@@ -317,22 +520,32 @@
                 const users = JSON.parse(localStorage.getItem('physics110_users') || '[]');
                 const demoUsers = [
                     {
+                        id: 'demo-student',
                         email: 'student@example.com',
                         firstName: 'Demo',
                         lastName: 'Student',
                         password: 'Physics110!',
                         role: 'student',
                         createdAt: new Date().toISOString(),
-                        progress: { completedLectures: 2, completedQuizzes: 1, submittedHomework: 3 }
+                        progress: { 
+                            completedLectures: 2, 
+                            completedQuizzes: 1, 
+                            submittedHomework: 3 
+                        }
                     },
                     {
+                        id: 'demo-instructor',
                         email: 'instructor@example.com',
                         firstName: 'Demo',
                         lastName: 'Instructor',
                         password: 'Physics110!',
                         role: 'instructor',
                         createdAt: new Date().toISOString(),
-                        progress: { completedLectures: 14, completedQuizzes: 6, submittedHomework: 10 }
+                        progress: { 
+                            completedLectures: 14, 
+                            completedQuizzes: 6, 
+                            submittedHomework: 10 
+                        }
                     }
                 ];
 
@@ -371,10 +584,12 @@
 
                 // Store session
                 localStorage.setItem('physics110_currentUser', JSON.stringify({
+                    id: user.id,
                     email: user.email,
                     firstName: user.firstName,
                     lastName: user.lastName,
-                    role: user.role
+                    role: user.role,
+                    progress: user.progress
                 }));
 
                 // Store remember me
@@ -382,12 +597,24 @@
                     localStorage.setItem('physics110_rememberMe', 'true');
                 }
 
-                showMessage('✅ Login successful! Redirecting to your dashboard...', 'success');
+                showToast('✅ Login successful! Redirecting to your dashboard...', 'success');
                 
                 // Redirect to home
                 setTimeout(() => {
                     window.location.href = '../index.html';
                 }, 1500);
+            });
+
+            // Add some visual feedback for form interactions
+            const inputs = document.querySelectorAll('.form-control');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.parentElement.classList.add('ring-2', 'ring-blue-500', 'ring-opacity-50');
+                });
+                
+                input.addEventListener('blur', function() {
+                    this.parentElement.classList.remove('ring-2', 'ring-blue-500', 'ring-opacity-50');
+                });
             });
 
             // Auto-focus email field
