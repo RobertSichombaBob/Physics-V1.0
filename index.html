@@ -363,18 +363,34 @@
                     </a>
                 </div>
 
-                <!-- Desktop Navigation -->
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="#home" class="nav-link text-light hover:text-accent font-medium transition-colors duration-200 active">Home</a>
-                    <a href="#lectures" class="nav-link text-light hover:text-accent font-medium transition-colors duration-200">Lectures</a>
-                    <a href="#notebooks" class="nav-link text-light hover:text-accent font-medium transition-colors duration-200">Notebooks</a>
-                    <a href="#homework" class="nav-link text-light hover:text-accent font-medium transition-colors duration-200">Homework</a>
-                    <a href="#quizzes" class="nav-link text-light hover:text-accent font-medium transition-colors duration-200">Quizzes</a>
-                    <a href="#resources" class="nav-link text-light hover:text-accent font-medium transition-colors duration-200">Resources</a>
-                    <a href="https://github.com/RobertSichombaBob/physics-110" class="btn-primary px-6 py-3 rounded-xl font-semibold transition-all duration-200">
-                        <i class="fab fa-github mr-2"></i>Code
-                    </a>
-                </div>
+
+
+
+<!-- In the desktop navigation -->
+<div class="hidden md:flex items-center space-x-4">
+    <a href="#home" class="nav-link text-light hover:text-accent font-medium transition-colors duration-200 active">Home</a>
+    <a href="#lectures" class="nav-link text-light hover:text-accent font-medium transition-colors duration-200">Lectures</a>
+    <a href="#notebooks" class="nav-link text-light hover:text-accent font-medium transition-colors duration-200">Notebooks</a>
+    <a href="#homework" class="nav-link text-light hover:text-accent font-medium transition-colors duration-200">Homework</a>
+    <a href="#quizzes" class="nav-link text-light hover:text-accent font-medium transition-colors duration-200">Quizzes</a>
+    <a href="#resources" class="nav-link text-light hover:text-accent font-medium transition-colors duration-200">Resources</a>
+    
+    <!-- Authentication Links -->
+    <div id="auth-links" class="flex items-center space-x-3">
+        <a href="auth/login.html" class="text-light hover:text-accent font-medium transition-colors duration-200">Login</a>
+        <a href="auth/signup.html" class="btn-primary px-6 py-3 rounded-xl font-semibold transition-all duration-200">
+            Sign Up
+        </a>
+    </div>
+    
+    <a href="https://github.com/RobertSichombaBob/physics-110" class="text-light hover:text-accent transition-colors">
+        <i class="fab fa-github text-xl"></i>
+    </a>
+</div>
+
+
+
+
 
                 <!-- Mobile menu button -->
                 <div class="md:hidden flex items-center">
@@ -1928,7 +1944,68 @@
                     }
                 });
             }, observerOptions);
+
+
+
+
+            // Add this to your existing JavaScript in index.html
+
+// Authentication state management
+function checkAuthState() {
+    const currentUser = JSON.parse(localStorage.getItem('physics110_currentUser'));
+    const authLinks = document.getElementById('auth-links');
+    
+    if (currentUser) {
+        // User is logged in
+        authLinks.innerHTML = `
+            <div class="flex items-center space-x-4">
+                <span class="text-light">Welcome, ${currentUser.firstName}</span>
+                <button onclick="logout()" class="text-light hover:text-accent font-medium transition-colors duration-200">
+                    Logout
+                </button>
+            </div>
+        `;
+        
+        // Update progress with user data if available
+        updateUserProgress(currentUser);
+    }
+}
+
+function logout() {
+    localStorage.removeItem('physics110_currentUser');
+    window.location.reload();
+}
+
+function updateUserProgress(user) {
+    // You can fetch user progress from localStorage and update the UI
+    const users = JSON.parse(localStorage.getItem('physics110_users') || '[]');
+    const userData = users.find(u => u.email === user.email);
+    
+    if (userData && userData.progress) {
+        // Update progress bars and stats
+        const progressFill = document.querySelector('.progress-fill');
+        if (progressFill) {
+            const completion = (userData.progress.completedLectures / 14) * 100;
+            progressFill.style.width = `${completion}%`;
+        }
+    }
+}
+
+// Call this when the page loads
+document.addEventListener('DOMContentLoaded', function() {
+    checkAuthState();
+});
             
+
+
+
+
+
+
+
+
+
+
             // Observe all cards for animation
             document.querySelectorAll('.card').forEach(card => {
                 card.style.opacity = '0';

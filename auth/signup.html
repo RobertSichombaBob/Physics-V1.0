@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Physics 110: Introductory Mechanics</title>
+    
+    <!-- Same assets as main site -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#0a0a0a',
+                        light: '#ffffff',
+                        accent: '#3b82f6',
+                        secondary: '#8b5cf6',
+                        success: '#10b981',
+                        warning: '#f59e0b',
+                        danger: '#ef4444',
+                        'dark-card': '#1a1a1a',
+                        'dark-hover': '#2a2a2a',
+                        'dark-border': '#2a2a2a',
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif'],
+                        'serif': ['Source Serif Pro', 'Georgia', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: #0a0a0a;
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #3730a3 100%);
+        }
+        
+        .form-card {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 1rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn-primary {
+            background-color: #3b82f6;
+            border: none;
+            padding: 12px 20px;
+            font-weight: 600;
+            border-radius: 0.75rem;
+            transition: all 0.3s ease;
+            color: #ffffff;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.4);
+        }
+        
+        .form-control {
+            background: #2a2a2a;
+            border: 1px solid #374151;
+            border-radius: 0.5rem;
+            padding: 12px 15px;
+            color: #ffffff;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+            outline: none;
+        }
+        
+        .role-option {
+            border: 2px solid #374151;
+            border-radius: 0.5rem;
+            padding: 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .role-option:hover {
+            border-color: #3b82f6;
+            background-color: rgba(59, 130, 246, 0.1);
+        }
+        
+        .role-option.selected {
+            border-color: #3b82f6;
+            background-color: rgba(59, 130, 246, 0.2);
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #9ca3af;
+        }
+        
+        .link-primary {
+            color: #3b82f6;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .link-primary:hover {
+            color: #60a5fa;
+            text-decoration: underline;
+        }
+        
+        .nav-link {
+            position: relative;
+            color: #ffffff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: #3b82f6;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: #3b82f6;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="gradient-bg">
+    <!-- Navigation -->
+    <nav class="bg-dark bg-opacity-90 backdrop-blur-sm border-b border-gray-800 py-4">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center">
+                <a href="../index.html" class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-dark-card rounded-xl flex items-center justify-center border border-gray-800">
+                        <i class="fas fa-atom text-accent text-lg"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-lg font-bold text-light">Physics 110</h1>
+                        <p class="text-xs text-gray-400 -mt-1">Introductory Mechanics</p>
+                    </div>
+                </a>
+                
+                <div class="flex items-center space-x-6">
+                    <a href="../index.html" class="nav-link">Home</a>
+                    <a href="login.html" class="nav-link">Login</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Signup Section -->
+    <section class="py-16 min-h-screen flex items-center">
+        <div class="max-w-md mx-auto px-4 w-full">
+            <div class="form-card p-8">
+                <div class="text-center mb-2">
+                    <div class="w-16 h-16 bg-dark-card rounded-2xl flex items-center justify-center border border-gray-800 mx-auto mb-4">
+                        <i class="fas fa-user-plus text-accent text-2xl"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-light mb-2">Create Your Account</h2>
+                    <p class="text-gray-400">Join Physics 110 to start learning</p>
+                </div>
+                
+                <div id="messageContainer" class="hidden mb-4 p-4 rounded-lg"></div>
+
+                <form id="signupForm" novalidate class="space-y-4">
+                    <!-- Email Field -->
+                    <div>
+                        <label for="email" class="block text-light font-semibold mb-2">Email Address</label>
+                        <input type="email" 
+                               class="form-control w-full" 
+                               id="email" 
+                               name="email" 
+                               placeholder="Enter your email address" 
+                               required>
+                        <div class="text-gray-400 text-sm mt-1">We'll never share your email with anyone else.</div>
+                    </div>
+
+                    <!-- First Name Field -->
+                    <div>
+                        <label for="firstName" class="block text-light font-semibold mb-2">First Name</label>
+                        <input type="text" 
+                               class="form-control w-full" 
+                               id="firstName" 
+                               name="firstName" 
+                               placeholder="Enter your first name" 
+                               required>
+                    </div>
+
+                    <!-- Last Name Field -->
+                    <div>
+                        <label for="lastName" class="block text-light font-semibold mb-2">Last Name</label>
+                        <input type="text" 
+                               class="form-control w-full" 
+                               id="lastName" 
+                               name="lastName" 
+                               placeholder="Enter your last name" 
+                               required>
+                    </div>
+
+                    <!-- Password Field -->
+                    <div class="relative">
+                        <label for="password" class="block text-light font-semibold mb-2">Password</label>
+                        <input type="password" 
+                               class="form-control w-full" 
+                               id="password" 
+                               name="password" 
+                               placeholder="Create a strong password" 
+                               required>
+                        <i class="fas fa-eye password-toggle" onclick="togglePassword('password')"></i>
+                        <div class="text-gray-400 text-sm mt-1">
+                            Must be at least 8 characters with uppercase, lowercase, and numbers.
+                        </div>
+                    </div>
+
+                    <!-- Confirm Password Field -->
+                    <div class="relative">
+                        <label for="confirmPassword" class="block text-light font-semibold mb-2">Confirm Password</label>
+                        <input type="password" 
+                               class="form-control w-full" 
+                               id="confirmPassword" 
+                               name="confirmPassword" 
+                               placeholder="Confirm your password" 
+                               required>
+                        <i class="fas fa-eye password-toggle" onclick="togglePassword('confirmPassword')"></i>
+                    </div>
+
+                    <!-- Role Selection -->
+                    <div>
+                        <label class="block text-light font-semibold mb-2">I am a:</label>
+                        <div class="space-y-2">
+                            <label class="role-option block" for="role_student">
+                                <input type="radio" id="role_student" name="role" value="student" checked class="hidden">
+                                <div class="flex items-center">
+                                    <i class="fas fa-user-graduate mr-3 text-accent"></i>
+                                    <div>
+                                        <div class="font-semibold text-light">Student</div>
+                                        <div class="text-sm text-gray-400">I want to learn and take courses</div>
+                                    </div>
+                                </div>
+                            </label>
+                            
+                            <label class="role-option block" for="role_instructor">
+                                <input type="radio" id="role_instructor" name="role" value="instructor" class="hidden">
+                                <div class="flex items-center">
+                                    <i class="fas fa-chalkboard-teacher mr-3 text-secondary"></i>
+                                    <div>
+                                        <div class="font-semibold text-light">Instructor</div>
+                                        <div class="text-sm text-gray-400">I want to create and teach courses</div>
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Terms and Conditions -->
+                    <div class="flex items-start space-x-2">
+                        <input type="checkbox" class="mt-1 form-checkbox h-4 w-4 text-accent bg-dark-card border-gray-600 rounded" id="terms" required>
+                        <label for="terms" class="text-gray-300 text-sm">
+                            I agree to the <a href="#" class="link-primary">Terms of Service</a> and <a href="#" class="link-primary">Privacy Policy</a>
+                        </label>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div>
+                        <button type="submit" class="btn-primary w-full py-3 font-semibold text-lg">
+                            Create Account
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Login Link -->
+                <div class="text-center mt-6 pt-6 border-t border-gray-800">
+                    <p class="text-gray-400">Already have an account? <a href="login.html" class="link-primary">Log In</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Password toggle functionality
+        function togglePassword(fieldId) {
+            const passwordField = document.getElementById(fieldId);
+            const toggleIcon = passwordField.parentNode.querySelector('.password-toggle');
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                toggleIcon.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                passwordField.type = "password";
+                toggleIcon.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        }
+
+        // Role selection styling
+        document.addEventListener('DOMContentLoaded', function() {
+            const roleOptions = document.querySelectorAll('.role-option');
+            roleOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    roleOptions.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    const radio = this.querySelector('input[type="radio"]');
+                    radio.checked = true;
+                });
+            });
+
+            // Form submission handling
+            const signupForm = document.getElementById('signupForm');
+            const messageContainer = document.getElementById('messageContainer');
+
+            function showMessage(message, type = 'success') {
+                messageContainer.className = `p-4 rounded-lg mb-4 ${
+                    type === 'success' ? 'bg-green-900 text-green-200 border border-green-700' : 'bg-red-900 text-red-200 border border-red-700'
+                }`;
+                messageContainer.innerHTML = message;
+                messageContainer.classList.remove('hidden');
+            }
+
+            signupForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const email = document.getElementById('email').value;
+                const firstName = document.getElementById('firstName').value;
+                const lastName = document.getElementById('lastName').value;
+                const password = document.getElementById('password').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                const role = document.querySelector('input[name="role"]:checked').value;
+                const terms = document.getElementById('terms').checked;
+
+                // Validation
+                if (!email || !firstName || !lastName || !password || !confirmPassword) {
+                    showMessage('Please fill in all required fields.', 'error');
+                    return;
+                }
+
+                if (password !== confirmPassword) {
+                    showMessage('Passwords do not match!', 'error');
+                    return;
+                }
+
+                if (password.length < 8) {
+                    showMessage('Password must be at least 8 characters long.', 'error');
+                    return;
+                }
+
+                if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(password)) {
+                    showMessage('Password must contain uppercase, lowercase letters and numbers.', 'error');
+                    return;
+                }
+
+                if (!terms) {
+                    showMessage('Please agree to the Terms of Service and Privacy Policy', 'error');
+                    return;
+                }
+
+                // Create user object
+                const user = {
+                    email,
+                    firstName,
+                    lastName,
+                    password, // Note: In real app, hash passwords
+                    role,
+                    createdAt: new Date().toISOString(),
+                    progress: {
+                        completedLectures: 0,
+                        completedQuizzes: 0,
+                        submittedHomework: 0
+                    }
+                };
+
+                // Store user in localStorage
+                const users = JSON.parse(localStorage.getItem('physics110_users') || '[]');
+                
+                // Check if user exists
+                if (users.find(u => u.email === email)) {
+                    showMessage('An account with this email already exists.', 'error');
+                    return;
+                }
+
+                // Add new user
+                users.push(user);
+                localStorage.setItem('physics110_users', JSON.stringify(users));
+                
+                // Store current session
+                localStorage.setItem('physics110_currentUser', JSON.stringify({
+                    email: user.email,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    role: user.role
+                }));
+
+                showMessage('🎉 Account created successfully! Redirecting to your dashboard...', 'success');
+                
+                // Redirect to home page
+                setTimeout(() => {
+                    window.location.href = '../index.html';
+                }, 2000);
+            });
+
+            // Auto-select first role option
+            document.querySelector('.role-option').classList.add('selected');
+        });
+    </script>
+</body>
+</html>
