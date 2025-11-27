@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz 1: Units & Vectors - Physics 110</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#0a0a0a',
+                        light: '#ffffff',
+                        accent: '#3b82f6',
+                        secondary: '#8b5cf6',
+                        success: '#10b981',
+                        warning: '#f59e0b',
+                        danger: '#ef4444',
+                        'dark-card': '#1a1a1a',
+                        'dark-hover': '#2a2a2a',
+                        'dark-border': '#2a2a2a',
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif'],
+                        'serif': ['Source Serif Pro', 'Georgia', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: #0a0a0a;
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+        }
+        
+        .content-card {
+            background-color: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .quiz-card {
+            background-color: #2a2a2a;
+            border: 1px solid #374151;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .equation {
+            background-color: #1a1a1a;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            border: 1px solid #374151;
+        }
+        
+        .nav-link {
+            position: relative;
+            color: #ffffff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: #3b82f6;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: #3b82f6;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .btn-primary {
+            background-color: #1a1a1a;
+            color: #ffffff;
+            border: 1px solid #2a2a2a;
+            transition: all 0.3s ease;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+        }
+        
+        .btn-primary:hover {
+            background-color: #3b82f6;
+            color: #ffffff;
+            border-color: #3b82f6;
+            transform: translateY(-2px);
+        }
+        
+        .input-field {
+            background-color: #2a2a2a;
+            border: 1px solid #374151;
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            color: #ffffff;
+            width: 100%;
+            margin: 0.5rem 0;
+        }
+        
+        .input-field:focus {
+            border-color: #3b82f6;
+            outline: none;
+        }
+        
+        .submit-btn {
+            background-color: #10b981;
+            color: #ffffff;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .submit-btn:hover {
+            background-color: #059669;
+            transform: translateY(-2px);
+        }
+        
+        .quiz-option {
+            background-color: #1a1a1a;
+            border: 1px solid #374151;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .quiz-option:hover {
+            border-color: #3b82f6;
+        }
+        
+        .quiz-option.selected {
+            background-color: rgba(59, 130, 246, 0.2);
+            border-color: #3b82f6;
+        }
+        
+        .quiz-option.correct {
+            background-color: rgba(16, 185, 129, 0.2);
+            border-color: #10b981;
+        }
+        
+        .quiz-option.incorrect {
+            background-color: rgba(239, 68, 68, 0.2);
+            border-color: #ef4444;
+        }
+        
+        .vector-diagram {
+            width: 100%;
+            height: 300px;
+            background-color: #1a1a1a;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .vector-canvas {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .quiz-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+        
+        .question-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .question-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #374151;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .question-indicator.active {
+            background-color: #3b82f6;
+            transform: scale(1.2);
+        }
+        
+        .question-indicator.answered {
+            background-color: #10b981;
+        }
+        
+        .question-indicator.current {
+            border: 2px solid #ffffff;
+        }
+        
+        .timer {
+            background-color: rgba(59, 130, 246, 0.1);
+            border: 1px solid #3b82f6;
+            border-radius: 0.5rem;
+            padding: 0.5rem 1rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .results-card {
+            background-color: #2a2a2a;
+            border: 1px solid #374151;
+            border-radius: 0.75rem;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .score-display {
+            font-size: 3rem;
+            font-weight: 700;
+            margin: 1rem 0;
+        }
+        
+        .score-excellent {
+            color: #10b981;
+        }
+        
+        .score-good {
+            color: #f59e0b;
+        }
+        
+        .score-poor {
+            color: #ef4444;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background-color: #374151;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background-color: #3b82f6;
+            transition: width 0.5s ease;
+        }
+        
+        .feedback-correct {
+            background-color: rgba(16, 185, 129, 0.1);
+            border-left: 4px solid #10b981;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+        
+        .feedback-incorrect {
+            background-color: rgba(239, 68, 68, 0.1);
+            border-left: 4px solid #ef4444;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+        
+        .hint-box {
+            background-color: rgba(245, 158, 11, 0.1);
+            border-left: 4px solid #f59e0b;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 0.5rem 0.5rem 0;
+            display: none;
+        }
+        
+        .hint-toggle {
+            color: #f59e0b;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-dark bg-opacity-90 backdrop-blur-sm border-b border-gray-800 py-4 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center">
+                <a href="../../../index.html" class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-dark-card rounded-xl flex items-center justify-center border border-gray-800">
+                        <i class="fas fa-atom text-accent text-lg"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-lg font-bold text-light">Physics 110</h1>
+                        <p class="text-xs text-gray-400 -mt-1">Introductory Mechanics</p>
+                    </div>
+                </a>
+                
+                <div class="flex items-center space-x-6">
+                    <a href="../../../index.html" class="nav-link">Home</a>
+                    <a href="../lectures/lecture1.html" class="nav-link">Lecture</a>
+                    <a href="../homework/hw1.html" class="nav-link">Homework</a>
+                    <a href="../solutions/sol1.html" class="nav-link">Solutions</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Quiz Content -->
+    <div class="max-w-4xl mx-auto px-4 py-8">
+        <div class="content-card">
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <h1 class="text-4xl font-bold text-light mb-2">Quiz 1: Units & Vectors</h1>
+                    <p class="text-gray-400">Test your understanding of unit conversions, dimensional analysis, and vector operations</p>
+                </div>
+                <div class="text-right">
+                    <div class="timer" id="timer">
+                        <i class="fas fa-clock"></i>
+                        <span id="time">30:00</span>
+                    </div>
+                    <p class="text-gray-400 text-sm mt-2">10 questions • 100 points</p>
+                </div>
+            </div>
+
+            <!-- Instructions -->
+            <div class="bg-yellow-900 bg-opacity-20 border border-yellow-700 rounded-xl p-6 mb-8">
+                <h3 class="text-xl font-semibold text-light mb-3 flex items-center">
+                    <i class="fas fa-info-circle text-yellow-400 mr-2"></i>
+                    Quiz Instructions
+                </h3>
+                <ul class="text-gray-300 space-y-2">
+                    <li>• You have 30 minutes to complete this quiz</li>
+                    <li>• There are 10 questions of various types</li>
+                    <li>• Questions are worth 10 points each</li>
+                    <li>• You can navigate between questions using the dots below</li>
+                    <li>• Some questions have hints available</li>
+                    <li>• Your progress will be saved if you leave the page</li>
+                </ul>
+            </div>
+
+            <!-- Quiz Navigation -->
+            <div class="bg-dark-card rounded-xl p-4 mb-6 border border-gray-800">
+                <h3 class="text-lg font-semibold text-light mb-3">Question Navigation</h3>
+                <div class="question-indicators" id="question-indicators">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Quiz Questions Container -->
+            <div id="quiz-questions">
+                <!-- Question 1 -->
+                <div class="quiz-card" id="question-1">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-xl font-semibold text-light">Question 1: SI Units</h3>
+                        <span class="bg-accent text-dark px-3 py-1 rounded-full text-sm font-semibold">10 pts</span>
+                    </div>
+                    
+                    <p class="text-gray-300 mb-4">
+                        Which of the following is the SI base unit for mass?
+                    </p>
+                    
+                    <div class="space-y-3" id="options-1">
+                        <div class="quiz-option" data-correct="false">
+                            <span class="text-gray-300">Gram (g)</span>
+                        </div>
+                        <div class="quiz-option" data-correct="true">
+                            <span class="text-gray-300">Kilogram (kg)</span>
+                        </div>
+                        <div class="quiz-option" data-correct="false">
+                            <span class="text-gray-300">Pound (lb)</span>
+                        </div>
+                        <div class="quiz-option" data-correct="false">
+                            <span class="text-gray-300">Newton (N)</span>
+                        </div>
+                    </div>
+
+                    <div class="hint-box" id="hint-1">
+                        <h4 class="text-lg font-semibold text-light mb-2">Hint</h4>
+                        <p class="text-gray-300">Remember that the kilogram is the only SI base unit that contains a prefix. The gram is a derived unit.</p>
+                    </div>
+                    
+                    <div class="hint-toggle" onclick="toggleHint(1)">
+                        <i class="fas fa-lightbulb"></i> Show Hint
+                    </div>
+
+                    <div class="feedback-correct" id="feedback-correct-1" style="display: none;">
+                        <h4 class="text-lg font-semibold text-light mb-2">Correct!</h4>
+                        <p class="text-gray-300">Yes, the kilogram (kg) is the SI base unit for mass. Although it contains the prefix "kilo", it is defined as the base unit in the International System of Units.</p>
+                    </div>
+
+                    <div class="feedback-incorrect" id="feedback-incorrect-1" style="display: none;">
+                        <h4 class="text-lg font-semibold text-light mb-2">Incorrect</h4>
+                        <p class="text-gray-300">The correct answer is kilogram (kg). While the gram is a metric unit, the kilogram is the SI base unit for mass.</p>
+                    </div>
+                </div>
+
+                <!-- Question 2 -->
+                <div class="quiz-card" id="question-2" style="display: none;">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-xl font-semibold text-light">Question 2: Unit Conversion</h3>
+                        <span class="bg-accent text-dark px-3 py-1 rounded-full text-sm font-semibold">10 pts</span>
+                    </div>
+                    
+                    <p class="text-gray-300 mb-4">
+                        Convert 72 km/h to m/s.
+                    </p>
+                    
+                    <div class="space-y-3" id="options-2">
+                        <div class="quiz-option" data-correct="false">
+                            <span class="text-gray-300">2 m/s</span>
+                        </div>
+                        <div class="quiz-option" data-correct="false">
+                            <span class="text-gray-300">10 m/s</span>
+                        </div>
+                        <div class="quiz-option" data-correct="false">
+                            <span class="text-gray-300">15 m/s</span>
+                        </div>
+                        <div class="quiz-option" data-correct="true">
+                            <span class="text-gray-300">20 m/s</span>
+                        </div>
+                    </div>
+
+                    <div class="hint-box" id="hint-2">
+                        <h4 class="text-lg font-semibold text-light mb-2">Hint</h4>
+                        <p class="text-gray-300">Remember that 1 km = 1000 m and 1 h = 3600 s. So to convert km/h to m/s, multiply by (1000/3600) or (5/18).</p>
+                    </div>
+                    
+                    <div class="hint-toggle" onclick="toggleHint(2)">
+                        <i class="fas fa-lightbulb"></i> Show Hint
+                    </div>
+
+                    <div class="feedback-correct" id="feedback-correct-2" style="display: none;">
+                        <h4 class="text-lg font-semibold text-light mb-2">Correct!</h4>
+                        <p class="text-gray-300">Yes, 72 km/h = 20 m/s. The calculation is: 72 × (1000/3600) = 72 × (5/18) = 20 m/s.</p>
+                    </div>
+
+                    <div class="feedback-incorrect" id="feedback-incorrect-2" style="display: none;">
+                        <h4 class="text-lg font-semibold text-light mb-2">Incorrect</h4>
+                        <p class="text-gray-300">The correct answer is 20 m/s. To convert km/h to m/s, multiply by (1000/3600) = 5/18. So 72 × (5/18) = 20 m/s.</p>
+                    </div>
+                </div>
+
+                <!-- Question 3 -->
+                <div class="quiz-card" id="question-3" style="display: none;">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-xl font-semibold text-light">Question 3: Significant Figures</h3>
+                        <span class="bg-accent text-dark px-3 py-1 rounded-full text-sm font-semibold">10 pts</span>
+                    </div>
+                    
+                    <p class="text-gray-300 mb-4">
+                        How many significant figures are in the measurement 0.00450 m?
+                    </p>
+                    
+                    <div class="space-y-3" id="options-3">
+                        <div class="quiz-option" data-correct="false">
+                            <span class="text-gray-300">2</span>
+                        </div>
+                        <div class="quiz-option" data-correct="false">
+                            <span class="text-gray-300">4</span>
+                        </div>
+                        <div class="quiz-option" data-correct="false">
+                            <span class="text-gray-300">5</span>
+                        </div>
+                        <div class="quiz-option" data-correct="true">
+                            <span class="text-gray-300">3</span>
+                        </div>
+                    </div>
+
+                    <div class="hint-box" id="hint-3">
+                        <h4 class="text-lg font-semibold text-light mb-2">Hint</h4>
+                        <p class="text-gray-300">Remember that leading zeros are not significant, but trailing zeros after a decimal point are significant.</p>
+                    </div>
+                    
+                    <div class="hint-toggle" onclick="toggleHint(3)">
+                        <i class="fas fa-lightbulb"></i> Show Hint
+                    </div>
+
+                    <div class="feedback-correct" id="feedback-correct-3" style="display: none;">
+                        <h4 class="text-lg font-semibold text-light mb-2">Correct!</h4>
+                        <p class="text-gray-300">Yes, 0.00450 m has 3 significant figures. The leading zeros are not significant, but the trailing zero after the decimal is significant.</p>
+                    </div>
+
+                    <div class="feedback-incorrect" id="feedback-incorrect-3" style="display: none;">
+                        <h4 class="text-lg font-semibold text-light mb-2">Incorrect</h4>
+                        <p class="text-gray-300">The correct answer is 3. The significant figures are 4, 5, and 0 (the trailing zero after the decimal point). The leading zeros are not significant.</p>
+                    </div>
+                </div>
+
+                <!-- Question 4 -->
+                <div class="quiz-card" id="question-4" style="display: none;">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-xl font-semibold text-light">Question 4: Dimensional Analysis</h3>
+                        <span class="bg-accent text-dark px-3 py-1 rounded-full text-sm font-semibold">10 pts</span>
+                    </div>
+                    
+                    <p class="text-gray-300 mb-4">
+                        Which of the following equations is dimensionally consistent?
+                    </p>
+                    
+                    <div class="space-y-3" id="options-4">
+                        <div class="quiz-option" data-correct="false">
+                            <span class="text-gray-300">v = at²</span>
+                        </div>
+                        <div class="quiz-option" data-correct="true">
+                            <span class="text-gray-300">s = ut + ½at²</span>
+                        </div>
+                        <div class="quiz-option" data-correct="false">
+                            <span class="text-gray-300">F = m + a</span>
+                        </div>
+                        <div class="quiz-option" data-correct="false">
+                            <span class="text-gray-300">E = m/v</span>
+                        </div>
+                    </div>
+
+                    <div class="hint-box" id="hint-4">
+                        <h4 class="text-lg font-semibold text-light mb-2">Hint</h4>
+                        <p class="text-gray-300">Check if all terms in the equation have the same dimensions. Remember that numerical constants like ½ are dimensionless.</p>
+                    </div>
+                    
+                    <div class="hint-toggle" onclick="toggleHint(4)">
+                        <i class="fas fa-lightbulb"></i> Show Hint
+                    </div>
+
+                    <div class="feedback-correct" id="feedback-correct-4" style="display: none;">
+                        <h4 class="text-lg font-semibold text-light mb-2">Correct!</h4>
+                        <p class="text-gray-300">Yes, s = ut + ½at² is dimensionally consistent. All terms have dimensions of length [L].</p>
+                    </div>
+
+                    <div class="feedback-incorrect" id="feedback-incorrect-4" style="display: none;">
+                        <h4 class="text-lg font-semibold text-light mb-2">Incorrect</h4>
+                        <p class="text-gray-300">The correct answer is s = ut + ½at². All terms in this equation have dimensions of length [L]. The other equations add or equate quantities with different dimensions.</p>
+                    </div>
+                </div>
+
+                <!-- Question 5 -->
+                <div class="quiz-card" id="question-5" style="display: none;">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-xl font-semibold text-light">Question 5: Vector Magnitude</h3>
+                        <span class="bg-accent text-dark px-3 py-1 rounded-full text-sm font-semibold">10 pts</span>
+                    </div>
+                    
+                    <p class="text-gray-300 mb-4">
+                        What is the magnitude of vector A = 3i + 4j?
+                    </p>
+                    
+                    <div class="space-y-3" id="options-5">
+                        <div class="quiz-option" data-correct="false">
+                            <span class="text-gray-300">5</span>
+                        </div>
+                        <div class="quiz-option" data-correct="false">
+                            <span class="text-gray-300">7</span>
+                        </div>
+                        <div class="quiz-option" data-correct="true">
+                            <span class="text-gray-300">5</span>
+                        </div>
+                        <div class="quiz-option" data-correct="false">
+                            <span class="text-gray-300">25</span>
+                        </div>
+                    </div>
+
+                    <div class="hint-box" id="hint-5">
+                        <h4 class="text-lg font-semibold text-light mb-2">Hint</h4>
+                        <p class="text-gray-300">The magnitude of a vector A = xi + yj is given by |A| = √(x² + y²).</p>
+                    </div>
+                    
+                    <div class="hint-toggle" onclick="toggleHint(5)">
+                        <i class="fas fa-lightbulb"></i> Show Hint
+                    </div>
+
+                    <div class="feedback-correct" id="feedback-correct-5" style="display: none;">
+                        <h4 class="text-lg font-semibold text-light mb-2">Correct!</h4>
+                        <p class="text-gray-300">Yes, |A| = √(3² + 4²) = √(9 + 16) = √25 = 5.</p>
+                    </div>
+
+                    <div class="feedback-incorrect" id="feedback-incorrect-5" style="display: none;">
+                        <h4 class="text-lg font-semibold text-light mb-2">Incorrect</h4>
+                        <p class="text-gray-300">The correct answer is 5. The magnitude is calculated as |A| = √(3² + 4²) = √(9 + 16) = √25 = 5.</p>
+                    </div>
+                </div>
+
+                <!-- Question 6 -->
+                <div class="quiz-card" id="question-6" style="display: none;">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-xl font-semibold text-light">Question 6: Dot Product</h3>
+                        <span class="bg-accent text-dark px-3 py-1 rounded-full text-sm font-semibold">10 pts</span>
+                    </div>
+                    
+                    <p class="text-gray-300 mb-4">
+                        Calculate the dot product of A = 2i + 3j and B = -1i + 4j.
+                    </p>
+                    
+                    <div class="space-y-3" id="options-6">
+                        <div class="quiz-option" data-correct="false">
+                            <span class="text-gray-300">5</span>
+                        </div>
+                        <div class="quiz-option" data-correct="false">
+                            <span class="text-gray-300">11</span>
+                        </div>
+                        <div class="quiz-option" data-correct="true">
+                            <span class="text-gray-300">10</span>
+                        </div>
+                        <div class="quiz-option" data-correct="false">
+                            <span class="text-gray-300">14</span>
+                        </div>
+                    </div>
+
+                    <div class="hint-box" id="hint-6">
+                        <h4 class="text-lg font-semibold text-light mb-2">Hint</h4>
+                        <p class="text-gray-300">The dot product A · B = AₓBₓ + AᵧBᵧ.</p>
+                    </div>
+                    
+                    <div class="hint-toggle" onclick="toggleHint(6)">
+                        <i class="fas fa-lightbulb"></i> Show Hint
+                    </div>
+
+                    <div class="feedback-correct" id="feedback-correct-6" style="display: none;">
+                        <h4 class="text-lg font-semibold text-light mb-2">Correct!</h4>
+                        <p class="text-gray-300">Yes, A · B = (2)(-1) + (3)(4) = -2 + 12 = 10.</p>
+                    </div>
+
+                    <div class="feedback-incorrect" id="feedback-incorrect-6" style="display: none;">
+                        <h4 class="text-lg font-semibold text-light mb-2">Incorrect</h4>
+                        <p class="text-gray-300">The correct answer is 10. The dot product is calculated as A · B = (2)(-1) + (3)(4) = -2 + 12 = 10.</p>
+                    </div>
+                </div>
+
+                <!-- Question 7 -->
+                <div class="quiz-card" id="question-7" style="display: none;">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-xl font-semibold text-light">Question 7: Vector Addition</h3>
+                        <span class="bg-accent text-dark px-3 py-1 rounded-full text-sm font-semibold">10 pts</span>
+                    </div>
+                    
+                    <p class="text-gray-300 mb-4">
+                        Vector A has a magnitude of 5 units directed east. Vector B has a magnitude of 12 units directed north. What is the magnitude of A + B?
+                    </p>
+
+                    <div class="vector-diagram">
+                        <canvas class="vector-canvas" id="vector-canvas-7"></canvas>
+                    </div>
+                    
+                    <div class="space-y-3" id="options-7">
+                        <div class="quiz-option" data-correct="false">
+                            <span class="text-gray-300">7 units</span>
+                        </div>
+                        <div class="quiz-option" data-correct="false">
+                            <span class="text-gray-300">13 units</span>
+                        </div>
+                        <div class="quiz-option" data-correct="true">
+                            <span class="text-gray-300">13 units</span>
+                        </div>
+                        <div class="quiz-option" data-correct="false">
+                            <span class="text-gray-300">17 units</span>
+                        </div>
+                    </div>
+
+                    <div class="hint-box" id="hint-7">
+                        <h4 class="text-lg font-semibold text-light mb-2">Hint</h4>
+                        <p class="text-gray-300">Since the vectors are perpendicular, use the Pythagorean theorem: |A + B| = √(|A|² + |B|²).</p>
+                    </div>
+                    
+                    <div class="hint-toggle" onclick="toggleHint(7)">
+                        <i class="fas fa-lightbulb"></i> Show Hint
+                    </div>
+
+                    <div class="feedback-correct" id="feedback-correct-7" style="display: none;">
+                        <h4 class="text-lg font-semibold text-light mb-2">Correct!</h4>
+                        <p class="text-gray-300">Yes, |A + B| = √(5² + 12²) = √(25 + 144) = √169 = 13 units.</p>
+                    </div>
+
+                    <div class="feedback-incorrect" id="feedback-incorrect-7" style="display: none;">
+                        <h4 class="text-lg font-semibold text-light mb-2">Incorrect</h4>
+                        <p class="text-gray-300">The correct answer is 13 units. Since the vectors are perpendicular, we use the Pythagorean theorem: |A + B| = √(5² + 12²) = √(25 + 144) = √169 = 13.</p>
+                    </div>
+                </div>
+
+                <!-- Question 8 -->
+                <div class="quiz-card" id="question-8" style="display: none;">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-xl font-semibold text-light">Question 8: SI Prefixes</h3>
+                        <span class="bg-accent text-dark px-3 py-1 rounded-full text-sm font-semibold">10 pts</span>
+                    </div>
+                    
+                    <p class="text-gray-300 mb-4">
+                        Which prefix corresponds to 10⁻⁶?
+                    </p>
+                    
+                    <div class="space-y-3" id="options-8">
+                        <div class="quiz-option" data-correct="false">
+                            <span class="text-gray-300">kilo (k)</span>
+                        </div>
+                        <div class="quiz-option" data-correct="false">
+                            <span class="text-gray-300">centi (c)</span>
+                        </div>
+                        <div class="quiz-option" data-correct="false">
+                            <span class="text-gray-300">nano (n)</span>
+                        </div>
+                        <div class="quiz-option" data-correct="true">
+                            <span class="text-gray-300">micro (μ)</span>
+                        </div>
+                    </div>
+
+                    <div class="hint-box" id="hint-8">
+                        <h4 class="text-lg font-semibold text-light mb-2">Hint</h4>
+                        <p class="text-gray-300">Remember the common SI prefixes: milli (10⁻³), micro (10⁻⁶), nano (10⁻⁹), pico (10⁻¹²).</p>
+                    </div>
+                    
+                    <div class="hint-toggle" onclick="toggleHint(8)">
+                        <i class="fas fa-lightbulb"></i> Show Hint
+                    </div>
+
+                    <div class="feedback-correct" id="feedback-correct-8" style="display: none;">
+                        <h4 class="text-lg font-semibold text-light mb-2">Correct!</h4>
+                        <p class="text-gray-300">Yes, micro (μ) corresponds to 10⁻⁶. For example, 1 micrometer = 10⁻⁶ meters.</p>
+                    </div>
+
+                    <div class="feedback-incorrect" id="feedback-incorrect-8" style="display: none;">
+                        <h4 class="text-lg font-semibold text-light mb-2">Incorrect</h4>
+                        <p class="text-gray-300">The correct answer is micro (μ). The prefix micro corresponds to 10⁻⁶. Nano corresponds to 10⁻⁹, centi to 10⁻², and kilo to 10³.</p>
+                    </div>
+                </div>
+
+                <!-- Question 9 -->
+                <div class="quiz-card" id="question-9" style="display: none;">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-xl font-semibold text-light">Question 9: Cross Product</h3>
+                        <span class="bg-accent text-dark px-3 py-1 rounded-full text-sm font-semibold">10 pts</span>
+                    </div>
+                    
+                    <p class="text-gray-300 mb-4">
+                        For 2D vectors in the xy-plane, the cross product A × B gives a vector in which direction?
+                    </p>
+                    
+                    <div class="space-y-3" id="options-9">
+                        <div class="quiz-option" data-correct="false">
+                            <span class="text-gray-300">x-direction</span>
+                        </div>
+                        <div class="quiz-option" data-correct="false">
+                            <span class="text-gray-300">y-direction</span>
+                        </div>
+                        <div class="quiz-option" data-correct="false">
+                            <span class="text-gray-300">xy-plane</span>
+                        </div>
+                        <div class="quiz-option" data-correct="true">
+                            <span class="text-gray-300">z-direction</span>
+                        </div>
+                    </div>
+
+                    <div class="hint-box" id="hint-9">
+                        <h4 class="text-lg font-semibold text-light mb-2">Hint</h4>
+                        <p class="text-gray-300">The cross product of two vectors is always perpendicular to both vectors. In 2D, both vectors lie in the xy-plane.</p>
+                    </div>
+                    
+                    <div class="hint-toggle" onclick="toggleHint(9)">
+                        <i class="fas fa-lightbulb"></i> Show Hint
+                    </div>
+
+                    <div class="feedback-correct" id="feedback-correct-9" style="display: none;">
+                        <h4 class="text-lg font-semibold text-light mb-2">Correct!</h4>
+                        <p class="text-gray-300">Yes, for 2D vectors in the xy-plane, A × B gives a vector in the z-direction (either positive or negative).</p>
+                    </div>
+
+                    <div class="feedback-incorrect" id="feedback-incorrect-9" style="display: none;">
+                        <h4 class="text-lg font-semibold text-light mb-2">Incorrect</h4>
+                        <p class="text-gray-300">The correct answer is z-direction. The cross product of two vectors is always perpendicular to both vectors. Since both vectors lie in the xy-plane, their cross product must point in the z-direction.</p>
+                    </div>
+                </div>
+
+                <!-- Question 10 -->
+                <div class="quiz-card" id="question-10" style="display: none;">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-xl font-semibold text-light">Question 10: Vector Components</h3>
+                        <span class="bg-accent text-dark px-3 py-1 rounded-full text-sm font-semibold">10 pts</span>
+                    </div>
+                    
+                    <p class="text-gray-300 mb-4">
+                        A vector has a magnitude of 10 units and makes an angle of 30° with the positive x-axis. What is its y-component?
+                    </p>
+
+                    <div class="vector-diagram">
+                        <canvas class="vector-canvas" id="vector-canvas-10"></canvas>
+                    </div>
+                    
+                    <div class="space-y-3" id="options-10">
+                        <div class="quiz-option" data-correct="false">
+                            <span class="text-gray-300">5 units</span>
+                        </div>
+                        <div class="quiz-option" data-correct="false">
+                            <span class="text-gray-300">7.5 units</span>
+                        </div>
+                        <div class="quiz-option" data-correct="false">
+                            <span class="text-gray-300">8.66 units</span>
+                        </div>
+                        <div class="quiz-option" data-correct="true">
+                            <span class="text-gray-300">5 units</span>
+                        </div>
+                    </div>
+
+                    <div class="hint-box" id="hint-10">
+                        <h4 class="text-lg font-semibold text-light mb-2">Hint</h4>
+                        <p class="text-gray-300">The y-component of a vector is given by |A|sinθ, where θ is the angle with the positive x-axis.</p>
+                    </div>
+                    
+                    <div class="hint-toggle" onclick="toggleHint(10)">
+                        <i class="fas fa-lightbulb"></i> Show Hint
+                    </div>
+
+                    <div class="feedback-correct" id="feedback-correct-10" style="display: none;">
+                        <h4 class="text-lg font-semibold text-light mb-2">Correct!</h4>
+                        <p class="text-gray-300">Yes, Aᵧ = |A|sinθ = 10 × sin30° = 10 × 0.5 = 5 units.</p>
+                    </div>
+
+                    <div class="feedback-incorrect" id="feedback-incorrect-10" style="display: none;">
+                        <h4 class="text-lg font-semibold text-light mb-2">Incorrect</h4>
+                        <p class="text-gray-300">The correct answer is 5 units. The y-component is calculated as Aᵧ = |A|sinθ = 10 × sin30° = 10 × 0.5 = 5 units.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quiz Navigation Buttons -->
+            <div class="quiz-navigation">
+                <button class="btn-primary" id="prev-btn" onclick="previousQuestion()" disabled>
+                    <i class="fas fa-arrow-left mr-2"></i>
+                    Previous
+                </button>
+                
+                <button class="btn-primary" id="next-btn" onclick="nextQuestion()">
+                    Next
+                    <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+
+            <!-- Submit Section -->
+            <div class="bg-dark-card rounded-xl p-6 mt-8 border border-gray-800 text-center" id="submit-section">
+                <h3 class="text-xl font-semibold text-light mb-4">Ready to Submit?</h3>
+                <p class="text-gray-300 mb-4">You have answered <span id="answered-count">0</span> out of 10 questions.</p>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+                </div>
+                <button class="submit-btn mt-4" id="submit-btn" onclick="submitQuiz()">
+                    <i class="fas fa-paper-plane mr-2"></i>
+                    Submit Quiz
+                </button>
+            </div>
+
+            <!-- Results Section (Initially Hidden) -->
+            <div class="results-card" id="results-section" style="display: none;">
+                <h2 class="text-3xl font-bold text-light mb-4">Quiz Results</h2>
+                
+                <div class="score-display" id="score-display">
+                    <!-- Score will be inserted here -->
+                </div>
+                
+                <p class="text-gray-300 mb-4" id="score-message">
+                    <!-- Message will be inserted here -->
+                </p>
+                
+                <div class="progress-bar">
+                    <div class="progress-fill" id="results-progress" style="width: 0%"></div>
+                </div>
+                
+                <p class="text-gray-300 mb-6">You scored <span id="correct-count">0</span> out of 10 questions correctly.</p>
+                
+                <div class="flex justify-center space-x-4">
+                    <button class="btn-primary" onclick="reviewQuiz()">
+                        <i class="fas fa-redo mr-2"></i>
+                        Review Answers
+                    </button>
+                    <a href="../lectures/lecture1.html" class="btn-primary">
+                        <i class="fas fa-book mr-2"></i>
+                        Review Lecture
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="py-8 border-t border-gray-800 mt-8">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <p class="text-gray-400 text-sm">© 2024 Physics 110: Introductory Mechanics - Robert Sichomba</p>
+        </div>
+    </footer>
+
+    <script>
+        // Quiz state
+        let currentQuestion = 1;
+        let answers = {};
+        let score = 0;
+        let timeLeft = 30 * 60; // 30 minutes in seconds
+        let timerInterval;
+        
+        // Initialize the quiz
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeQuiz();
+            startTimer();
+            drawVectorDiagrams();
+        });
+        
+        // Initialize quiz navigation and state
+        function initializeQuiz() {
+            // Create question indicators
+            const indicatorsContainer = document.getElementById('question-indicators');
+            for (let i = 1; i <= 10; i++) {
+                const indicator = document.createElement('div');
+                indicator.className = 'question-indicator';
+                if (i === 1) indicator.classList.add('active', 'current');
+                indicator.setAttribute('data-question', i);
+                indicator.addEventListener('click', function() {
+                    goToQuestion(parseInt(this.getAttribute('data-question')));
+                });
+                indicatorsContainer.appendChild(indicator);
+            }
+            
+            // Set up option selection
+            for (let i = 1; i <= 10; i++) {
+                const options = document.getElementById(`options-${i}`);
+                if (options) {
+                    const optionElements = options.querySelectorAll('.quiz-option');
+                    optionElements.forEach(option => {
+                        option.addEventListener('click', function() {
+                            // Remove selected class from all options in this question
+                            optionElements.forEach(opt => opt.classList.remove('selected'));
+                            
+                            // Add selected class to clicked option
+                            this.classList.add('selected');
+                            
+                            // Store the answer
+                            answers[i] = this.getAttribute('data-correct') === 'true';
+                            
+                            // Update progress
+                            updateProgress();
+                            
+                            // Mark question as answered
+                            const indicator = document.querySelector(`.question-indicator[data-question="${i}"]`);
+                            indicator.classList.add('answered');
+                            
+                            // Show feedback if enabled
+                            if (document.getElementById(`feedback-correct-${i}`).style.display !== 'none' ||
+                                document.getElementById(`feedback-incorrect-${i}`).style.display !== 'none') {
+                                showFeedback(i);
+                            }
+                        });
+                    });
+                }
+            }
+        }
+        
+        // Navigation functions
+        function nextQuestion() {
+            if (currentQuestion < 10) {
+                goToQuestion(currentQuestion + 1);
+            }
+        }
+        
+        function previousQuestion() {
+            if (currentQuestion > 1) {
+                goToQuestion(currentQuestion - 1);
+            }
+        }
+        
+        function goToQuestion(questionNum) {
+            // Hide current question
+            document.getElementById(`question-${currentQuestion}`).style.display = 'none';
+            
+            // Remove current class from current indicator
+            document.querySelector(`.question-indicator[data-question="${currentQuestion}"]`).classList.remove('current');
+            
+            // Show new question
+            document.getElementById(`question-${questionNum}`).style.display = 'block';
+            
+            // Add current class to new indicator
+            document.querySelector(`.question-indicator[data-question="${questionNum}"]`).classList.add('current');
+            
+            // Update current question
+            currentQuestion = questionNum;
+            
+            // Update navigation buttons
+            document.getElementById('prev-btn').disabled = currentQuestion === 1;
+            document.getElementById('next-btn').disabled = currentQuestion === 10;
+            
+            // Update active class on indicators
+            document.querySelectorAll('.question-indicator').forEach(indicator => {
+                indicator.classList.remove('active');
+            });
+            document.querySelector(`.question-indicator[data-question="${questionNum}"]`).classList.add('active');
+        }
+        
+        // Timer functions
+        function startTimer() {
+            timerInterval = setInterval(function() {
+                timeLeft--;
+                updateTimerDisplay();
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    submitQuiz();
+                }
+            }, 1000);
+        }
+        
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('time').textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            // Change color when time is running out
+            if (timeLeft < 5 * 60) { // 5 minutes left
+                document.getElementById('timer').style.backgroundColor = 'rgba(239, 68, 68, 0.1)';
+                document.getElementById('timer').style.borderColor = '#ef4444';
+            }
+        }
+        
+        // Progress tracking
+        function updateProgress() {
+            const answeredCount = Object.keys(answers).length;
+            const progress = (answeredCount / 10) * 100;
+            
+            document.getElementById('answered-count').textContent = answeredCount;
+            document.getElementById('progress-fill').style.width = `${progress}%`;
+        }
+        
+        // Hint functionality
+        function toggleHint(questionNum) {
+            const hint = document.getElementById(`hint-${questionNum}`);
+            const toggle = event.target;
+            
+            if (hint.style.display === 'block') {
+                hint.style.display = 'none';
+                toggle.innerHTML = '<i class="fas fa-lightbulb"></i> Show Hint';
+            } else {
+                hint.style.display = 'block';
+                toggle.innerHTML = '<i class="fas fa-times"></i> Hide Hint';
+            }
+        }
+        
+        // Show feedback for a question
+        function showFeedback(questionNum) {
+            const isCorrect = answers[questionNum];
+            
+            if (isCorrect) {
+                document.getElementById(`feedback-correct-${questionNum}`).style.display = 'block';
+                document.getElementById(`feedback-incorrect-${questionNum}`).style.display = 'none';
+            } else {
+                document.getElementById(`feedback-correct-${questionNum}`).style.display = 'none';
+                document.getElementById(`feedback-incorrect-${questionNum}`).style.display = 'block';
+            }
+        }
+        
+        // Vector diagram drawing
+        function drawVectorDiagrams() {
+            // Question 7: Vector addition
+            const canvas7 = document.getElementById('vector-canvas-7');
+            const ctx7 = canvas7.getContext('2d');
+            const width7 = canvas7.parentElement.clientWidth;
+            const height7 = canvas7.parentElement.clientHeight;
+            
+            canvas7.width = width7;
+            canvas7.height = height7;
+            
+            // Set origin
+            const originX7 = width7 / 2;
+            const originY7 = height7 / 2;
+            const scale7 = 15;
+            
+            // Draw coordinate system
+            ctx7.strokeStyle = '#374151';
+            ctx7.lineWidth = 1;
+            ctx7.beginPath();
+            ctx7.moveTo(0, originY7);
+            ctx7.lineTo(width7, originY7);
+            ctx7.moveTo(originX7, 0);
+            ctx7.lineTo(originX7, height7);
+            ctx7.stroke();
+            
+            // Draw vector A (5 units east)
+            ctx7.strokeStyle = '#3b82f6';
+            ctx7.lineWidth = 2;
+            ctx7.beginPath();
+            ctx7.moveTo(originX7, originY7);
+            ctx7.lineTo(originX7 + 5 * scale7, originY7);
+            ctx7.stroke();
+            
+            // Draw vector B (12 units north)
+            ctx7.strokeStyle = '#ef4444';
+            ctx7.beginPath();
+            ctx7.moveTo(originX7, originY7);
+            ctx7.lineTo(originX7, originY7 - 12 * scale7);
+            ctx7.stroke();
+            
+            // Draw resultant A + B
+            ctx7.strokeStyle = '#10b981';
+            ctx7.lineWidth = 3;
+            ctx7.beginPath();
+            ctx7.moveTo(originX7, originY7);
+            ctx7.lineTo(originX7 + 5 * scale7, originY7 - 12 * scale7);
+            ctx7.stroke();
+            
+            // Add labels
+            ctx7.fillStyle = '#ffffff';
+            ctx7.font = '12px Arial';
+            ctx7.fillText('A (5 units)', originX7 + 2.5 * scale7, originY7 + 15);
+            ctx7.fillText('B (12 units)', originX7 - 40, originY7 - 6 * scale7);
+            ctx7.fillText('A + B', originX7 + 2.5 * scale7, originY7 - 6 * scale7);
+            
+            // Question 10: Vector components
+            const canvas10 = document.getElementById('vector-canvas-10');
+            const ctx10 = canvas10.getContext('2d');
+            const width10 = canvas10.parentElement.clientWidth;
+            const height10 = canvas10.parentElement.clientHeight;
+            
+            canvas10.width = width10;
+            canvas10.height = height10;
+            
+            // Set origin
+            const originX10 = width10 / 2;
+            const originY10 = height10 / 2;
+            const scale10 = 20;
+            
+            // Draw coordinate system
+            ctx10.strokeStyle = '#374151';
+            ctx10.lineWidth = 1;
+            ctx10.beginPath();
+            ctx10.moveTo(0, originY10);
+            ctx10.lineTo(width10, originY10);
+            ctx10.moveTo(originX10, 0);
+            ctx10.lineTo(originX10, height10);
+            ctx10.stroke();
+            
+            // Draw vector (10 units at 30°)
+            const angle = 30 * Math.PI / 180;
+            const Ax = 10 * Math.cos(angle);
+            const Ay = 10 * Math.sin(angle);
+            
+            ctx10.strokeStyle = '#3b82f6';
+            ctx10.lineWidth = 3;
+            ctx10.beginPath();
+            ctx10.moveTo(originX10, originY10);
+            ctx10.lineTo(originX10 + Ax * scale10, originY10 - Ay * scale10);
+            ctx10.stroke();
+            
+            // Draw components
+            ctx10.strokeStyle = '#ef4444';
+            ctx10.lineWidth = 1;
+            ctx10.setLineDash([5, 5]);
+            ctx10.beginPath();
+            ctx10.moveTo(originX10 + Ax * scale10, originY10);
+            ctx10.lineTo(originX10 + Ax * scale10, originY10 - Ay * scale10);
+            ctx10.stroke();
+            
+            ctx10.beginPath();
+            ctx10.moveTo(originX10, originY10);
+            ctx10.lineTo(originX10 + Ax * scale10, originY10);
+            ctx10.stroke();
+            ctx10.setLineDash([]);
+            
+            // Draw angle arc
+            ctx10.strokeStyle = '#f59e0b';
+            ctx10.lineWidth = 1;
+            ctx10.beginPath();
+            ctx10.arc(originX10, originY10, 30, 0, angle);
+            ctx10.stroke();
+            
+            // Add labels
+            ctx10.fillStyle = '#ffffff';
+            ctx10.font = '12px Arial';
+            ctx10.fillText('A = 10 units', originX10 + 5 * scale10, originY10 - 2 * scale10);
+            ctx10.fillText('30°', originX10 + 20, originY10 - 15);
+            ctx10.fillText('A_y', originX10 + Ax * scale10 + 5, originY10 - Ay * scale10 / 2);
+            ctx10.fillText('A_x', originX10 + Ax * scale10 / 2, originY10 + 15);
+        }
+        
+        // Submit quiz
+        function submitQuiz() {
+            clearInterval(timerInterval);
+            
+            // Calculate score
+            score = 0;
+            for (let i = 1; i <= 10; i++) {
+                if (answers[i] === true) {
+                    score += 10;
+                }
+            }
+            
+            // Show results
+            document.getElementById('quiz-questions').style.display = 'none';
+            document.getElementById('submit-section').style.display = 'none';
+            document.getElementById('results-section').style.display = 'block';
+            
+            // Update results display
+            document.getElementById('correct-count').textContent = score / 10;
+            document.getElementById('results-progress').style.width = `${score}%`;
+            
+            const scoreDisplay = document.getElementById('score-display');
+            scoreDisplay.textContent = `${score}%`;
+            
+            if (score >= 80) {
+                scoreDisplay.className = 'score-display score-excellent';
+                document.getElementById('score-message').textContent = 'Excellent work! You have a strong understanding of units and vectors.';
+            } else if (score >= 60) {
+                scoreDisplay.className = 'score-display score-good';
+                document.getElementById('score-message').textContent = 'Good job! You understand the basics but could use some more practice.';
+            } else {
+                scoreDisplay.className = 'score-display score-poor';
+                document.getElementById('score-message').textContent = 'Keep practicing! Review the lecture materials and try again.';
+            }
+            
+            // Show feedback for all questions
+            for (let i = 1; i <= 10; i++) {
+                showFeedback(i);
+            }
+        }
+        
+        // Review quiz answers
+        function reviewQuiz() {
+            document.getElementById('results-section').style.display = 'none';
+            document.getElementById('quiz-questions').style.display = 'block';
+            
+            // Show feedback for all questions
+            for (let i = 1; i <= 10; i++) {
+                showFeedback(i);
+            }
+            
+            // Go to first question
+            goToQuestion(1);
+        }
+    </script>
+</body>
+</html>

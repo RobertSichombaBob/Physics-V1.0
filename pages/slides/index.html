@@ -1,0 +1,1591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physics 110 Slides: Units & Vectors</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#0a0a0a',
+                        light: '#ffffff',
+                        accent: '#3b82f6',
+                        secondary: '#8b5cf6',
+                        success: '#10b981',
+                        warning: '#f59e0b',
+                        danger: '#ef4444',
+                        'dark-card': '#1a1a1a',
+                        'dark-hover': '#2a2a2a',
+                        'dark-border': '#2a2a2a',
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif'],
+                        'serif': ['Source Serif Pro', 'Georgia', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: #0a0a0a;
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .slide-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .slide {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+        
+        .slide-header {
+            border-bottom: 1px solid #374151;
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .slide-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .slide-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+        }
+        
+        .slide-subtitle {
+            font-size: 1.25rem;
+            color: #9ca3af;
+        }
+        
+        .content-card {
+            background-color: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 1rem;
+            padding: 1.5rem;
+        }
+        
+        .equation {
+            background-color: #2a2a2a;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            border: 1px solid #374151;
+        }
+        
+        .example-box {
+            background-color: rgba(59, 130, 246, 0.1);
+            border-left: 4px solid #3b82f6;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+        
+        .step {
+            background-color: rgba(59, 130, 246, 0.05);
+            border-left: 3px solid #3b82f6;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+        
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background-color: #3b82f6;
+            color: #ffffff;
+            border-radius: 50%;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+        
+        .vector-diagram {
+            width: 100%;
+            height: 300px;
+            background-color: #1a1a1a;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .vector-canvas {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .slide-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            border-top: 1px solid #374151;
+            background-color: #1a1a1a;
+        }
+        
+        .slide-navigation {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .nav-btn {
+            background-color: #1a1a1a;
+            color: #ffffff;
+            border: 1px solid #2a2a2a;
+            transition: all 0.3s ease;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+        }
+        
+        .nav-btn:hover {
+            background-color: #3b82f6;
+            color: #ffffff;
+            border-color: #3b82f6;
+        }
+        
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .nav-btn:disabled:hover {
+            background-color: #1a1a1a;
+            color: #ffffff;
+            border-color: #2a2a2a;
+        }
+        
+        .slide-indicators {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .slide-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #374151;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .slide-indicator.active {
+            background-color: #3b82f6;
+            transform: scale(1.2);
+        }
+        
+        .slide-counter {
+            color: #9ca3af;
+            font-size: 0.9rem;
+        }
+        
+        .key-concept {
+            background-color: rgba(139, 92, 246, 0.1);
+            border-left: 4px solid #8b5cf6;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+        
+        .problem-statement {
+            background-color: rgba(245, 158, 11, 0.1);
+            border-left: 4px solid #f59e0b;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+        
+        .solution-box {
+            background-color: rgba(16, 185, 129, 0.1);
+            border-left: 4px solid #10b981;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .definition {
+            background-color: rgba(59, 130, 246, 0.05);
+            border: 1px solid #3b82f6;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .interactive-tool {
+            background-color: rgba(16, 185, 129, 0.1);
+            border-left: 4px solid #10b981;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+        
+        .tool-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .tool-input {
+            background-color: #2a2a2a;
+            border: 1px solid #374151;
+            border-radius: 0.25rem;
+            padding: 0.5rem;
+            color: #ffffff;
+            width: 120px;
+        }
+        
+        .highlight {
+            background-color: rgba(245, 158, 11, 0.2);
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <!-- Slide 1: Title Slide -->
+        <div class="slide" id="slide-1">
+            <div class="slide-header">
+                <h1 class="slide-title">Physics 110: Units & Vectors</h1>
+                <p class="slide-subtitle">Complete Tutorial Solutions with Step-by-Step Explanations</p>
+            </div>
+            
+            <div class="slide-content">
+                <div class="content-card">
+                    <h2 class="text-2xl font-bold text-light mb-4">Welcome to the Interactive Slides</h2>
+                    <p class="text-gray-300 mb-4">This presentation will guide you through solving all problems from Tutorial Sheets 1 & 2 with detailed explanations.</p>
+                    
+                    <div class="key-concept">
+                        <h3 class="text-xl font-semibold text-light mb-2">What You'll Learn</h3>
+                        <ul class="text-gray-300 space-y-2">
+                            <li>• Unit conversions and SI prefixes</li>
+                            <li>• Significant figures and uncertainty</li>
+                            <li>• Dimensional analysis</li>
+                            <li>• Vector operations and applications</li>
+                            <li>• Problem-solving strategies</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="problem-statement">
+                        <h3 class="text-xl font-semibold text-light mb-2">Tutorial Sheets Covered</h3>
+                        <ul class="text-gray-300 space-y-2">
+                            <li>• Tutorial Sheet 1: Units and Measurements</li>
+                            <li>• Tutorial Sheet 2: Scalars and Vectors</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="content-card">
+                    <h3 class="text-xl font-semibold text-light mb-4">Navigation Guide</h3>
+                    <div class="two-column">
+                        <div>
+                            <p class="text-gray-300 mb-2"><i class="fas fa-arrow-left text-accent mr-2"></i> Previous Slide</p>
+                            <p class="text-gray-300 mb-2"><i class="fas fa-arrow-right text-accent mr-2"></i> Next Slide</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-300 mb-2"><i class="fas fa-circle text-accent mr-2"></i> Jump to Slide</p>
+                            <p class="text-gray-300">Use the progress indicators at the bottom</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 2: SI Units and Prefixes -->
+        <div class="slide hidden" id="slide-2">
+            <div class="slide-header">
+                <h1 class="slide-title">SI Units and Prefixes</h1>
+                <p class="slide-subtitle">Understanding the International System of Units</p>
+            </div>
+            
+            <div class="slide-content">
+                <div class="content-card">
+                    <h2 class="text-2xl font-bold text-light mb-4">SI Base Units</h2>
+                    
+                    <div class="definition">
+                        <p class="text-gray-300">The International System of Units (SI) defines seven base units from which all other units are derived.</p>
+                    </div>
+                    
+                    <div class="two-column">
+                        <div>
+                            <h3 class="text-xl font-semibold text-light mb-3">Base Units</h3>
+                            <ul class="text-gray-300 space-y-2">
+                                <li>• Length: meter (m)</li>
+                                <li>• Time: second (s)</li>
+                                <li>• Mass: kilogram (kg)</li>
+                                <li>• Temperature: kelvin (K)</li>
+                                <li>• Electric current: ampere (A)</li>
+                                <li>• Amount of substance: mole (mol)</li>
+                                <li>• Luminous intensity: candela (cd)</li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-xl font-semibold text-light mb-3">Common Derived Units</h3>
+                            <ul class="text-gray-300 space-y-2">
+                                <li>• Force: newton (N) = kg·m/s²</li>
+                                <li>• Energy: joule (J) = N·m</li>
+                                <li>• Power: watt (W) = J/s</li>
+                                <li>• Pressure: pascal (Pa) = N/m²</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="content-card">
+                    <h2 class="text-2xl font-bold text-light mb-4">SI Prefixes</h2>
+                    
+                    <div class="definition">
+                        <p class="text-gray-300">SI prefixes are used to form decimal multiples and submultiples of SI units.</p>
+                    </div>
+                    
+                    <div class="two-column">
+                        <div>
+                            <h3 class="text-xl font-semibold text-light mb-3">Common Prefixes</h3>
+                            <ul class="text-gray-300 space-y-2">
+                                <li>• kilo (k) = 10³</li>
+                                <li>• mega (M) = 10⁶</li>
+                                <li>• giga (G) = 10⁹</li>
+                                <li>• milli (m) = 10⁻³</li>
+                                <li>• micro (μ) = 10⁻⁶</li>
+                                <li>• nano (n) = 10⁻⁹</li>
+                                <li>• pico (p) = 10⁻¹²</li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-xl font-semibold text-light mb-3">Examples</h3>
+                            <ul class="text-gray-300 space-y-2">
+                                <li>• 1 km = 1000 m</li>
+                                <li>• 1 mg = 0.001 g</li>
+                                <li>• 1 ns = 10⁻⁹ s</li>
+                                <li>• 1 GW = 10⁹ W</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="interactive-tool">
+                    <h3 class="text-xl font-semibold text-light mb-4">Prefix Conversion Practice</h3>
+                    <p class="text-gray-300 mb-4">Convert between different SI prefixes:</p>
+                    
+                    <div class="tool-controls">
+                        <div>
+                            <input type="number" id="prefix-value" class="tool-input" value="1" step="0.1">
+                            <select id="prefix-from" class="tool-input">
+                                <option value="1">No prefix</option>
+                                <option value="1000">kilo (k)</option>
+                                <option value="1000000">mega (M)</option>
+                                <option value="0.001">milli (m)</option>
+                                <option value="0.000001">micro (μ)</option>
+                            </select>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-arrow-right text-accent mx-2"></i>
+                        </div>
+                        <div>
+                            <input type="text" id="prefix-result" class="tool-input" readonly>
+                            <select id="prefix-to" class="tool-input">
+                                <option value="1">No prefix</option>
+                                <option value="1000">kilo (k)</option>
+                                <option value="1000000">mega (M)</option>
+                                <option value="0.001">milli (m)</option>
+                                <option value="0.000001">micro (μ)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="nav-btn" onclick="convertPrefix()">
+                        <i class="fas fa-sync-alt mr-2"></i>
+                        Convert
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Unit Conversions -->
+        <div class="slide hidden" id="slide-3">
+            <div class="slide-header">
+                <h1 class="slide-title">Unit Conversions</h1>
+                <p class="slide-subtitle">Solving Tutorial Problems with Step-by-Step Solutions</p>
+            </div>
+            
+            <div class="slide-content">
+                <div class="content-card">
+                    <h2 class="text-2xl font-bold text-light mb-4">Problem 1: Carpet Installation</h2>
+                    
+                    <div class="problem-statement">
+                        <p class="text-gray-300">A carpet is to be installed in a room whose length is measured to be 13.71 m and whose width is measured to be 4.46 m. Find the area of the room.</p>
+                    </div>
+                    
+                    <div class="solution-box">
+                        <h3 class="text-xl font-semibold text-light mb-3">Solution</h3>
+                        
+                        <div class="step">
+                            <p class="text-gray-300"><span class="step-number">1</span> Identify the formula for area of a rectangle:</p>
+                            <div class="equation">Area = Length × Width</div>
+                        </div>
+                        
+                        <div class="step">
+                            <p class="text-gray-300"><span class="step-number">2</span> Substitute the given values:</p>
+                            <div class="equation">Area = 13.71 m × 4.46 m</div>
+                        </div>
+                        
+                        <div class="step">
+                            <p class="text-gray-300"><span class="step-number">3</span> Perform the multiplication:</p>
+                            <div class="equation">13.71 × 4.46 = 61.1466 m²</div>
+                        </div>
+                        
+                        <div class="step">
+                            <p class="text-gray-300"><span class="step-number">4</span> Apply significant figures rules:</p>
+                            <p class="text-gray-300 ml-6">- Length: 13.71 m (4 significant figures)</p>
+                            <p class="text-gray-300 ml-6">- Width: 4.46 m (3 significant figures)</p>
+                            <p class="text-gray-300 ml-6">- Result should have 3 significant figures</p>
+                            <div class="equation">61.1466 m² → 61.1 m²</div>
+                        </div>
+                        
+                        <div class="step">
+                            <p class="text-gray-300"><span class="step-number">5</span> Final Answer:</p>
+                            <div class="equation highlight">Area = 61.1 m²</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="content-card">
+                    <h2 class="text-2xl font-bold text-light mb-4">Problem 2: Volume Conversion</h2>
+                    
+                    <div class="problem-statement">
+                        <p class="text-gray-300">An object in the shape of rectangular parallelepiped measures 2.0 in × 3.5 in × 6.5 in. Determine the volume of the object in m³.</p>
+                    </div>
+                    
+                    <div class="solution-box">
+                        <h3 class="text-xl font-semibold text-light mb-3">Solution</h3>
+                        
+                        <div class="step">
+                            <p class="text-gray-300"><span class="step-number">1</span> Calculate volume in cubic inches:</p>
+                            <div class="equation">Volume = 2.0 in × 3.5 in × 6.5 in = 45.5 in³</div>
+                        </div>
+                        
+                        <div class="step">
+                            <p class="text-gray-300"><span class="step-number">2</span> Convert inches to meters:</p>
+                            <div class="equation">1 in = 0.0254 m</div>
+                            <div class="equation">1 in³ = (0.0254 m)³ = 1.6387 × 10⁻⁵ m³</div>
+                        </div>
+                        
+                        <div class="step">
+                            <p class="text-gray-300"><span class="step-number">3</span> Convert volume to cubic meters:</p>
+                            <div class="equation">Volume = 45.5 in³ × (1.6387 × 10⁻⁵ m³/in³) = 7.456 × 10⁻⁴ m³</div>
+                        </div>
+                        
+                        <div class="step">
+                            <p class="text-gray-300"><span class="step-number">4</span> Apply significant figures:</p>
+                            <p class="text-gray-300 ml-6">- All measurements have 2 significant figures</p>
+                            <p class="text-gray-300 ml-6">- Result should have 2 significant figures</p>
+                            <div class="equation">7.456 × 10⁻⁴ m³ → 7.5 × 10⁻⁴ m³</div>
+                        </div>
+                        
+                        <div class="step">
+                            <p class="text-gray-300"><span class="step-number">5</span> Final Answer:</p>
+                            <div class="equation highlight">Volume = 7.5 × 10⁻⁴ m³</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Significant Figures and Uncertainty -->
+        <div class="slide hidden" id="slide-4">
+            <div class="slide-header">
+                <h1 class="slide-title">Significant Figures and Uncertainty</h1>
+                <p class="slide-subtitle">Precision in Measurements and Calculations</p>
+            </div>
+            
+            <div class="slide-content">
+                <div class="content-card">
+                    <h2 class="text-2xl font-bold text-light mb-4">Rules for Significant Figures</h2>
+                    
+                    <div class="two-column">
+                        <div>
+                            <h3 class="text-xl font-semibold text-light mb-3">Counting Rules</h3>
+                            <ul class="text-gray-300 space-y-2">
+                                <li>• All non-zero digits are significant</li>
+                                <li>• Zeros between non-zero digits are significant</li>
+                                <li>• Leading zeros are not significant</li>
+                                <li>• Trailing zeros after a decimal point are significant</li>
+                                <li>• Trailing zeros without a decimal point are ambiguous</li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-xl font-semibold text-light mb-3">Calculation Rules</h3>
+                            <ul class="text-gray-300 space-y-2">
+                                <li>• Multiplication/Division: Result has same sig figs as measurement with fewest sig figs</li>
+                                <li>• Addition/Subtraction: Result has same decimal places as measurement with fewest decimal places</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="content-card">
+                    <h2 class="text-2xl font-bold text-light mb-4">Problem 6: Uncertainty in Area</h2>
+                    
+                    <div class="problem-statement">
+                        <p class="text-gray-300">A rectangular plate has a length of (21.3 ± 0.2) cm and a width of (9.8 ± 0.1) cm. Calculate the area of the plate including its uncertainty.</p>
+                    </div>
+                    
+                    <div class="solution-box">
+                        <h3 class="text-xl font-semibold text-light mb-3">Solution</h3>
+                        
+                        <div class="step">
+                            <p class="text-gray-300"><span class="step-number">1</span> Calculate nominal area:</p>
+                            <div class="equation">A = 21.3 cm × 9.8 cm = 208.74 cm²</div>
+                        </div>
+                        
+                        <div class="step">
+                            <p class="text-gray-300"><span class="step-number">2</span> Calculate relative uncertainties:</p>
+                            <div class="equation">Relative uncertainty in length = 0.2 / 21.3 = 0.00939 (0.939%)</div>
+                            <div class="equation">Relative uncertainty in width = 0.1 / 9.8 = 0.01020 (1.020%)</div>
+                        </div>
+                        
+                        <div class="step">
+                            <p class="text-gray-300"><span class="step-number">3</span> For multiplication, relative uncertainties add:</p>
+                            <div class="equation">Relative uncertainty in area = 0.00939 + 0.01020 = 0.01959 (1.959%)</div>
+                        </div>
+                        
+                        <div class="step">
+                            <p class="text-gray-300"><span class="step-number">4</span> Calculate absolute uncertainty:</p>
+                            <div class="equation">Absolute uncertainty = 208.74 cm² × 0.01959 = 4.087 cm²</div>
+                        </div>
+                        
+                        <div class="step">
+                            <p class="text-gray-300"><span class="step-number">5</span> Round uncertainty to 1 significant figure:</p>
+                            <div class="equation">4.087 cm² → 4 cm²</div>
+                        </div>
+                        
+                        <div class="step">
+                            <p class="text-gray-300"><span class="step-number">6</span> Round area to match uncertainty:</p>
+                            <div class="equation">208.74 cm² → 209 cm²</div>
+                        </div>
+                        
+                        <div class="step">
+                            <p class="text-gray-300"><span class="step-number">7</span> Final Answer:</p>
+                            <div class="equation highlight">Area = 209 ± 4 cm²</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Dimensional Analysis -->
+        <div class="slide hidden" id="slide-5">
+            <div class="slide-header">
+                <h1 class="slide-title">Dimensional Analysis</h1>
+                <p class="slide-subtitle">Checking Equations and Deriving Formulas</p>
+            </div>
+            
+            <div class="slide-content">
+                <div class="content-card">
+                    <h2 class="text-2xl font-bold text-light mb-4">Fundamental Dimensions</h2>
+                    
+                    <div class="definition">
+                        <p class="text-gray-300">All physical quantities can be expressed in terms of three fundamental dimensions: Length [L], Mass [M], and Time [T].</p>
+                    </div>
+                    
+                    <div class="two-column">
+                        <div>
+                            <h3 class="text-xl font-semibold text-light mb-3">Common Dimensions</h3>
+                            <ul class="text-gray-300 space-y-2">
+                                <li>• Velocity: [L][T]⁻¹</li>
+                                <li>• Acceleration: [L][T]⁻²</li>
+                                <li>• Force: [M][L][T]⁻²</li>
+                                <li>• Energy: [M][L]²[T]⁻²</li>
+                                <li>• Pressure: [M][L]⁻¹[T]⁻²</li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-xl font-semibold text-light mb-3">Dimensional Consistency</h3>
+                            <p class="text-gray-300">For an equation to be physically valid, all terms must have the same dimensions.</p>
+                            <div class="equation">v = u + at</div>
+                            <p class="text-gray-300 mt-2">[L][T]⁻¹ = [L][T]⁻¹ + [L][T]⁻² × [T] = [L][T]⁻¹ + [L][T]⁻¹</p>
+                            <p class="text-gray-300">✓ Dimensionally consistent</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="content-card">
+                    <h2 class="text-2xl font-bold text-light mb-4">Problem 15: Dimensional Analysis</h2>
+                    
+                    <div class="problem-statement">
+                        <p class="text-gray-300">Analyze the following equations to determine whether dimensionally correct or not:</p>
+                        <p class="text-gray-300 mt-2">(a) v = u + ax</p>
+                        <p class="text-gray-300">(b) y = (2m)cos(kx) where k = 2m⁻¹</p>
+                    </div>
+                    
+                    <div class="solution-box">
+                        <h3 class="text-xl font-semibold text-light mb-3">Solution (a)</h3>
+                        
+                        <div class="step">
+                            <p class="text-gray-300"><span class="step-number">1</span> Identify dimensions:</p>
+                            <div class="equation">[v] = [u] = [L][T]⁻¹ (velocity)</div>
+                            <div class="equation">[a] = [L][T]⁻² (acceleration)</div>
+                            <div class="equation">[x] = [L] (distance)</div>
+                            <div class="equation">[ax] = [L][T]⁻² × [L] = [L]²[T]⁻²</div>
+                        </div>
+                        
+                        <div class="step">
+                            <p class="text-gray-300"><span class="step-number">2</span> Check consistency:</p>
+                            <div class="equation">[L][T]⁻¹ ≠ [L]²[T]⁻²</div>
+                            <p class="text-gray-300 mt-2">The equation adds quantities with different dimensions.</p>
+                        </div>
+                        
+                        <div class="step">
+                            <p class="text-gray-300"><span class="step-number">3</span> Conclusion:</p>
+                            <div class="equation highlight">Equation (a) is dimensionally INCONSISTENT</div>
+                        </div>
+                    </div>
+                    
+                    <div class="solution-box mt-6">
+                        <h3 class="text-xl font-semibold text-light mb-3">Solution (b)</h3>
+                        
+                        <div class="step">
+                            <p class="text-gray-300"><span class="step-number">1</span> Identify dimensions:</p>
+                            <div class="equation">[y] = [L] (length)</div>
+                            <div class="equation">[2m] = [M] (mass)</div>
+                            <div class="equation">[cos(kx)] = dimensionless</div>
+                            <div class="equation">[k] = [L]⁻¹ (given as m⁻¹)</div>
+                            <div class="equation">[x] = [L] (length)</div>
+                            <div class="equation">[kx] = [L]⁻¹ × [L] = dimensionless ✓</div>
+                        </div>
+                        
+                        <div class="step">
+                            <p class="text-gray-300"><span class="step-number">2</span> Check consistency:</p>
+                            <div class="equation">[L] ≠ [M]</div>
+                            <p class="text-gray-300 mt-2">The equation equates length with mass.</p>
+                        </div>
+                        
+                        <div class="step">
+                            <p class="text-gray-300"><span class="step-number">3</span> Conclusion:</p>
+                            <div class="equation highlight">Equation (b) is dimensionally INCONSISTENT</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Introduction to Vectors -->
+        <div class="slide hidden" id="slide-6">
+            <div class="slide-header">
+                <h1 class="slide-title">Introduction to Vectors</h1>
+                <p class="slide-subtitle">Quantities with Magnitude and Direction</p>
+            </div>
+            
+            <div class="slide-content">
+                <div class="content-card">
+                    <h2 class="text-2xl font-bold text-light mb-4">Scalars vs. Vectors</h2>
+                    
+                    <div class="two-column">
+                        <div>
+                            <h3 class="text-xl font-semibold text-light mb-3">Scalar Quantities</h3>
+                            <p class="text-gray-300 mb-3">Have magnitude only</p>
+                            <ul class="text-gray-300 space-y-2">
+                                <li>• Mass</li>
+                                <li>• Temperature</li>
+                                <li>• Time</li>
+                                <li>• Distance</li>
+                                <li>• Speed</li>
+                                <li>• Energy</li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-xl font-semibold text-light mb-3">Vector Quantities</h3>
+                            <p class="text-gray-300 mb-3">Have both magnitude and direction</p>
+                            <ul class="text-gray-300 space-y-2">
+                                <li>• Displacement</li>
+                                <li>• Velocity</li>
+                                <li>• Acceleration</li>
+                                <li>• Force</li>
+                                <li>• Momentum</li>
+                                <li>• Electric field</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="content-card">
+                    <h2 class="text-2xl font-bold text-light mb-4">Vector Representation</h2>
+                    
+                    <div class="two-column">
+                        <div>
+                            <h3 class="text-xl font-semibold text-light mb-3">Component Form</h3>
+                            <div class="equation">A = Aₓi + Aᵧj</div>
+                            <p class="text-gray-300 mt-2">Where i and j are unit vectors in the x and y directions.</p>
+                            
+                            <h3 class="text-xl font-semibold text-light mb-3 mt-4">Magnitude and Direction</h3>
+                            <div class="equation">|A| = √(Aₓ² + Aᵧ²)</div>
+                            <div class="equation">θ = tan⁻¹(Aᵧ/Aₓ)</div>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-xl font-semibold text-light mb-3">Graphical Representation</h3>
+                            <div class="vector-diagram">
+                                <canvas class="vector-canvas" id="vector-canvas-1"></canvas>
+                            </div>
+                            <p class="text-gray-300 text-center mt-2">Vector A with components Aₓ and Aᵧ</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="content-card">
+                    <h2 class="text-2xl font-bold text-light mb-4">Vector Addition</h2>
+                    
+                    <div class="two-column">
+                        <div>
+                            <h3 class="text-xl font-semibold text-light mb-3">Graphical Method</h3>
+                            <p class="text-gray-300">Place vectors head to tail. The resultant is from the tail of the first to the head of the last.</p>
+                            
+                            <h3 class="text-xl font-semibold text-light mb-3 mt-4">Component Method</h3>
+                            <div class="equation">Rₓ = Aₓ + Bₓ</div>
+                            <div class="equation">Rᵧ = Aᵧ + Bᵧ</div>
+                            <div class="equation">R = √(Rₓ² + Rᵧ²)</div>
+                            <div class="equation">θ = tan⁻¹(Rᵧ/Rₓ)</div>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-xl font-semibold text-light mb-3">Visualization</h3>
+                            <div class="vector-diagram">
+                                <canvas class="vector-canvas" id="vector-canvas-2"></canvas>
+                            </div>
+                            <p class="text-gray-300 text-center mt-2">Vector A + B = R (resultant)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Vector Operations -->
+        <div class="slide hidden" id="slide-7">
+            <div class="slide-header">
+                <h1 class="slide-title">Vector Operations</h1>
+                <p class="slide-subtitle">Addition, Subtraction, Dot Product, and Cross Product</p>
+            </div>
+            
+            <div class="slide-content">
+                <div class="content-card">
+                    <h2 class="text-2xl font-bold text-light mb-4">Problem 1: Vector Addition and Subtraction</h2>
+                    
+                    <div class="problem-statement">
+                        <p class="text-gray-300">Vector A has a magnitude of 10 units and makes 60° with the positive x-axis. Vector B has a magnitude of 5 units and is directed along the negative x-axis. Find:</p>
+                        <p class="text-gray-300 mt-2">(i) A + B</p>
+                        <p class="text-gray-300">(ii) A - B</p>
+                    </div>
+                    
+                    <div class="solution-box">
+                        <h3 class="text-xl font-semibold text-light mb-3">Solution</h3>
+                        
+                        <div class="step">
+                            <p class="text-gray-300"><span class="step-number">1</span> Break vectors into components:</p>
+                            <div class="equation">Aₓ = |A|cosθ = 10 cos60° = 10 × 0.5 = 5 units</div>
+                            <div class="equation">Aᵧ = |A|sinθ = 10 sin60° = 10 × 0.866 = 8.66 units</div>
+                            <div class="equation">Bₓ = |B|cos180° = 5 × (-1) = -5 units</div>
+                            <div class="equation">Bᵧ = |B|sin180° = 5 × 0 = 0 units</div>
+                        </div>
+                        
+                        <div class="step">
+                            <p class="text-gray-300"><span class="step-number">2</span> (i) Calculate A + B:</p>
+                            <div class="equation">(A + B)ₓ = Aₓ + Bₓ = 5 + (-5) = 0 units</div>
+                            <div class="equation">(A + B)ᵧ = Aᵧ + Bᵧ = 8.66 + 0 = 8.66 units</div>
+                        </div>
+                        
+                        <div class="step">
+                            <p class="text-gray-300"><span class="step-number">3</span> Find magnitude and direction of A + B:</p>
+                            <div class="equation">|A + B| = √(0² + 8.66²) = √75 = 8.66 units</div>
+                            <div class="equation">Direction: tanθ = 8.66/0 (undefined) → θ = 90°</div>
+                        </div>
+                        
+                        <div class="step">
+                            <p class="text-gray-300"><span class="step-number">4</span> (ii) Calculate A - B:</p>
+                            <div class="equation">(A - B)ₓ = Aₓ - Bₓ = 5 - (-5) = 10 units</div>
+                            <div class="equation">(A - B)ᵧ = Aᵧ - Bᵧ = 8.66 - 0 = 8.66 units</div>
+                        </div>
+                        
+                        <div class="step">
+                            <p class="text-gray-300"><span class="step-number">5</span> Find magnitude and direction of A - B:</p>
+                            <div class="equation">|A - B| = √(10² + 8.66²) = √(100 + 75) = √175 = 13.23 units</div>
+                            <div class="equation">Direction: tanθ = 8.66/10 = 0.866 → θ = 40.9°</div>
+                        </div>
+                        
+                        <div class="step">
+                            <p class="text-gray-300"><span class="step-number">6</span> Final Answers:</p>
+                            <div class="equation highlight">(i) A + B = 8.66 units along positive y-axis</div>
+                            <div class="equation highlight">(ii) A - B = 13.23 units at 40.9° above positive x-axis</div>
+                        </div>
+                    </div>
+                    
+                    <div class="vector-diagram mt-4">
+                        <canvas class="vector-canvas" id="vector-canvas-3"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Dot and Cross Products -->
+        <div class="slide hidden" id="slide-8">
+            <div class="slide-header">
+                <h1 class="slide-title">Dot and Cross Products</h1>
+                <p class="slide-subtitle">Vector Multiplication Operations</p>
+            </div>
+            
+            <div class="slide-content">
+                <div class="content-card">
+                    <h2 class="text-2xl font-bold text-light mb-4">Dot Product (Scalar Product)</h2>
+                    
+                    <div class="two-column">
+                        <div>
+                            <h3 class="text-xl font-semibold text-light mb-3">Definition</h3>
+                            <div class="equation">A · B = |A||B|cosθ</div>
+                            <p class="text-gray-300 mt-2">Where θ is the angle between vectors A and B.</p>
+                            
+                            <h3 class="text-xl font-semibold text-light mb-3 mt-4">Component Form</h3>
+                            <div class="equation">A · B = AₓBₓ + AᵧBᵧ + A₂B₂</div>
+                            
+                            <h3 class="text-xl font-semibold text-light mb-3 mt-4">Properties</h3>
+                            <ul class="text-gray-300 space-y-2">
+                                <li>• Commutative: A · B = B · A</li>
+                                <li>• Distributive: A · (B + C) = A · B + A · C</li>
+                                <li>• Result is a scalar</li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-xl font-semibold text-light mb-3">Cross Product (Vector Product)</h3>
+                            <div class="equation">A × B = |A||B|sinθ n</div>
+                            <p class="text-gray-300 mt-2">Where n is a unit vector perpendicular to both A and B.</p>
+                            
+                            <h3 class="text-xl font-semibold text-light mb-3 mt-4">Component Form (3D)</h3>
+                            <div class="equation">A × B = (AᵧB₂ - A₂Bᵧ)i + (A₂Bₓ - AₓB₂)j + (AₓBᵧ - AᵧBₓ)k</div>
+                            
+                            <h3 class="text-xl font-semibold text-light mb-3 mt-4">Properties</h3>
+                            <ul class="text-gray-300 space-y-2">
+                                <li>• Anti-commutative: A × B = -B × A</li>
+                                <li>• Distributive: A × (B + C) = A × B + A × C</li>
+                                <li>• Result is a vector</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="content-card">
+                    <h2 class="text-2xl font-bold text-light mb-4">Problem 9: Cross Product</h2>
+                    
+                    <div class="problem-statement">
+                        <p class="text-gray-300">Find the cross product of A × B where A = 2i + 3j, B = -i + 2j.</p>
+                    </div>
+                    
+                    <div class="solution-box">
+                        <h3 class="text-xl font-semibold text-light mb-3">Solution</h3>
+                        
+                        <div class="step">
+                            <p class="text-gray-300"><span class="step-number">1</span> Identify components:</p>
+                            <div class="equation">Aₓ = 2, Aᵧ = 3, A₂ = 0</div>
+                            <div class="equation">Bₓ = -1, Bᵧ = 2, B₂ = 0</div>
+                        </div>
+                        
+                        <div class="step">
+                            <p class="text-gray-300"><span class="step-number">2</span> Apply cross product formula:</p>
+                            <div class="equation">A × B = (AᵧB₂ - A₂Bᵧ)i + (A₂Bₓ - AₓB₂)j + (AₓBᵧ - AᵧBₓ)k</div>
+                        </div>
+                        
+                        <div class="step">
+                            <p class="text-gray-300"><span class="step-number">3</span> Calculate each component:</p>
+                            <div class="equation">i-component: AᵧB₂ - A₂Bᵧ = (3)(0) - (0)(2) = 0</div>
+                            <div class="equation">j-component: A₂Bₓ - AₓB₂ = (0)(-1) - (2)(0) = 0</div>
+                            <div class="equation">k-component: AₓBᵧ - AᵧBₓ = (2)(2) - (3)(-1) = 4 - (-3) = 7</div>
+                        </div>
+                        
+                        <div class="step">
+                            <p class="text-gray-300"><span class="step-number">4</span> Write the cross product:</p>
+                            <div class="equation">A × B = 0i + 0j + 7k = 7k</div>
+                        </div>
+                        
+                        <div class="step">
+                            <p class="text-gray-300"><span class="step-number">5</span> For 2D vectors, simplified formula:</p>
+                            <div class="equation">A × B = (AₓBᵧ - AᵧBₓ)k = (2×2 - 3×(-1))k = (4 + 3)k = 7k</div>
+                        </div>
+                        
+                        <div class="step">
+                            <p class="text-gray-300"><span class="step-number">6</span> Final Answer:</p>
+                            <div class="equation highlight">A × B = 7k</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Vector Applications -->
+        <div class="slide hidden" id="slide-9">
+            <div class="slide-header">
+                <h1 class="slide-title">Vector Applications</h1>
+                <p class="slide-subtitle">Solving Real-World Physics Problems</p>
+            </div>
+            
+            <div class="slide-content">
+                <div class="content-card">
+                    <h2 class="text-2xl font-bold text-light mb-4">Problem 4: Relative Velocity</h2>
+                    
+                    <div class="problem-statement">
+                        <p class="text-gray-300">A ship is steaming due east at a speed of 12 m/s. A passenger runs across the deck at a speed of 5 m/s toward north. What is the resultant velocity of the passenger relative to the sea?</p>
+                    </div>
+                    
+                    <div class="solution-box">
+                        <h3 class="text-xl font-semibold text-light mb-3">Solution</h3>
+                        
+                        <div class="step">
+                            <p class="text-gray-300"><span class="step-number">1</span> Identify velocities:</p>
+                            <div class="equation">v_ship = 12 m/s (east)</div>
+                            <div class="equation">v_passenger/ship = 5 m/s (north)</div>
+                        </div>
+                        
+                        <div class="step">
+                            <p class="text-gray-300"><span class="step-number">2</span> Break into components:</p>
+                            <div class="equation">v_ship = 12i + 0j m/s</div>
+                            <div class="equation">v_passenger/ship = 0i + 5j m/s</div>
+                        </div>
+                        
+                        <div class="step">
+                            <p class="text-gray-300"><span class="step-number">3</span> Calculate resultant velocity:</p>
+                            <div class="equation">v_resultant = v_ship + v_passenger/ship = (12i + 0j) + (0i + 5j) = 12i + 5j m/s</div>
+                        </div>
+                        
+                        <div class="step">
+                            <p class="text-gray-300"><span class="step-number">4</span> Find magnitude:</p>
+                            <div class="equation">|v_resultant| = √(12² + 5²) = √(144 + 25) = √169 = 13 m/s</div>
+                        </div>
+                        
+                        <div class="step">
+                            <p class="text-gray-300"><span class="step-number">5</span> Find direction:</p>
+                            <div class="equation">tanθ = 5/12 = 0.4167</div>
+                            <div class="equation">θ = tan⁻¹(0.4167) = 22.6° north of east</div>
+                        </div>
+                        
+                        <div class="step">
+                            <p class="text-gray-300"><span class="step-number">6</span> Final Answer:</p>
+                            <div class="equation highlight">Resultant velocity = 13 m/s at 22.6° north of east</div>
+                        </div>
+                    </div>
+                    
+                    <div class="vector-diagram mt-4">
+                        <canvas class="vector-canvas" id="vector-canvas-4"></canvas>
+                    </div>
+                </div>
+                
+                <div class="content-card">
+                    <h2 class="text-2xl font-bold text-light mb-4">Problem 3: Treasure Hunt</h2>
+                    
+                    <div class="problem-statement">
+                        <p class="text-gray-300">Three contestants are given three displacements: 72.4 m, 32.0° east of north; 57.3 m, 36.0° south of west; 17.8 m straight south. The displacements lead to a point where keys are buried. Calculate the resultant displacement.</p>
+                    </div>
+                    
+                    <div class="solution-box">
+                        <h3 class="text-xl font-semibold text-light mb-3">Solution Strategy</h3>
+                        
+                        <div class="step">
+                            <p class="text-gray-300"><span class="step-number">1</span> Convert each displacement to component form:</p>
+                            <div class="equation">D1: 72.4 m, 32.0° east of north</div>
+                            <div class="equation">D2: 57.3 m, 36.0° south of west</div>
+                            <div class="equation">D3: 17.8 m straight south</div>
+                        </div>
+                        
+                        <div class="step">
+                            <p class="text-gray-300"><span class="step-number">2</span> Calculate components:</p>
+                            <div class="equation">D1ₓ = 72.4 sin32.0° = 72.4 × 0.5299 = 38.4 m (east)</div>
+                            <div class="equation">D1ᵧ = 72.4 cos32.0° = 72.4 × 0.8480 = 61.4 m (north)</div>
+                            <div class="equation">D2ₓ = 57.3 cos36.0° = 57.3 × 0.8090 = 46.4 m (west, so negative)</div>
+                            <div class="equation">D2ᵧ = 57.3 sin36.0° = 57.3 × 0.5878 = 33.7 m (south, so negative)</div>
+                            <div class="equation">D3ₓ = 0 m</div>
+                            <div class="equation">D3ᵧ = -17.8 m (south)</div>
+                        </div>
+                        
+                        <div class="step">
+                            <p class="text-gray-300"><span class="step-number">3</span> Sum components:</p>
+                            <div class="equation">Rₓ = 38.4 - 46.4 + 0 = -8.0 m (west)</div>
+                            <div class="equation">Rᵧ = 61.4 - 33.7 - 17.8 = 9.9 m (north)</div>
+                        </div>
+                        
+                        <div class="step">
+                            <p class="text-gray-300"><span class="step-number">4</span> Find magnitude and direction:</p>
+                            <div class="equation">|R| = √((-8.0)² + (9.9)²) = √(64 + 98.0) = √162 = 12.7 m</div>
+                            <div class="equation">θ = tan⁻¹(9.9/8.0) = tan⁻¹(1.2375) = 51.0° north of west</div>
+                        </div>
+                        
+                        <div class="step">
+                            <p class="text-gray-300"><span class="step-number">5</span> Final Answer:</p>
+                            <div class="equation highlight">Resultant displacement = 12.7 m at 51.0° north of west</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Summary and Key Takeaways -->
+        <div class="slide hidden" id="slide-10">
+            <div class="slide-header">
+                <h1 class="slide-title">Summary and Key Takeaways</h1>
+                <p class="slide-subtitle">Review of Units & Vectors Concepts</p>
+            </div>
+            
+            <div class="slide-content">
+                <div class="content-card">
+                    <h2 class="text-2xl font-bold text-light mb-4">Key Concepts Covered</h2>
+                    
+                    <div class="two-column">
+                        <div>
+                            <h3 class="text-xl font-semibold text-light mb-3">Units and Measurements</h3>
+                            <ul class="text-gray-300 space-y-2">
+                                <li>• SI units and prefixes</li>
+                                <li>• Unit conversions</li>
+                                <li>• Significant figures</li>
+                                <li>• Uncertainty calculations</li>
+                                <li>• Dimensional analysis</li>
+                            </ul>
+                            
+                            <h3 class="text-xl font-semibold text-light mb-3 mt-4">Problem-Solving Strategies</h3>
+                            <ul class="text-gray-300 space-y-2">
+                                <li>• Break problems into steps</li>
+                                <li>• Use dimensional analysis to check work</li>
+                                <li>• Apply significant figures rules</li>
+                                <li>• Draw diagrams for vector problems</li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-xl font-semibold text-light mb-3">Vectors</h3>
+                            <ul class="text-gray-300 space-y-2">
+                                <li>• Vector representation</li>
+                                <li>• Vector addition and subtraction</li>
+                                <li>• Dot and cross products</li>
+                                <li>• Applications in physics</li>
+                            </ul>
+                            
+                            <h3 class="text-xl font-semibold text-light mb-3 mt-4">Common Mistakes to Avoid</h3>
+                            <ul class="text-gray-300 space-y-2">
+                                <li>• Confusing scalars and vectors</li>
+                                <li>• Incorrect unit conversions</li>
+                                <li>• Misapplying significant figures</li>
+                                <li>• Adding vectors incorrectly</li>
+                                <li>• Forgetting vector direction</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="content-card">
+                    <h2 class="text-2xl font-bold text-light mb-4">Practice Resources</h2>
+                    
+                    <div class="two-column">
+                        <div>
+                            <h3 class="text-xl font-semibold text-light mb-3">Further Study</h3>
+                            <ul class="text-gray-300 space-y-2">
+                                <li>• Review lecture materials</li>
+                                <li>• Complete homework problems</li>
+                                <li>• Try the interactive quiz</li>
+                                <li>• Use the Python notebook</li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-xl font-semibold text-light mb-3">Getting Help</h3>
+                            <ul class="text-gray-300 space-y-2">
+                                <li>• Attend office hours</li>
+                                <li>• Form study groups</li>
+                                <li>• Use online resources</li>
+                                <li>• Practice with tutorial problems</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="content-card text-center">
+                    <h2 class="text-2xl font-bold text-light mb-4">Congratulations!</h2>
+                    <p class="text-gray-300 mb-4">You've completed the comprehensive review of Units & Vectors.</p>
+                    <p class="text-gray-300">You're now well-prepared to solve problems on these topics with confidence.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide Footer with Navigation -->
+        <div class="slide-footer">
+            <div class="slide-navigation">
+                <button class="nav-btn" id="prev-btn" onclick="previousSlide()" disabled>
+                    <i class="fas fa-arrow-left mr-2"></i>
+                    Previous
+                </button>
+                <button class="nav-btn" id="next-btn" onclick="nextSlide()">
+                    Next
+                    <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+            
+            <div class="slide-indicators" id="slide-indicators">
+                <!-- Will be populated by JavaScript -->
+            </div>
+            
+            <div class="slide-counter">
+                <span id="current-slide">1</span> / <span id="total-slides">10</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Slide management
+        let currentSlide = 1;
+        const totalSlides = 10;
+        
+        // Initialize slides
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeSlides();
+            drawVectorDiagrams();
+        });
+        
+        function initializeSlides() {
+            // Create slide indicators
+            const indicatorsContainer = document.getElementById('slide-indicators');
+            for (let i = 1; i <= totalSlides; i++) {
+                const indicator = document.createElement('div');
+                indicator.className = 'slide-indicator';
+                if (i === 1) indicator.classList.add('active');
+                indicator.setAttribute('data-slide', i);
+                indicator.addEventListener('click', function() {
+                    goToSlide(parseInt(this.getAttribute('data-slide')));
+                });
+                indicatorsContainer.appendChild(indicator);
+            }
+            
+            // Update slide counter
+            document.getElementById('current-slide').textContent = currentSlide;
+            document.getElementById('total-slides').textContent = totalSlides;
+            
+            // Update navigation buttons
+            updateNavigation();
+        }
+        
+        function nextSlide() {
+            if (currentSlide < totalSlides) {
+                goToSlide(currentSlide + 1);
+            }
+        }
+        
+        function previousSlide() {
+            if (currentSlide > 1) {
+                goToSlide(currentSlide - 1);
+            }
+        }
+        
+        function goToSlide(slideNum) {
+            // Hide current slide
+            document.getElementById(`slide-${currentSlide}`).classList.add('hidden');
+            
+            // Remove active class from current indicator
+            document.querySelector(`.slide-indicator[data-slide="${currentSlide}"]`).classList.remove('active');
+            
+            // Show new slide
+            document.getElementById(`slide-${slideNum}`).classList.remove('hidden');
+            
+            // Add active class to new indicator
+            document.querySelector(`.slide-indicator[data-slide="${slideNum}"]`).classList.add('active');
+            
+            // Update current slide
+            currentSlide = slideNum;
+            
+            // Update slide counter
+            document.getElementById('current-slide').textContent = currentSlide;
+            
+            // Update navigation buttons
+            updateNavigation();
+            
+            // Redraw vector diagrams for the current slide
+            drawVectorDiagrams();
+        }
+        
+        function updateNavigation() {
+            document.getElementById('prev-btn').disabled = currentSlide === 1;
+            document.getElementById('next-btn').disabled = currentSlide === totalSlides;
+        }
+        
+        // Prefix conversion function
+        function convertPrefix() {
+            const value = parseFloat(document.getElementById('prefix-value').value);
+            const fromFactor = parseFloat(document.getElementById('prefix-from').value);
+            const toFactor = parseFloat(document.getElementById('prefix-to').value);
+            
+            if (!isNaN(value)) {
+                const result = value * fromFactor / toFactor;
+                document.getElementById('prefix-result').value = result.toExponential(3);
+            }
+        }
+        
+        // Vector diagram drawing
+        function drawVectorDiagrams() {
+            // Only draw diagrams for the current slide
+            if (currentSlide === 6) {
+                drawVectorDiagram1();
+                drawVectorDiagram2();
+            } else if (currentSlide === 7) {
+                drawVectorDiagram3();
+            } else if (currentSlide === 9) {
+                drawVectorDiagram4();
+            }
+        }
+        
+        function drawVectorDiagram1() {
+            const canvas = document.getElementById('vector-canvas-1');
+            const ctx = canvas.getContext('2d');
+            const width = canvas.parentElement.clientWidth;
+            const height = canvas.parentElement.clientHeight;
+            
+            canvas.width = width;
+            canvas.height = height;
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, width, height);
+            
+            // Set origin
+            const originX = width / 2;
+            const originY = height / 2;
+            const scale = 20;
+            
+            // Draw coordinate system
+            ctx.strokeStyle = '#374151';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(0, originY);
+            ctx.lineTo(width, originY);
+            ctx.moveTo(originX, 0);
+            ctx.lineTo(originX, height);
+            ctx.stroke();
+            
+            // Draw vector A with components
+            const Ax = 3;
+            const Ay = 2;
+            
+            ctx.strokeStyle = '#3b82f6';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(originX, originY);
+            ctx.lineTo(originX + Ax * scale, originY - Ay * scale);
+            ctx.stroke();
+            
+            // Draw components
+            ctx.strokeStyle = '#ef4444';
+            ctx.lineWidth = 1;
+            ctx.setLineDash([5, 5]);
+            ctx.beginPath();
+            ctx.moveTo(originX + Ax * scale, originY);
+            ctx.lineTo(originX + Ax * scale, originY - Ay * scale);
+            ctx.stroke();
+            
+            ctx.beginPath();
+            ctx.moveTo(originX, originY);
+            ctx.lineTo(originX + Ax * scale, originY);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            
+            // Add labels
+            ctx.fillStyle = '#ffffff';
+            ctx.font = '12px Arial';
+            ctx.fillText('A', originX + Ax * scale / 2, originY - Ay * scale / 2 - 5);
+            ctx.fillText('A_x', originX + Ax * scale / 2, originY + 15);
+            ctx.fillText('A_y', originX + Ax * scale + 5, originY - Ay * scale / 2);
+        }
+        
+        function drawVectorDiagram2() {
+            const canvas = document.getElementById('vector-canvas-2');
+            const ctx = canvas.getContext('2d');
+            const width = canvas.parentElement.clientWidth;
+            const height = canvas.parentElement.clientHeight;
+            
+            canvas.width = width;
+            canvas.height = height;
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, width, height);
+            
+            // Set origin
+            const originX = width / 2;
+            const originY = height / 2;
+            const scale = 15;
+            
+            // Draw coordinate system
+            ctx.strokeStyle = '#374151';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(0, originY);
+            ctx.lineTo(width, originY);
+            ctx.moveTo(originX, 0);
+            ctx.lineTo(originX, height);
+            ctx.stroke();
+            
+            // Draw vector A
+            const Ax = 3;
+            const Ay = 2;
+            
+            ctx.strokeStyle = '#3b82f6';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(originX, originY);
+            ctx.lineTo(originX + Ax * scale, originY - Ay * scale);
+            ctx.stroke();
+            
+            // Draw vector B
+            const Bx = 2;
+            const By = -1;
+            
+            ctx.strokeStyle = '#ef4444';
+            ctx.beginPath();
+            ctx.moveTo(originX + Ax * scale, originY - Ay * scale);
+            ctx.lineTo(originX + (Ax + Bx) * scale, originY - (Ay + By) * scale);
+            ctx.stroke();
+            
+            // Draw resultant R = A + B
+            ctx.strokeStyle = '#10b981';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(originX, originY);
+            ctx.lineTo(originX + (Ax + Bx) * scale, originY - (Ay + By) * scale);
+            ctx.stroke();
+            
+            // Add labels
+            ctx.fillStyle = '#ffffff';
+            ctx.font = '12px Arial';
+            ctx.fillText('A', originX + Ax * scale / 2, originY - Ay * scale / 2);
+            ctx.fillText('B', originX + Ax * scale + Bx * scale / 2, originY - Ay * scale - By * scale / 2);
+            ctx.fillText('R = A + B', originX + (Ax + Bx) * scale / 2, originY - (Ay + By) * scale / 2 - 10);
+        }
+        
+        function drawVectorDiagram3() {
+            const canvas = document.getElementById('vector-canvas-3');
+            const ctx = canvas.getContext('2d');
+            const width = canvas.parentElement.clientWidth;
+            const height = canvas.parentElement.clientHeight;
+            
+            canvas.width = width;
+            canvas.height = height;
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, width, height);
+            
+            // Set origin
+            const originX = width / 2;
+            const originY = height / 2;
+            const scale = 15;
+            
+            // Draw coordinate system
+            ctx.strokeStyle = '#374151';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(0, originY);
+            ctx.lineTo(width, originY);
+            ctx.moveTo(originX, 0);
+            ctx.lineTo(originX, height);
+            ctx.stroke();
+            
+            // Draw vector A (10 units at 60°)
+            const angleA = 60 * Math.PI / 180;
+            const Ax = 10 * Math.cos(angleA);
+            const Ay = 10 * Math.sin(angleA);
+            
+            ctx.strokeStyle = '#3b82f6';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(originX, originY);
+            ctx.lineTo(originX + Ax * scale, originY - Ay * scale);
+            ctx.stroke();
+            
+            // Draw vector B (5 units along negative x-axis)
+            ctx.strokeStyle = '#ef4444';
+            ctx.beginPath();
+            ctx.moveTo(originX, originY);
+            ctx.lineTo(originX - 5 * scale, originY);
+            ctx.stroke();
+            
+            // Draw resultant A + B
+            const R1x = Ax - 5;
+            const R1y = Ay;
+            
+            ctx.strokeStyle = '#10b981';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(originX, originY);
+            ctx.lineTo(originX + R1x * scale, originY - R1y * scale);
+            ctx.stroke();
+            
+            // Draw resultant A - B
+            const R2x = Ax + 5;
+            const R2y = Ay;
+            
+            ctx.strokeStyle = '#8b5cf6';
+            ctx.lineWidth = 3;
+            ctx.setLineDash([5, 5]);
+            ctx.beginPath();
+            ctx.moveTo(originX, originY);
+            ctx.lineTo(originX + R2x * scale, originY - R2y * scale);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            
+            // Add labels
+            ctx.fillStyle = '#ffffff';
+            ctx.font = '12px Arial';
+            ctx.fillText('A', originX + Ax * scale / 2, originY - Ay * scale / 2 - 5);
+            ctx.fillText('B', originX - 2.5 * scale, originY + 15);
+            ctx.fillText('A+B', originX + R1x * scale / 2, originY - R1y * scale / 2 - 5);
+            ctx.fillText('A-B', originX + R2x * scale / 2, originY - R2y * scale / 2 - 5);
+        }
+        
+        function drawVectorDiagram4() {
+            const canvas = document.getElementById('vector-canvas-4');
+            const ctx = canvas.getContext('2d');
+            const width = canvas.parentElement.clientWidth;
+            const height = canvas.parentElement.clientHeight;
+            
+            canvas.width = width;
+            canvas.height = height;
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, width, height);
+            
+            // Set origin
+            const originX = width / 2;
+            const originY = height / 2;
+            const scale = 10;
+            
+            // Draw coordinate system
+            ctx.strokeStyle = '#374151';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(0, originY);
+            ctx.lineTo(width, originY);
+            ctx.moveTo(originX, 0);
+            ctx.lineTo(originX, height);
+            ctx.stroke();
+            
+            // Draw ship velocity (12 m/s east)
+            ctx.strokeStyle = '#3b82f6';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(originX, originY);
+            ctx.lineTo(originX + 12 * scale, originY);
+            ctx.stroke();
+            
+            // Draw passenger velocity (5 m/s north)
+            ctx.strokeStyle = '#ef4444';
+            ctx.beginPath();
+            ctx.moveTo(originX, originY);
+            ctx.lineTo(originX, originY - 5 * scale);
+            ctx.stroke();
+            
+            // Draw resultant velocity
+            ctx.strokeStyle = '#10b981';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(originX, originY);
+            ctx.lineTo(originX + 12 * scale, originY - 5 * scale);
+            ctx.stroke();
+            
+            // Add labels
+            ctx.fillStyle = '#ffffff';
+            ctx.font = '12px Arial';
+            ctx.fillText('Ship (12 m/s)', originX + 6 * scale, originY + 15);
+            ctx.fillText('Passenger (5 m/s)', originX - 40, originY - 2.5 * scale);
+            ctx.fillText('Resultant (13 m/s)', originX + 6 * scale, originY - 2.5 * scale);
+            
+            // Draw angle
+            ctx.strokeStyle = '#f59e0b';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.arc(originX, originY, 30, 0, Math.atan2(-5, 12));
+            ctx.stroke();
+            
+            ctx.fillStyle = '#f59e0b';
+            ctx.font = '10px Arial';
+            ctx.fillText('22.6°', originX + 20, originY - 10);
+        }
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight' || event.key === ' ') {
+                nextSlide();
+            } else if (event.key === 'ArrowLeft') {
+                previousSlide();
+            }
+        });
+    </script>
+</body>
+</html>

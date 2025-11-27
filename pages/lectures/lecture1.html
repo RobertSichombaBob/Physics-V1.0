@@ -15,6 +15,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Source+Serif+Pro:wght@400;600;700&display=swap" rel="stylesheet">
     
+    <!-- MathJax for equations -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
     <script>
         tailwind.config = {
             theme: {
@@ -62,13 +66,33 @@
             margin-bottom: 2rem;
         }
         
-        .equation {
+        .slide-card {
             background-color: #2a2a2a;
+            border: 1px solid #374151;
+            border-radius: 0.75rem;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .equation {
+            background-color: #1a1a1a;
             padding: 1rem;
             border-radius: 0.5rem;
             margin: 1rem 0;
             font-family: 'Courier New', monospace;
             text-align: center;
+            border: 1px solid #374151;
+        }
+        
+        .step {
+            background-color: rgba(59, 130, 246, 0.1);
+            border-left: 3px solid #3b82f6;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 0.5rem 0.5rem 0;
         }
         
         .example-box {
@@ -82,6 +106,14 @@
         .definition-box {
             background-color: rgba(139, 92, 246, 0.1);
             border-left: 4px solid #8b5cf6;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+        
+        .interactive-box {
+            background-color: rgba(16, 185, 129, 0.1);
+            border-left: 4px solid #10b981;
             padding: 1.5rem;
             margin: 1.5rem 0;
             border-radius: 0 0.5rem 0.5rem 0;
@@ -149,6 +181,291 @@
             border-color: #3b82f6;
             transform: translateY(-2px);
         }
+        
+        .input-field {
+            background-color: #2a2a2a;
+            border: 1px solid #374151;
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            color: #ffffff;
+            width: 100%;
+            margin: 0.5rem 0;
+        }
+        
+        .input-field:focus {
+            border-color: #3b82f6;
+            outline: none;
+        }
+        
+        .submit-btn {
+            background-color: #10b981;
+            color: #ffffff;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .submit-btn:hover {
+            background-color: #059669;
+            transform: translateY(-2px);
+        }
+        
+        .quiz-card {
+            background-color: #2a2a2a;
+            border: 1px solid #374151;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .notebook {
+            background-color: #2a2a2a;
+            border: 1px solid #374151;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            min-height: 300px;
+        }
+        
+        .slide-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+        
+        .slide-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .slide-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #374151;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .slide-indicator.active {
+            background-color: #3b82f6;
+            transform: scale(1.2);
+        }
+        
+        .vector-diagram {
+            width: 100%;
+            height: 300px;
+            background-color: #1a1a1a;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .vector {
+            position: absolute;
+            height: 3px;
+            transform-origin: 0 0;
+        }
+        
+        .vector-label {
+            position: absolute;
+            font-size: 0.8rem;
+            color: #ffffff;
+        }
+        
+        .vector-resultant {
+            height: 4px;
+            background-color: #10b981;
+        }
+        
+        .quiz-option {
+            background-color: #1a1a1a;
+            border: 1px solid #374151;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .quiz-option:hover {
+            border-color: #3b82f6;
+        }
+        
+        .quiz-option.selected {
+            background-color: rgba(59, 130, 246, 0.2);
+            border-color: #3b82f6;
+        }
+        
+        .quiz-option.correct {
+            background-color: rgba(16, 185, 129, 0.2);
+            border-color: #10b981;
+        }
+        
+        .quiz-option.incorrect {
+            background-color: rgba(239, 68, 68, 0.2);
+            border-color: #ef4444;
+        }
+        
+        .tab-container {
+            display: flex;
+            border-bottom: 1px solid #374151;
+            margin-bottom: 1.5rem;
+        }
+        
+        .tab {
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .tab.active {
+            border-bottom-color: #3b82f6;
+            color: #3b82f6;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .interactive-tool {
+            background-color: #1a1a1a;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .tool-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .tool-input {
+            background-color: #2a2a2a;
+            border: 1px solid #374151;
+            border-radius: 0.25rem;
+            padding: 0.5rem;
+            color: #ffffff;
+            width: 120px;
+        }
+        
+        .conversion-box {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 1rem;
+            align-items: center;
+            margin: 1rem 0;
+        }
+        
+        .conversion-arrow {
+            text-align: center;
+            font-size: 1.5rem;
+            color: #3b82f6;
+        }
+        
+        .conversion-result {
+            background-color: rgba(16, 185, 129, 0.1);
+            border: 1px solid #10b981;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-top: 1rem;
+            display: none;
+        }
+        
+        .step-by-step {
+            background-color: rgba(59, 130, 246, 0.05);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background-color: #3b82f6;
+            color: #ffffff;
+            border-radius: 50%;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+        
+        .hint-box {
+            background-color: rgba(245, 158, 11, 0.1);
+            border-left: 4px solid #f59e0b;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+        
+        .checkpoint {
+            background-color: rgba(139, 92, 246, 0.1);
+            border: 1px solid #8b5cf6;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .checkpoint-question {
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .checkpoint-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .checkpoint-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 0.25rem;
+            transition: background-color 0.3s ease;
+        }
+        
+        .checkpoint-option:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+        
+        .checkpoint-feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            display: none;
+        }
+        
+        .checkpoint-feedback.correct {
+            background-color: rgba(16, 185, 129, 0.1);
+            border: 1px solid #10b981;
+        }
+        
+        .checkpoint-feedback.incorrect {
+            background-color: rgba(239, 68, 68, 0.1);
+            border: 1px solid #ef4444;
+        }
     </style>
 </head>
 <body class="min-h-screen">
@@ -170,6 +487,7 @@
                     <a href="../../../index.html" class="nav-link">Home</a>
                     <a href="../notebooks/chapter1.html" class="nav-link">Notebook</a>
                     <a href="../homework/hw1.html" class="nav-link">Homework</a>
+                    <a href="../solutions/sol1.html" class="nav-link">Solutions</a>
                 </div>
             </div>
         </div>
@@ -185,8 +503,38 @@
                 </div>
                 <div class="text-right">
                     <span class="bg-accent text-dark px-3 py-1 rounded-full text-sm font-semibold">Week 1</span>
-                    <p class="text-gray-400 text-sm mt-2">Estimated time: 45 minutes</p>
+                    <p class="text-gray-400 text-sm mt-2">Estimated time: 60 minutes</p>
                 </div>
+            </div>
+
+            <!-- Learning Objectives -->
+            <div class="bg-accent bg-opacity-10 border border-accent rounded-xl p-6 mb-8">
+                <h3 class="text-xl font-semibold text-light mb-3 flex items-center">
+                    <i class="fas fa-bullseye text-accent mr-2"></i>
+                    Learning Objectives
+                </h3>
+                <ul class="text-gray-300 space-y-2 grid grid-cols-1 md:grid-cols-2">
+                    <li class="flex items-start">
+                        <i class="fas fa-check text-success mr-2 mt-1"></i>
+                        <span>Understand and apply SI units and prefixes</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-check text-success mr-2 mt-1"></i>
+                        <span>Convert between different units of measurement</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-check text-success mr-2 mt-1"></i>
+                        <span>Apply dimensional analysis to verify equations</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-check text-success mr-2 mt-1"></i>
+                        <span>Solve problems involving significant figures</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-check text-success mr-2 mt-1"></i>
+                        <span>Understand and perform vector operations</span>
+                    </li>
+                </ul>
             </div>
 
             <!-- Video Placeholder -->
@@ -210,7 +558,7 @@
                     </li>
                     <li class="flex items-center">
                         <i class="fas fa-chevron-right text-accent mr-3 text-sm"></i>
-                        <a href="#section2" class="hover:text-accent transition-colors">1.2 Standards of Length, Time, and Mass</a>
+                        <a href="#section2" class="hover:text-accent transition-colors">1.2 Unit Conversions and Significant Figures</a>
                     </li>
                     <li class="flex items-center">
                         <i class="fas fa-chevron-right text-accent mr-3 text-sm"></i>
@@ -218,7 +566,11 @@
                     </li>
                     <li class="flex items-center">
                         <i class="fas fa-chevron-right text-accent mr-3 text-sm"></i>
-                        <a href="#section4" class="hover:text-accent transition-colors">1.4 Exercises</a>
+                        <a href="#section4" class="hover:text-accent transition-colors">1.4 Vectors and Vector Operations</a>
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-chevron-right text-accent mr-3 text-sm"></i>
+                        <a href="#section5" class="hover:text-accent transition-colors">1.5 Practice Problems</a>
                     </li>
                 </ul>
             </div>
@@ -297,119 +649,79 @@
                     1 N = 1 kg·m/s²
                 </div>
                 
-                <p class="text-gray-300 mb-4">
-                    When dealing with very large or very small numbers in physics, we use the so-called scientific notation which employs powers of 10, such as:
-                </p>
-                
-                <div class="equation">
-                    3,210,000,000 m = 3.21 × 10⁹ m
-                </div>
-                
-                <div class="equation">
-                    0.000000789 s = 7.89 × 10⁻⁷ s
-                </div>
-                
-                <div class="definition-box">
-                    <h3 class="text-xl font-semibold text-light mb-3">SI Prefixes</h3>
+                <div class="interactive-box">
+                    <h3 class="text-xl font-semibold text-light mb-3">Interactive: SI Prefixes</h3>
                     <p class="text-gray-300 mb-4">
-                        An additional convenient way to deal with very large or very small numbers in physics is to use prefixes. Each one of these prefixes represents a certain power of 10.
+                        Use this tool to practice converting between different SI prefixes. Enter a value and select the prefix to convert from and to.
                     </p>
                     
-                    <table>
-                        <thead>
-                            <tr>
-                                <th class="text-light">Factor</th>
-                                <th class="text-light">Prefix</th>
-                                <th class="text-light">Symbol</th>
-                                <th class="text-light">Factor</th>
-                                <th class="text-light">Prefix</th>
-                                <th class="text-light">Symbol</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="text-gray-300">10²⁴</td>
-                                <td class="text-gray-300">yotta</td>
-                                <td class="text-gray-300">Y</td>
-                                <td class="text-gray-300">10⁻²⁴</td>
-                                <td class="text-gray-300">yocto</td>
-                                <td class="text-gray-300">y</td>
-                            </tr>
-                            <tr>
-                                <td class="text-gray-300">10²¹</td>
-                                <td class="text-gray-300">zetta</td>
-                                <td class="text-gray-300">Z</td>
-                                <td class="text-gray-300">10⁻²¹</td>
-                                <td class="text-gray-300">zepto</td>
-                                <td class="text-gray-300">z</td>
-                            </tr>
-                            <tr>
-                                <td class="text-gray-300">10¹⁸</td>
-                                <td class="text-gray-300">exa</td>
-                                <td class="text-gray-300">E</td>
-                                <td class="text-gray-300">10⁻¹⁸</td>
-                                <td class="text-gray-300">atto</td>
-                                <td class="text-gray-300">a</td>
-                            </tr>
-                            <tr>
-                                <td class="text-gray-300">10¹⁵</td>
-                                <td class="text-gray-300">peta</td>
-                                <td class="text-gray-300">P</td>
-                                <td class="text-gray-300">10⁻¹⁵</td>
-                                <td class="text-gray-300">femto</td>
-                                <td class="text-gray-300">f</td>
-                            </tr>
-                            <tr>
-                                <td class="text-gray-300">10¹²</td>
-                                <td class="text-gray-300">tera</td>
-                                <td class="text-gray-300">T</td>
-                                <td class="text-gray-300">10⁻¹²</td>
-                                <td class="text-gray-300">pico</td>
-                                <td class="text-gray-300">p</td>
-                            </tr>
-                            <tr>
-                                <td class="text-gray-300">10⁹</td>
-                                <td class="text-gray-300">giga</td>
-                                <td class="text-gray-300">G</td>
-                                <td class="text-gray-300">10⁻⁹</td>
-                                <td class="text-gray-300">nano</td>
-                                <td class="text-gray-300">n</td>
-                            </tr>
-                            <tr>
-                                <td class="text-gray-300">10⁶</td>
-                                <td class="text-gray-300">mega</td>
-                                <td class="text-gray-300">M</td>
-                                <td class="text-gray-300">10⁻⁶</td>
-                                <td class="text-gray-300">micro</td>
-                                <td class="text-gray-300">μ</td>
-                            </tr>
-                            <tr>
-                                <td class="text-gray-300">10³</td>
-                                <td class="text-gray-300">kilo</td>
-                                <td class="text-gray-300">k</td>
-                                <td class="text-gray-300">10⁻³</td>
-                                <td class="text-gray-300">milli</td>
-                                <td class="text-gray-300">m</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="conversion-box">
+                        <div>
+                            <input type="number" id="prefix-value" class="tool-input" value="1" step="0.1">
+                            <select id="prefix-from" class="tool-input">
+                                <option value="1">No prefix</option>
+                                <option value="1000">kilo (k)</option>
+                                <option value="1000000">mega (M)</option>
+                                <option value="1000000000">giga (G)</option>
+                                <option value="0.001">milli (m)</option>
+                                <option value="0.000001">micro (μ)</option>
+                                <option value="0.000000001">nano (n)</option>
+                            </select>
+                        </div>
+                        <div class="conversion-arrow">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                        <div>
+                            <input type="text" id="prefix-result" class="tool-input" readonly>
+                            <select id="prefix-to" class="tool-input">
+                                <option value="1">No prefix</option>
+                                <option value="1000">kilo (k)</option>
+                                <option value="1000000">mega (M)</option>
+                                <option value="1000000000">giga (G)</option>
+                                <option value="0.001">milli (m)</option>
+                                <option value="0.000001">micro (μ)</option>
+                                <option value="0.000000001">nano (n)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button id="prefix-convert-btn" class="btn-primary mt-2">
+                        <i class="fas fa-sync-alt mr-2"></i>
+                        Convert
+                    </button>
                 </div>
                 
-                <p class="text-gray-300 mb-4">
-                    Accordingly, we can express a particular magnitude of force as:
-                </p>
-                
-                <div class="equation">
-                    1.23 × 10⁶ N = 1.23 mega newtons = 1.23 MN
+                <div class="checkpoint">
+                    <div class="checkpoint-question">
+                        Which of the following is the SI unit for electric current?
+                    </div>
+                    <div class="checkpoint-options">
+                        <div class="checkpoint-option" data-correct="false">
+                            <input type="radio" name="checkpoint1" id="check1a">
+                            <label for="check1a">Volt</label>
+                        </div>
+                        <div class="checkpoint-option" data-correct="false">
+                            <input type="radio" name="checkpoint1" id="check1b">
+                            <label for="check1b">Ohm</label>
+                        </div>
+                        <div class="checkpoint-option" data-correct="true">
+                            <input type="radio" name="checkpoint1" id="check1c">
+                            <label for="check1c">Ampere</label>
+                        </div>
+                        <div class="checkpoint-option" data-correct="false">
+                            <input type="radio" name="checkpoint1" id="check1d">
+                            <label for="check1d">Watt</label>
+                        </div>
+                    </div>
+                    <button id="checkpoint1-btn" class="btn-primary mt-3">
+                        Check Answer
+                    </button>
+                    <div id="checkpoint1-feedback" class="checkpoint-feedback"></div>
                 </div>
-                
-                <p class="text-gray-300 mb-4">
-                    or a particular time interval as:
-                </p>
-                
-                <div class="equation">
-                    1.23 × 10⁻⁹ s = 1.23 nano seconds = 1.23 ns
-                </div>
+            </section>
+
+            <!-- Section 2: Unit Conversions and Significant Figures -->
+            <section id="section2" class="mb-12">
+                <h2 class="text-3xl font-bold text-light mb-6 border-b border-gray-800 pb-2">1.2 Unit Conversions and Significant Figures</h2>
                 
                 <p class="text-gray-300 mb-4">
                     We often need to change units in which a physical quantity is expressed. We do that by using a method called chain-link conversion, in which we multiply by a conversion factor that equals unity. For example, because 1 minute and 60 seconds are identical time intervals, then we can write:
@@ -420,133 +732,122 @@
                 </div>
                 
                 <div class="example-box">
-                    <h3 class="text-xl font-semibold text-light mb-3">Example 1.1</h3>
+                    <h3 class="text-xl font-semibold text-light mb-3">Example 1.1: Unit Conversion</h3>
                     <p class="text-gray-300 mb-4">
                         Convert the following: (a) 1 kilometer per hour to meter per second, (b) 1 mile per hour to meter per second, and (c) 1 mile per hour to kilometer per hour [to a good approximation 1 mi = 1.609 km].
                     </p>
                     
-                    <h4 class="text-lg font-semibold text-light mb-2">Solution:</h4>
-                    <p class="text-gray-300 mb-2">(a) To convert the speed from the kilometers per hour unit to meters per second unit, we write:</p>
-                    <div class="equation">
-                        1 km/h = (1 km/h) × (1000 m / 1 km) × (1 h / 3600 s) = 0.278 m/s
+                    <div class="step-by-step">
+                        <h4 class="text-lg font-semibold text-light mb-2">Solution:</h4>
+                        <p class="text-gray-300 mb-2"><span class="step-number">1</span> (a) To convert the speed from the kilometers per hour unit to meters per second unit, we write:</p>
+                        <div class="equation">
+                            1 km/h = (1 km/h) × (1000 m / 1 km) × (1 h / 3600 s) = 0.278 m/s
+                        </div>
+                        
+                        <p class="text-gray-300 mb-2"><span class="step-number">2</span> (b) To convert from miles per hour to meters per second, we write:</p>
+                        <div class="equation">
+                            1 mi/h = (1 mi/h) × (1609 m / 1 mi) × (1 h / 3600 s) = 0.447 m/s
+                        </div>
+                        
+                        <p class="text-gray-300 mb-2"><span class="step-number">3</span> (c) To convert from miles per hour to kilometers per hour, we write:</p>
+                        <div class="equation">
+                            1 mi/h = (1 mi/h) × (1.609 km / 1 mi) = 1.609 km/h
+                        </div>
                     </div>
+                </div>
+                
+                <div class="interactive-box">
+                    <h3 class="text-xl font-semibold text-light mb-3">Interactive: Unit Conversion Tool</h3>
+                    <p class="text-gray-300 mb-4">
+                        Use this tool to practice unit conversions. Enter a value and select the units to convert from and to.
+                    </p>
                     
-                    <p class="text-gray-300 mb-2">(b) To convert from miles per hour to meters per second, we write:</p>
-                    <div class="equation">
-                        1 mi/h = (1 mi/h) × (1609 m / 1 mi) × (1 h / 3600 s) = 0.447 m/s
+                    <div class="tool-controls">
+                        <input type="number" id="conversion-value" class="tool-input" value="1" step="0.1">
+                        <select id="conversion-from" class="tool-input">
+                            <option value="m">Meters (m)</option>
+                            <option value="km">Kilometers (km)</option>
+                            <option value="cm">Centimeters (cm)</option>
+                            <option value="mi">Miles (mi)</option>
+                            <option value="ft">Feet (ft)</option>
+                        </select>
+                        <div class="conversion-arrow">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                        <select id="conversion-to" class="tool-input">
+                            <option value="m">Meters (m)</option>
+                            <option value="km">Kilometers (km)</option>
+                            <option value="cm">Centimeters (cm)</option>
+                            <option value="mi">Miles (mi)</option>
+                            <option value="ft">Feet (ft)</option>
+                        </select>
                     </div>
+                    <button id="conversion-btn" class="btn-primary">
+                        <i class="fas fa-sync-alt mr-2"></i>
+                        Convert
+                    </button>
+                    <div id="conversion-result" class="conversion-result"></div>
+                </div>
+                
+                <div class="definition-box">
+                    <h3 class="text-xl font-semibold text-light mb-3">Significant Figures</h3>
+                    <p class="text-gray-300 mb-4">
+                        Significant figures represent the precision of a measurement. The rules for determining significant figures are:
+                    </p>
+                    <ul class="text-gray-300 ml-6 space-y-2">
+                        <li>All non-zero digits are significant</li>
+                        <li>Zeros between non-zero digits are significant</li>
+                        <li>Leading zeros are not significant</li>
+                        <li>Trailing zeros in a number with a decimal point are significant</li>
+                    </ul>
+                </div>
+                
+                <div class="example-box">
+                    <h3 class="text-xl font-semibold text-light mb-3">Example 1.2: Significant Figures</h3>
+                    <p class="text-gray-300 mb-4">
+                        Determine the number of significant figures in the following measurements:
+                    </p>
                     
-                    <p class="text-gray-300 mb-2">(c) To convert from miles per hour to kilometers per hour, we write:</p>
-                    <div class="equation">
-                        1 mi/h = (1 mi/h) × (1.609 km / 1 mi) = 1.609 km/h
+                    <div class="step-by-step">
+                        <p class="text-gray-300 mb-2"><span class="step-number">1</span> 0.00345 m → 3 significant figures (leading zeros are not significant)</p>
+                        <p class="text-gray-300 mb-2"><span class="step-number">2</span> 120.05 kg → 5 significant figures (zeros between non-zero digits are significant)</p>
+                        <p class="text-gray-300 mb-2"><span class="step-number">3</span> 0.500 s → 3 significant figures (trailing zeros after decimal are significant)</p>
+                        <p class="text-gray-300 mb-2"><span class="step-number">4</span> 1500 m → 2 significant figures (trailing zeros without decimal are ambiguous)</p>
                     </div>
                 </div>
-            </section>
-
-            <!-- Section 2: Standards of Length, Time, and Mass -->
-            <section id="section2" class="mb-12">
-                <h2 class="text-3xl font-bold text-light mb-6 border-b border-gray-800 pb-2">1.2 Standards of Length, Time, and Mass</h2>
                 
-                <p class="text-gray-300 mb-6">
-                    Definitions of the units of length, time, and mass are under constant review and are changed from time to time. We only present in this section the latest definitions of those quantities.
-                </p>
-                
-                <h3 class="text-2xl font-semibold text-light mb-4">Length (L)</h3>
-                
-                <p class="text-gray-300 mb-4">
-                    In 1983, the precision of the meter was redefined as the distance traveled by a light wave in vacuum in a specified time interval. The reason is that the measurement of the speed of light has become extremely precise, so it made sense to adopt the speed of light as a defined quantity and to use it to redefine the meter.
-                </p>
-                
-                <div class="definition-box">
-                    <h4 class="text-xl font-semibold text-light mb-2">One Meter</h4>
-                    <p class="text-gray-300">
-                        One meter is the distance traveled by light in vacuum during the time interval of 1/299,792,458 of a second.
-                    </p>
-                </div>
-                
-                <p class="text-gray-300 mb-4">
-                    This time interval number was chosen so that the speed of light in vacuum c will be exactly given by:
-                </p>
-                
-                <div class="equation">
-                    c = 299,792,458 m/s
-                </div>
-                
-                <p class="text-gray-300 mb-6">
-                    For educational purposes we usually consider the value c = 3 × 10⁸ m/s.
-                </p>
-                
-                <h3 class="text-2xl font-semibold text-light mb-4">Time (T)</h3>
-                
-                <p class="text-gray-300 mb-4">
-                    Recently, the standard of time was redefined to take advantage of the high-precision measurements that could be obtained by using a device known as an atomic clock. Cesium is most common element that is typically used in the construction of atomic clocks because it allows us to attain high accuracy.
-                </p>
-                
-                <div class="definition-box">
-                    <h4 class="text-xl font-semibold text-light mb-2">One Second</h4>
-                    <p class="text-gray-300">
-                        One second is the time taken for the cesium atom ¹³³Cs to perform 9,192,631,770 oscillations to emit radiation of a specific wavelength.
-                    </p>
-                </div>
-                
-                <p class="text-gray-300 mb-6">
-                    Since 1967, the International System of Measurements has been basing its unit of time, the second, on the properties of the isotope cesium-133. One of the transitions between two energy levels of the ground state of ¹³³Cs has an oscillation frequency of 9,192,631,770 Hz, which is used to define the second in SI units.
-                </p>
-                
-                <h3 class="text-2xl font-semibold text-light mb-4">Mass (M)</h3>
-                
-                <div class="definition-box">
-                    <h4 class="text-xl font-semibold text-light mb-2">One Kilogram</h4>
-                    <p class="text-gray-300">
-                        The SI unit of mass, 1 kilogram, is defined as the mass of a platinum-iridium alloy cylinder kept at the International Bureau of Weights and Measures in France.
-                    </p>
-                </div>
-                
-                <p class="text-gray-300 mb-4">
-                    A cylindrical mass of 3.9 cm in diameter and of 3.9 cm in height and made of an unusually stable platinum-iridium alloy is kept at the International Bureau of Weights and Measures near Paris and assigned in the SI units a mass of 1 kilogram by international agreement.
-                </p>
-                
-                <p class="text-gray-300 mb-4">
-                    Accurate copies of this standard 1 kilogram have been sent to standardizing laboratories in other countries.
-                </p>
-                
-                <div class="definition-box">
-                    <h4 class="text-xl font-semibold text-light mb-2">A Second Standard Mass</h4>
-                    <p class="text-gray-300">
-                        Atomic masses can be compared with each other more precisely than the kilogram. By international agreement, the carbon-12 atom, ¹²C, has been assigned a mass of 12 atomic mass units (u), where:
-                    </p>
-                    <div class="equation">
-                        1 u = (1.6605402 ± 0.0000010) × 10⁻²⁷ kg
+                <div class="checkpoint">
+                    <div class="checkpoint-question">
+                        How many significant figures are in the measurement 0.004050 m?
                     </div>
+                    <div class="checkpoint-options">
+                        <div class="checkpoint-option" data-correct="false">
+                            <input type="radio" name="checkpoint2" id="check2a">
+                            <label for="check2a">3</label>
+                        </div>
+                        <div class="checkpoint-option" data-correct="false">
+                            <input type="radio" name="checkpoint2" id="check2b">
+                            <label for="check2b">4</label>
+                        </div>
+                        <div class="checkpoint-option" data-correct="true">
+                            <input type="radio" name="checkpoint2" id="check2c">
+                            <label for="check2c">4</label>
+                        </div>
+                        <div class="checkpoint-option" data-correct="false">
+                            <input type="radio" name="checkpoint2" id="check2d">
+                            <label for="check2d">6</label>
+                        </div>
+                    </div>
+                    <button id="checkpoint2-btn" class="btn-primary mt-3">
+                        Check Answer
+                    </button>
+                    <div id="checkpoint2-feedback" class="checkpoint-feedback"></div>
                 </div>
             </section>
 
             <!-- Section 3: Dimensional Analysis -->
             <section id="section3" class="mb-12">
                 <h2 class="text-3xl font-bold text-light mb-6 border-b border-gray-800 pb-2">1.3 Dimensional Analysis</h2>
-                
-                <p class="text-gray-300 mb-4">
-                    Throughout your experience, you have been exposed to a variety of units of length; the SI meter, kilometer, and millimeter; the English units of inches, feet, yards, and miles, etc. All of these derived units are said to have dimensions of length, symbolized by L.
-                </p>
-                
-                <p class="text-gray-300 mb-4">
-                    Likewise, all time units, such as seconds, minutes, hours, days, years, and centuries are said to have dimensions of time, symbolized by T. The kilogram and all other mass units have dimensions of mass, symbolized by M.
-                </p>
-                
-                <p class="text-gray-300 mb-6">
-                    In general, we may take the dimension (length, time, and mass) as the concept of the physical quantity.
-                </p>
-                
-                <p class="text-gray-300 mb-4">
-                    From the three fundamental physical quantities of length L, time T, and mass M, we can derive a variety of useful quantities. Derived quantities have different dimensions from the fundamental quantities. For example:
-                </p>
-                
-                <ul class="list-disc list-inside text-gray-300 mb-6 space-y-2">
-                    <li>Area has dimension L²</li>
-                    <li>Volume has dimension L³</li>
-                    <li>Mass density has dimension M/L³</li>
-                    <li>Speed has dimension L/T</li>
-                </ul>
                 
                 <p class="text-gray-300 mb-4">
                     The concept of dimensionality is important in understanding physics and in solving physics problems. For example, the addition or subtraction of quantities with different dimensions makes no sense, i.e. 2 kg plus 8 s is meaningless.
@@ -568,123 +869,309 @@
                     L = (L/T) × T + (L/T²) × T² = L + L
                 </div>
                 
-                <p class="text-gray-300 mb-4">
-                    Note that every term of this equation has the dimension of length L. Also note that numerical factors, such as ½ in the equation, are ignored in dimensional analysis because they have no dimension.
-                </p>
-                
                 <div class="example-box">
-                    <h3 class="text-xl font-semibold text-light mb-3">Example 1.2</h3>
+                    <h3 class="text-xl font-semibold text-light mb-3">Example 1.3: Dimensional Analysis</h3>
                     <p class="text-gray-300 mb-4">
                         Use dimensional analysis to show that the expression v = v₀ + at is dimensionally correct, where v and v₀ represent velocities, a is acceleration, and t is a time interval.
                     </p>
                     
-                    <h4 class="text-lg font-semibold text-light mb-2">Solution:</h4>
-                    <p class="text-gray-300 mb-2">Since L/T is the dimension of v and v₀, and the dimension of a is L/T², then when we analyze the equation v = v₀ + at dimensionally, we have:</p>
-                    <div class="equation">
-                        L/T = L/T + (L/T²) × T = L/T + L/T
+                    <div class="step-by-step">
+                        <h4 class="text-lg font-semibold text-light mb-2">Solution:</h4>
+                        <p class="text-gray-300 mb-2"><span class="step-number">1</span> Since L/T is the dimension of v and v₀, and the dimension of a is L/T², then when we analyze the equation v = v₀ + at dimensionally, we have:</p>
+                        <div class="equation">
+                            L/T = L/T + (L/T²) × T = L/T + L/T
+                        </div>
+                        <p class="text-gray-300">Thus, the expression v = v₀ + at is dimensionally correct.</p>
                     </div>
-                    <p class="text-gray-300">Thus, the expression v = v₀ + at is dimensionally correct.</p>
                 </div>
                 
                 <div class="example-box">
-                    <h3 class="text-xl font-semibold text-light mb-3">Example 1.3</h3>
+                    <h3 class="text-xl font-semibold text-light mb-3">Example 1.4: Dimensional Analysis with Unknowns</h3>
                     <p class="text-gray-300 mb-4">
                         A particle moves with a constant speed v in a circular orbit of radius r. Given that the magnitude of the acceleration a is proportional to some power of r, say rᵐ, and some power of v, say vⁿ, then determine the powers of r and v.
                     </p>
                     
-                    <h4 class="text-lg font-semibold text-light mb-2">Solution:</h4>
-                    <p class="text-gray-300 mb-2">Assume that the variables of the problem can be expressed mathematically by the following relation:</p>
-                    <div class="equation">
-                        a = k rᵐvⁿ
+                    <div class="step-by-step">
+                        <h4 class="text-lg font-semibold text-light mb-2">Solution:</h4>
+                        <p class="text-gray-300 mb-2"><span class="step-number">1</span> Assume that the variables of the problem can be expressed mathematically by the following relation:</p>
+                        <div class="equation">
+                            a = k rᵐvⁿ
+                        </div>
+                        <p class="text-gray-300 mb-2"><span class="step-number">2</span> With the known dimensions of r, v, and a we analyze the dimensions of the above relation as follows:</p>
+                        <div class="equation">
+                            L/T² = Lᵐ × (L/T)ⁿ = Lᵐ⁺ⁿ/Tⁿ
+                        </div>
+                        <p class="text-gray-300 mb-2"><span class="step-number">3</span> This dimensional equation would be balanced only when:</p>
+                        <div class="equation">
+                            m + n = 1 and n = 2
+                        </div>
+                        <p class="text-gray-300 mb-2"><span class="step-number">4</span> Thus:</p>
+                        <div class="equation">
+                            m = -1
+                        </div>
+                        <p class="text-gray-300">Therefore, we can rewrite the acceleration as follows: a = k r⁻¹v² = k v²/r</p>
                     </div>
-                    <p class="text-gray-300 mb-2">where k is a dimensionless proportionality constant. With the known dimensions of r, v, and a we analyze the dimensions of the above relation as follows:</p>
-                    <div class="equation">
-                        L/T² = Lᵐ × (L/T)ⁿ = Lᵐ⁺ⁿ/Tⁿ
+                </div>
+                
+                <div class="interactive-box">
+                    <h3 class="text-xl font-semibold text-light mb-3">Interactive: Dimensional Analysis Checker</h3>
+                    <p class="text-gray-300 mb-4">
+                        Check if the following equations are dimensionally consistent:
+                    </p>
+                    
+                    <div class="mb-4">
+                        <select id="equation-select" class="tool-input w-full">
+                            <option value="v2 = u2 + 2as">v² = u² + 2as</option>
+                            <option value="T = 2π√(L/g)">T = 2π√(L/g)</option>
+                            <option value="F = mv²/r">F = mv²/r</option>
+                            <option value="E = mc²">E = mc²</option>
+                        </select>
                     </div>
-                    <p class="text-gray-300 mb-2">This dimensional equation would be balanced only when:</p>
-                    <div class="equation">
-                        m + n = 1 and n = 2
+                    <button id="dimension-check-btn" class="btn-primary">
+                        <i class="fas fa-check mr-2"></i>
+                        Check Dimensional Consistency
+                    </button>
+                    <div id="dimension-result" class="conversion-result mt-4"></div>
+                </div>
+                
+                <div class="checkpoint">
+                    <div class="checkpoint-question">
+                        Which of the following equations is dimensionally consistent?
                     </div>
-                    <p class="text-gray-300 mb-2">Thus:</p>
-                    <div class="equation">
-                        m = -1
+                    <div class="checkpoint-options">
+                        <div class="checkpoint-option" data-correct="false">
+                            <input type="radio" name="checkpoint3" id="check3a">
+                            <label for="check3a">v = at²</label>
+                        </div>
+                        <div class="checkpoint-option" data-correct="true">
+                            <input type="radio" name="checkpoint3" id="check3b">
+                            <label for="check3b">s = ut + ½at²</label>
+                        </div>
+                        <div class="checkpoint-option" data-correct="false">
+                            <input type="radio" name="checkpoint3" id="check3c">
+                            <label for="check3c">F = m + a</label>
+                        </div>
+                        <div class="checkpoint-option" data-correct="false">
+                            <input type="radio" name="checkpoint3" id="check3d">
+                            <label for="check3d">E = m/v</label>
+                        </div>
                     </div>
-                    <p class="text-gray-300">Therefore, we can rewrite the acceleration as follows: a = k r⁻¹v² = k v²/r</p>
+                    <button id="checkpoint3-btn" class="btn-primary mt-3">
+                        Check Answer
+                    </button>
+                    <div id="checkpoint3-feedback" class="checkpoint-feedback"></div>
                 </div>
             </section>
 
-            <!-- Section 4: Exercises -->
-            <section id="section4">
-                <h2 class="text-3xl font-bold text-light mb-6 border-b border-gray-800 pb-2">1.4 Exercises</h2>
+            <!-- Section 4: Vectors and Vector Operations -->
+            <section id="section4" class="mb-12">
+                <h2 class="text-3xl font-bold text-light mb-6 border-b border-gray-800 pb-2">1.4 Vectors and Vector Operations</h2>
+                
+                <p class="text-gray-300 mb-4">
+                    Vectors are quantities that have both magnitude and direction, such as displacement, velocity, and force. Scalars are quantities that have only magnitude, such as mass, temperature, and time.
+                </p>
+                
+                <div class="definition-box">
+                    <h3 class="text-xl font-semibold text-light mb-3">Vector Operations</h3>
+                    <p class="text-gray-300 mb-4">
+                        Vectors can be added, subtracted, and multiplied in specific ways:
+                    </p>
+                    <ul class="text-gray-300 ml-6 space-y-2">
+                        <li><strong>Vector Addition:</strong> The sum of two vectors A and B is a vector C = A + B</li>
+                        <li><strong>Vector Subtraction:</strong> The difference of two vectors A and B is a vector C = A - B</li>
+                        <li><strong>Scalar Multiplication:</strong> Multiplying a vector by a scalar changes its magnitude but not its direction</li>
+                        <li><strong>Dot Product:</strong> A · B = |A||B|cosθ (results in a scalar)</li>
+                        <li><strong>Cross Product:</strong> A × B = |A||B|sinθ (results in a vector perpendicular to both A and B)</li>
+                    </ul>
+                </div>
+                
+                <div class="example-box">
+                    <h3 class="text-xl font-semibold text-light mb-3">Example 1.5: Vector Operations</h3>
+                    <p class="text-gray-300 mb-4">
+                        Given two vectors: A = 3i + 4j and B = -2i + 6j, calculate:
+                    </p>
+                    
+                    <div class="step-by-step">
+                        <h4 class="text-lg font-semibold text-light mb-2">Solution:</h4>
+                        <p class="text-gray-300 mb-2"><span class="step-number">1</span> Magnitude of vector A:</p>
+                        <div class="equation">
+                            |A| = √(3² + 4²) = √(9 + 16) = √25 = 5
+                        </div>
+                        
+                        <p class="text-gray-300 mb-2"><span class="step-number">2</span> Dot product A · B:</p>
+                        <div class="equation">
+                            A · B = (3)(-2) + (4)(6) = -6 + 24 = 18
+                        </div>
+                        
+                        <p class="text-gray-300 mb-2"><span class="step-number">3</span> Cross product A × B (in 2D, gives a scalar magnitude):</p>
+                        <div class="equation">
+                            A × B = (3)(6) - (4)(-2) = 18 + 8 = 26
+                        </div>
+                        
+                        <p class="text-gray-300 mb-2"><span class="step-number">4</span> Angle between vectors A and B:</p>
+                        <div class="equation">
+                            cosθ = (A · B) / (|A||B|) = 18 / (5 × √((-2)² + 6²)) = 18 / (5 × √40) ≈ 18 / 31.62 ≈ 0.569
+                        </div>
+                        <div class="equation">
+                            θ = cos⁻¹(0.569) ≈ 55.3°
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="interactive-box">
+                    <h3 class="text-xl font-semibold text-light mb-3">Interactive: Vector Addition</h3>
+                    <p class="text-gray-300 mb-4">
+                        Use this tool to visualize vector addition. Enter the components of two vectors and see their sum.
+                    </p>
+                    
+                    <div class="tool-controls">
+                        <div>
+                            <label class="text-gray-300 text-sm">Vector A:</label>
+                            <div class="flex gap-2">
+                                <input type="number" id="vector-a-x" class="tool-input" value="3" step="0.1" placeholder="x">
+                                <input type="number" id="vector-a-y" class="tool-input" value="4" step="0.1" placeholder="y">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="text-gray-300 text-sm">Vector B:</label>
+                            <div class="flex gap-2">
+                                <input type="number" id="vector-b-x" class="tool-input" value="-2" step="0.1" placeholder="x">
+                                <input type="number" id="vector-b-y" class="tool-input" value="6" step="0.1" placeholder="y">
+                            </div>
+                        </div>
+                    </div>
+                    <button id="vector-add-btn" class="btn-primary mt-2">
+                        <i class="fas fa-plus mr-2"></i>
+                        Add Vectors
+                    </button>
+                    <div id="vector-result" class="conversion-result mt-4"></div>
+                    
+                    <div class="vector-diagram mt-4" id="vector-diagram">
+                        <canvas id="vector-canvas" width="600" height="300"></canvas>
+                    </div>
+                </div>
+                
+                <div class="checkpoint">
+                    <div class="checkpoint-question">
+                        If vector A = 2i + 3j and vector B = -1i + 4j, what is the dot product A · B?
+                    </div>
+                    <div class="checkpoint-options">
+                        <div class="checkpoint-option" data-correct="false">
+                            <input type="radio" name="checkpoint4" id="check4a">
+                            <label for="check4a">5</label>
+                        </div>
+                        <div class="checkpoint-option" data-correct="false">
+                            <input type="radio" name="checkpoint4" id="check4b">
+                            <label for="check4b">10</label>
+                        </div>
+                        <div class="checkpoint-option" data-correct="true">
+                            <input type="radio" name="checkpoint4" id="check4c">
+                            <label for="check4c">10</label>
+                        </div>
+                        <div class="checkpoint-option" data-correct="false">
+                            <input type="radio" name="checkpoint4" id="check4d">
+                            <label for="check4d">14</label>
+                        </div>
+                    </div>
+                    <button id="checkpoint4-btn" class="btn-primary mt-3">
+                        Check Answer
+                    </button>
+                    <div id="checkpoint4-feedback" class="checkpoint-feedback"></div>
+                </div>
+            </section>
+
+            <!-- Section 5: Practice Problems -->
+            <section id="section5">
+                <h2 class="text-3xl font-bold text-light mb-6 border-b border-gray-800 pb-2">1.5 Practice Problems</h2>
                 
                 <div class="mb-8">
-                    <h3 class="text-xl font-semibold text-light mb-4">Section 1.1: The International System of Units</h3>
+                    <h3 class="text-xl font-semibold text-light mb-4">Problem Set 1: Units and Conversions</h3>
                     
-                    <ol class="list-decimal list-inside text-gray-300 space-y-4">
+                    <ol class="list-decimal list-inside text-gray-300 space-y-6">
                         <li class="pl-4">
-                            Use the prefixes introduced in Table 1.2 to express the following: 
-                            <ul class="list-disc list-inside ml-6 mt-2 space-y-1">
-                                <li>10³ lambs</li>
-                                <li>10⁶ bytes</li>
-                                <li>10⁹ cars</li>
-                                <li>10¹² stars</li>
-                                <li>10⁻¹ Kelvin</li>
-                                <li>10⁻² meter</li>
-                                <li>10⁻³ ampere</li>
-                                <li>10⁻⁶ newton</li>
-                                <li>10⁻⁹ kilogram</li>
-                                <li>10⁻¹⁵ second</li>
-                            </ul>
+                            <p class="mb-2">A carpet is to be installed in a room whose length is measured to be 13.71 m and whose width is measured to be 4.46 m. Find the area of the room.</p>
+                            <div class="hint-box">
+                                <p class="text-gray-300"><strong>Hint:</strong> Area = length × width. Pay attention to significant figures.</p>
+                            </div>
+                        </li>
+                        
+                        <li class="pl-4">
+                            <p class="mb-2">A worker is to paint the walls of a square room 8.00 ft high and 12 ft along each side. What surface area in square meters must she cover?</p>
+                            <div class="hint-box">
+                                <p class="text-gray-300"><strong>Hint:</strong> First calculate the area in square feet, then convert to square meters. Remember 1 ft = 0.3048 m.</p>
+                            </div>
+                        </li>
+                        
+                        <li class="pl-4">
+                            <p class="mb-2">One gallon of paint (volume = 3.78 × 10⁻³ m³) covers an area of 25.0 m². What is the thickness of the paint on the wall?</p>
+                            <div class="hint-box">
+                                <p class="text-gray-300"><strong>Hint:</strong> Thickness = Volume / Area. Make sure all units are consistent.</p>
+                            </div>
+                        </li>
+                        
+                        <li class="pl-4">
+                            <p class="mb-2">A rectangular plate has a length of (21.3 ± 0.2) cm and a width of (9.8 ± 0.1) cm. Calculate the area of the plate including its uncertainty.</p>
+                            <div class="hint-box">
+                                <p class="text-gray-300"><strong>Hint:</strong> For multiplication, the relative uncertainty is the sum of the relative uncertainties of the factors.</p>
+                            </div>
                         </li>
                     </ol>
                 </div>
                 
                 <div class="mb-8">
-                    <h3 class="text-xl font-semibold text-light mb-4">Section 1.2: Standards of Length, Time, and Mass</h3>
+                    <h3 class="text-xl font-semibold text-light mb-4">Problem Set 2: Dimensional Analysis</h3>
                     
-                    <ol class="list-decimal list-inside text-gray-300 space-y-4" start="2">
+                    <ol class="list-decimal list-inside text-gray-300 space-y-6" start="5">
                         <li class="pl-4">
-                            The original definition of the meter was based on distance from the North pole to the Earth's equator (measures along the surface) and was taken to be 10⁷ m. 
+                            <p class="mb-2">Analyze the following equations to determine whether dimensionally correct or not:</p>
                             <ul class="list-disc list-inside ml-6 mt-2 space-y-1">
-                                <li>What is the circumference of the Earth in meters?</li>
-                                <li>What is the radius of the Earth in meters?</li>
-                                <li>Give your answer to part (a) and part (b) in miles.</li>
-                                <li>What is the circumference of the Earth in meters assuming it to be a sphere of radius 6.4 × 10⁶ m? Compare your answer to part (a)</li>
+                                <li>v = u + ax</li>
+                                <li>y = (2m)cos(kx) where k = 2m⁻¹</li>
                             </ul>
+                            <div class="hint-box">
+                                <p class="text-gray-300"><strong>Hint:</strong> Check if all terms in the equation have the same dimensions.</p>
+                            </div>
                         </li>
                         
                         <li class="pl-4">
-                            The time of flight of a laser pulse sent from the Earth to the Moon was measured in order to calculate the Earth-Moon distance, and it was found to be 3.8 × 10⁵ km.
-                            <ul class="list-disc list-inside ml-6 mt-2 space-y-1">
-                                <li>Express this distance in miles, meters, centimeters, and millimeters.</li>
-                            </ul>
+                            <p class="mb-2">A given formula is derived for the velocity of an object v that varies with time expressed as v = at² + bt + c where velocity v and time t are expressed in terms of SI units; determine the units of constants a, b and c in the given equation.</p>
+                            <div class="hint-box">
+                                <p class="text-gray-300"><strong>Hint:</strong> Each term must have the same dimensions (L/T for velocity).</p>
+                            </div>
                         </li>
                         
                         <li class="pl-4">
-                            A unit of area, often used in measuring land areas, is the hectare, defined as 10⁴ m². An open-pit coal mine excavates 75 hectares of land, down to a depth of 26 m, each year. What volume of Earth, in cubic kilometers, is removed during this time?
+                            <p class="mb-2">The centripetal force F acting on a particle depends on the mass m of the particle, its velocity v and radius r of the circle. Derive dimensionally the formula for force F.</p>
+                            <div class="hint-box">
+                                <p class="text-gray-300"><strong>Hint:</strong> Assume F = k mᵃ vᵇ rᶜ and solve for a, b, c using dimensional analysis.</p>
+                            </div>
                         </li>
                     </ol>
                 </div>
                 
                 <div class="mb-8">
-                    <h3 class="text-xl font-semibold text-light mb-4">Section 1.3: Dimensional Analysis</h3>
+                    <h3 class="text-xl font-semibold text-light mb-4">Problem Set 3: Vectors</h3>
                     
-                    <ol class="list-decimal list-inside text-gray-300 space-y-4" start="19">
+                    <ol class="list-decimal list-inside text-gray-300 space-y-6" start="8">
                         <li class="pl-4">
-                            A simple pendulum has periodic time T given by the relation: T = 2π√(L/g) where L is the length of the pendulum and g is the acceleration due to gravity in units of length divided by the square of time. Show that this equation is dimensionally correct.
-                        </li>
-                        
-                        <li class="pl-4">
-                            Suppose the displacements of an object moving in a straight line under uniform acceleration a is giving as a function of time by the relation s = kaᵐtⁿ, where k is a dimensionless constant. Use dimensional analysis to find the values of the powers m and n.
-                        </li>
-                        
-                        <li class="pl-4">
-                            Using dimensional analysis, determine if the following equations are dimensionally correct or incorrect:
+                            <p class="mb-2">Given vectors A = 2i + 3j - k and B = -i + 2j + 3k, calculate:</p>
                             <ul class="list-disc list-inside ml-6 mt-2 space-y-1">
-                                <li>v² = v₀² + 2as</li>
-                                <li>s = s₀ + v₀t + ½at²</li>
-                                <li>s = s₀ cos(kt), where k is a constant that has the dimension of the inverse of time.</li>
+                                <li>A + B</li>
+                                <li>A - B</li>
+                                <li>A · B</li>
+                                <li>A × B</li>
+                                <li>The angle between A and B</li>
                             </ul>
+                            <div class="hint-box">
+                                <p class="text-gray-300"><strong>Hint:</strong> Remember the formulas for dot and cross products in 3D.</p>
+                            </div>
+                        </li>
+                        
+                        <li class="pl-4">
+                            <p class="mb-2">A particle moves from point A (2, 3) to point B (5, 7) in a coordinate system. Find the displacement vector and its magnitude.</p>
+                            <div class="hint-box">
+                                <p class="text-gray-300"><strong>Hint:</strong> Displacement vector = final position - initial position.</p>
+                            </div>
                         </li>
                     </ol>
                 </div>
@@ -692,7 +1179,7 @@
                 <div class="bg-accent bg-opacity-10 border border-accent rounded-xl p-6 mt-8">
                     <h3 class="text-xl font-semibold text-light mb-3">Ready to Practice?</h3>
                     <p class="text-gray-300 mb-4">Now that you've completed this lecture, test your understanding with the homework problems and interactive notebook.</p>
-                    <div class="flex space-x-4">
+                    <div class="flex space-x-4 flex-wrap gap-4">
                         <a href="../homework/hw1.html" class="btn-primary">
                             <i class="fas fa-tasks mr-2"></i>
                             Homework 1
@@ -700,6 +1187,10 @@
                         <a href="../notebooks/chapter1.html" class="btn-primary">
                             <i class="fas fa-book mr-2"></i>
                             Chapter 1 Notebook
+                        </a>
+                        <a href="../solutions/sol1.html" class="btn-primary">
+                            <i class="fas fa-lightbulb mr-2"></i>
+                            View Solutions
                         </a>
                     </div>
                 </div>
@@ -733,6 +1224,187 @@
                 });
             });
             
+            // SI Prefix Conversion
+            document.getElementById('prefix-convert-btn').addEventListener('click', function() {
+                const value = parseFloat(document.getElementById('prefix-value').value);
+                const fromFactor = parseFloat(document.getElementById('prefix-from').value);
+                const toFactor = parseFloat(document.getElementById('prefix-to').value);
+                
+                if (!isNaN(value)) {
+                    const result = value * fromFactor / toFactor;
+                    document.getElementById('prefix-result').value = result.toExponential(3);
+                }
+            });
+            
+            // Unit Conversion
+            document.getElementById('conversion-btn').addEventListener('click', function() {
+                const value = parseFloat(document.getElementById('conversion-value').value);
+                const fromUnit = document.getElementById('conversion-from').value;
+                const toUnit = document.getElementById('conversion-to').value;
+                
+                if (!isNaN(value)) {
+                    // Conversion factors to meters
+                    const factors = {
+                        'm': 1,
+                        'km': 1000,
+                        'cm': 0.01,
+                        'mi': 1609.34,
+                        'ft': 0.3048
+                    };
+                    
+                    const result = value * factors[fromUnit] / factors[toUnit];
+                    document.getElementById('conversion-result').innerHTML = `
+                        <strong>${value} ${fromUnit} = ${result.toFixed(4)} ${toUnit}</strong>
+                    `;
+                    document.getElementById('conversion-result').style.display = 'block';
+                }
+            });
+            
+            // Dimensional Analysis Checker
+            document.getElementById('dimension-check-btn').addEventListener('click', function() {
+                const equation = document.getElementById('equation-select').value;
+                let result = '';
+                
+                switch(equation) {
+                    case 'v2 = u2 + 2as':
+                        result = '<strong>Dimensionally Consistent:</strong> All terms have dimensions of L²/T²';
+                        break;
+                    case 'T = 2π√(L/g)':
+                        result = '<strong>Dimensionally Consistent:</strong> Both sides have dimension T';
+                        break;
+                    case 'F = mv²/r':
+                        result = '<strong>Dimensionally Consistent:</strong> Both sides have dimensions ML/T²';
+                        break;
+                    case 'E = mc²':
+                        result = '<strong>Dimensionally Consistent:</strong> Both sides have dimensions ML²/T²';
+                        break;
+                }
+                
+                document.getElementById('dimension-result').innerHTML = result;
+                document.getElementById('dimension-result').style.display = 'block';
+            });
+            
+            // Vector Addition
+            document.getElementById('vector-add-btn').addEventListener('click', function() {
+                const ax = parseFloat(document.getElementById('vector-a-x').value) || 0;
+                const ay = parseFloat(document.getElementById('vector-a-y').value) || 0;
+                const bx = parseFloat(document.getElementById('vector-b-x').value) || 0;
+                const by = parseFloat(document.getElementById('vector-b-y').value) || 0;
+                
+                const rx = ax + bx;
+                const ry = ay + by;
+                const magnitude = Math.sqrt(rx*rx + ry*ry);
+                const angle = Math.atan2(ry, rx) * 180 / Math.PI;
+                
+                document.getElementById('vector-result').innerHTML = `
+                    <strong>Resultant Vector:</strong> R = ${rx.toFixed(2)}i + ${ry.toFixed(2)}j<br>
+                    <strong>Magnitude:</strong> |R| = ${magnitude.toFixed(2)}<br>
+                    <strong>Direction:</strong> θ = ${angle.toFixed(2)}° from positive x-axis
+                `;
+                document.getElementById('vector-result').style.display = 'block';
+                
+                // Draw vectors on canvas
+                const canvas = document.getElementById('vector-canvas');
+                const ctx = canvas.getContext('2d');
+                const centerX = canvas.width / 2;
+                const centerY = canvas.height / 2;
+                const scale = 20;
+                
+                // Clear canvas
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Draw coordinate system
+                ctx.strokeStyle = '#374151';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(0, centerY);
+                ctx.lineTo(canvas.width, centerY);
+                ctx.moveTo(centerX, 0);
+                ctx.lineTo(centerX, canvas.height);
+                ctx.stroke();
+                
+                // Draw vector A
+                ctx.strokeStyle = '#3b82f6';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(centerX, centerY);
+                ctx.lineTo(centerX + ax * scale, centerY - ay * scale);
+                ctx.stroke();
+                
+                // Draw vector B
+                ctx.strokeStyle = '#ef4444';
+                ctx.beginPath();
+                ctx.moveTo(centerX, centerY);
+                ctx.lineTo(centerX + bx * scale, centerY - by * scale);
+                ctx.stroke();
+                
+                // Draw resultant vector
+                ctx.strokeStyle = '#10b981';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.moveTo(centerX, centerY);
+                ctx.lineTo(centerX + rx * scale, centerY - ry * scale);
+                ctx.stroke();
+                
+                // Draw vector B from tip of A (for visualization of addition)
+                ctx.strokeStyle = '#ef4444';
+                ctx.lineWidth = 2;
+                ctx.setLineDash([5, 5]);
+                ctx.beginPath();
+                ctx.moveTo(centerX + ax * scale, centerY - ay * scale);
+                ctx.lineTo(centerX + rx * scale, centerY - ry * scale);
+                ctx.stroke();
+                ctx.setLineDash([]);
+                
+                // Add labels
+                ctx.fillStyle = '#ffffff';
+                ctx.font = '12px Arial';
+                ctx.fillText('A', centerX + ax * scale / 2, centerY - ay * scale / 2 - 5);
+                ctx.fillText('B', centerX + bx * scale / 2, centerY - by * scale / 2 - 5);
+                ctx.fillText('R', centerX + rx * scale / 2, centerY - ry * scale / 2 - 5);
+            });
+            
+            // Checkpoint functionality
+            function setupCheckpoint(checkpointId) {
+                const btn = document.getElementById(`${checkpointId}-btn`);
+                const feedback = document.getElementById(`${checkpointId}-feedback`);
+                const options = document.querySelectorAll(`input[name="${checkpointId}"]`);
+                
+                btn.addEventListener('click', function() {
+                    let selectedOption = null;
+                    options.forEach(option => {
+                        if (option.checked) {
+                            selectedOption = option.parentElement;
+                        }
+                    });
+                    
+                    if (!selectedOption) {
+                        feedback.textContent = 'Please select an answer.';
+                        feedback.className = 'checkpoint-feedback incorrect';
+                        feedback.style.display = 'block';
+                        return;
+                    }
+                    
+                    const isCorrect = selectedOption.getAttribute('data-correct') === 'true';
+                    
+                    if (isCorrect) {
+                        feedback.innerHTML = '<i class="fas fa-check text-success mr-2"></i> Correct! Well done.';
+                        feedback.className = 'checkpoint-feedback correct';
+                    } else {
+                        feedback.innerHTML = '<i class="fas fa-times text-danger mr-2"></i> Incorrect. Try again.';
+                        feedback.className = 'checkpoint-feedback incorrect';
+                    }
+                    
+                    feedback.style.display = 'block';
+                });
+            }
+            
+            // Setup all checkpoints
+            setupCheckpoint('checkpoint1');
+            setupCheckpoint('checkpoint2');
+            setupCheckpoint('checkpoint3');
+            setupCheckpoint('checkpoint4');
+            
             // Add a simple progress tracker
             const progressContainer = document.createElement('div');
             progressContainer.className = 'fixed bottom-4 right-4 bg-dark-card p-4 rounded-xl border border-gray-800 shadow-lg';
@@ -761,6 +1433,9 @@
             
             // Initial call
             updateProgress();
+            
+            // Initial vector diagram
+            document.getElementById('vector-add-btn').click();
         });
     </script>
 </body>

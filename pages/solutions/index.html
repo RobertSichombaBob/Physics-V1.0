@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solutions 1: Units & Vectors - Physics 110</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- MathJax for equations -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#0a0a0a',
+                        light: '#ffffff',
+                        accent: '#3b82f6',
+                        secondary: '#8b5cf6',
+                        success: '#10b981',
+                        warning: '#f59e0b',
+                        danger: '#ef4444',
+                        'dark-card': '#1a1a1a',
+                        'dark-hover': '#2a2a2a',
+                        'dark-border': '#2a2a2a',
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif'],
+                        'serif': ['Source Serif Pro', 'Georgia', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: #0a0a0a;
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+        }
+        
+        .content-card {
+            background-color: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .solution-card {
+            background-color: #2a2a2a;
+            border: 1px solid #374151;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .equation {
+            background-color: #1a1a1a;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            border: 1px solid #374151;
+        }
+        
+        .step {
+            background-color: rgba(59, 130, 246, 0.1);
+            border-left: 3px solid #3b82f6;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+        
+        .nav-link {
+            position: relative;
+            color: #ffffff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: #3b82f6;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: #3b82f6;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .btn-primary {
+            background-color: #1a1a1a;
+            color: #ffffff;
+            border: 1px solid #2a2a2a;
+            transition: all 0.3s ease;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+        }
+        
+        .btn-primary:hover {
+            background-color: #3b82f6;
+            color: #ffffff;
+            border-color: #3b82f6;
+            transform: translateY(-2px);
+        }
+        
+        .key-concept {
+            background-color: rgba(139, 92, 246, 0.1);
+            border-left: 4px solid #8b5cf6;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+        
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background-color: #3b82f6;
+            color: #ffffff;
+            border-radius: 50%;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+        
+        .final-answer {
+            background-color: rgba(16, 185, 129, 0.1);
+            border: 2px solid #10b981;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .tab-container {
+            display: flex;
+            border-bottom: 1px solid #374151;
+            margin-bottom: 1.5rem;
+            overflow-x: auto;
+        }
+        
+        .tab {
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        
+        .tab.active {
+            border-bottom-color: #3b82f6;
+            color: #3b82f6;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .vector-diagram {
+            width: 100%;
+            height: 300px;
+            background-color: #1a1a1a;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .vector-canvas {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .solution-note {
+            background-color: rgba(245, 158, 11, 0.1);
+            border-left: 4px solid #f59e0b;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-dark bg-opacity-90 backdrop-blur-sm border-b border-gray-800 py-4 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center">
+                <a href="../../../index.html" class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-dark-card rounded-xl flex items-center justify-center border border-gray-800">
+                        <i class="fas fa-atom text-accent text-lg"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-lg font-bold text-light">Physics 110</h1>
+                        <p class="text-xs text-gray-400 -mt-1">Introductory Mechanics</p>
+                    </div>
+                </a>
+                
+                <div class="flex items-center space-x-6">
+                    <a href="../../../index.html" class="nav-link">Home</a>
+                    <a href="../lectures/lecture1.html" class="nav-link">Lecture</a>
+                    <a href="../homework/hw1.html" class="nav-link">Homework</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Solutions Content -->
+    <div class="max-w-6xl mx-auto px-4 py-8">
+        <div class="content-card">
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <h1 class="text-4xl font-bold text-light mb-2">Solutions 1: Units & Vectors</h1>
+                    <p class="text-gray-400">Complete step-by-step solutions for Homework 1 problems</p>
+                </div>
+                <div class="text-right">
+                    <span class="bg-success text-dark px-3 py-1 rounded-full text-sm font-semibold">Released</span>
+                    <p class="text-gray-400 text-sm mt-2">Full solutions with explanations</p>
+                </div>
+            </div>
+
+            <!-- Access Notice -->
+            <div id="access-notice" class="bg-yellow-900 bg-opacity-20 border border-yellow-700 rounded-xl p-6 mb-8">
+                <h3 class="text-xl font-semibold text-light mb-3 flex items-center">
+                    <i class="fas fa-lock text-yellow-400 mr-2"></i>
+                    Solutions Locked
+                </h3>
+                <p class="text-gray-300 mb-4">These solutions are available after you submit your homework attempt.</p>
+                <button id="unlock-btn" class="btn-primary">
+                    <i class="fas fa-key mr-2"></i>
+                    Unlock Solutions
+                </button>
+            </div>
+
+            <!-- Solutions Content (Initially Hidden) -->
+            <div id="solutions-content" class="hidden">
+                <!-- Problem Navigation Tabs -->
+                <div class="tab-container">
+                    <div class="tab active" data-tab="problem1">Problem 1</div>
+                    <div class="tab" data-tab="problem2">Problem 2</div>
+                    <div class="tab" data-tab="problem3">Problem 3</div>
+                    <div class="tab" data-tab="problem4">Problem 4</div>
+                    <div class="tab" data-tab="problem5">Problem 5</div>
+                    <div class="tab" data-tab="problem6">Problem 6</div>
+                    <div class="tab" data-tab="problem7">Problem 7</div>
+                    <div class="tab" data-tab="problem8">Problem 8</div>
+                </div>
+
+                <!-- Problem 1 Solutions -->
+                <div class="tab-content active" id="problem1">
+                    <div class="solution-card">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-semibold text-light">Problem 1: Unit Conversions - Solutions</h3>
+                            <span class="bg-accent text-dark px-3 py-1 rounded-full text-sm font-semibold">12 pts</span>
+                        </div>
+                        
+                        <p class="text-gray-300 mb-4">
+                            A carpet is to be installed in a room whose length is measured to be 13.71 m and whose width is measured to be 4.46 m. Find the area of the room.
+                        </p>
+                        
+                        <div class="key-concept">
+                            <h4 class="text-lg font-semibold text-light mb-2">Key Concept</h4>
+                            <p class="text-gray-300">Area of a rectangle = length × width. Pay attention to significant figures in the final answer.</p>
+                        </div>
+                        
+                        <div class="step">
+                            <h4 class="text-lg font-semibold text-light mb-2">Step-by-Step Solution</h4>
+                            <p class="text-gray-300 mb-2"><span class="step-number">1</span> Identify the given values:</p>
+                            <div class="equation">
+                                Length = 13.71 m, Width = 4.46 m
+                            </div>
+                            
+                            <p class="text-gray-300 mb-2"><span class="step-number">2</span> Apply the formula for area of a rectangle:</p>
+                            <div class="equation">
+                                Area = Length × Width = 13.71 m × 4.46 m
+                            </div>
+                            
+                            <p class="text-gray-300 mb-2"><span class="step-number">3</span> Perform the multiplication:</p>
+                            <div class="equation">
+                                13.71 × 4.46 = 61.1466 m²
+                            </div>
+                            
+                            <p class="text-gray-300 mb-2"><span class="step-number">4</span> Apply significant figures rules:</p>
+                            <p class="text-gray-300 ml-6">- Length has 4 significant figures (13.71)</p>
+                            <p class="text-gray-300 ml-6">- Width has 3 significant figures (4.46)</p>
+                            <p class="text-gray-300 ml-6">- The result should have 3 significant figures (same as the measurement with fewer significant figures)</p>
+                            
+                            <p class="text-gray-300 mb-2"><span class="step-number">5</span> Round to appropriate significant figures:</p>
+                            <div class="equation">
+                                61.1466 m² → 61.1 m² (3 significant figures)
+                            </div>
+                        </div>
+                        
+                        <div class="final-answer">
+                            <h4 class="text-lg font-semibold text-light mb-2">Final Answer</h4>
+                            <div class="equation">
+                                Area = 61.1 m²
+                            </div>
+                        </div>
+                        
+                        <div class="solution-note">
+                            <h4 class="text-lg font-semibold text-light mb-2">Note</h4>
+                            <p class="text-gray-300">When multiplying measurements, the result should have the same number of significant figures as the measurement with the fewest significant figures. In this case, the width (4.46) has 3 significant figures, so our final answer should also have 3 significant figures.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Problem 2 Solutions -->
+                <div class="tab-content" id="problem2">
+                    <div class="solution-card">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-semibold text-light">Problem 2: Volume Calculation - Solutions</h3>
+                            <span class="bg-accent text-dark px-3 py-1 rounded-full text-sm font-semibold">12 pts</span>
+                        </div>
+                        
+                        <p class="text-gray-300 mb-4">
+                            An object in the shape of rectangular parallelepiped measures 2.0 in × 3.5 in × 6.5 in. Determine the volume of the object in m³.
+                        </p>
+                        
+                        <div class="key-concept">
+                            <h4 class="text-lg font-semibold text-light mb-2">Key Concept</h4>
+                            <p class="text-gray-300">Volume = length × width × height. Convert inches to meters using 1 in = 0.0254 m.</p>
+                        </div>
+                        
+                        <div class="step">
+                            <h4 class="text-lg font-semibold text-light mb-2">Step-by-Step Solution</h4>
+                            <p class="text-gray-300 mb-2"><span class="step-number">1</span> Identify the given values:</p>
+                            <div class="equation">
+                                Length = 2.0 in, Width = 3.5 in, Height = 6.5 in
+                            </div>
+                            
+                            <p class="text-gray-300 mb-2"><span class="step-number">2</span> Calculate volume in cubic inches:</p>
+                            <div class="equation">
+                                Volume = 2.0 in × 3.5 in × 6.5 in = 45.5 in³
+                            </div>
+                            
+                            <p class="text-gray-300 mb-2"><span class="step-number">3</span> Convert inches to meters:</p>
+                            <div class="equation">
+                                1 in = 0.0254 m, so 1 in³ = (0.0254 m)³ = 0.0254³ m³
+                            </div>
+                            
+                            <p class="text-gray-300 mb-2"><span class="step-number">4</span> Calculate the conversion factor:</p>
+                            <div class="equation">
+                                0.0254³ = 0.0254 × 0.0254 × 0.0254 = 1.6387064 × 10⁻⁵ m³/in³
+                            </div>
+                            
+                            <p class="text-gray-300 mb-2"><span class="step-number">5</span> Convert volume to cubic meters:</p>
+                            <div class="equation">
+                                Volume = 45.5 in³ × (1.6387064 × 10⁻⁵ m³/in³) = 7.45611412 × 10⁻⁴ m³
+                            </div>
+                            
+                            <p class="text-gray-300 mb-2"><span class="step-number">6</span> Apply significant figures rules:</p>
+                            <p class="text-gray-300 ml-6">- All measurements have 2 significant figures</p>
+                            <p class="text-gray-300 ml-6">- The result should have 2 significant figures</p>
+                            
+                            <p class="text-gray-300 mb-2"><span class="step-number">7</span> Round to appropriate significant figures:</p>
+                            <div class="equation">
+                                7.45611412 × 10⁻⁴ m³ → 7.5 × 10⁻⁴ m³ (2 significant figures)
+                            </div>
+                        </div>
+                        
+                        <div class="final-answer">
+                            <h4 class="text-lg font-semibold text-light mb-2">Final Answer</h4>
+                            <div class="equation">
+                                Volume = 7.5 × 10⁻⁴ m³
+                            </div>
+                        </div>
+                        
+                        <div class="solution-note">
+                            <h4 class="text-lg font-semibold text-light mb-2">Note</h4>
+                            <p class="text-gray-300">When converting between units, pay attention to cubic conversions. 1 cubic inch equals (0.0254 m)³, not 0.0254 m³. All original measurements have 2 significant figures, so the final answer should also have 2 significant figures.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Problem 3 Solutions -->
+                <div class="tab-content" id="problem3">
+                    <div class="solution-card">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-semibold text-light">Problem 3: Significant Figures - Solutions</h3>
+                            <span class="bg-accent text-dark px-3 py-1 rounded-full text-sm font-semibold">12 pts</span>
+                        </div>
+                        
+                        <p class="text-gray-300 mb-4">
+                            A rectangular plate has a length of (21.3 ± 0.2) cm and a width of (9.8 ± 0.1) cm. Calculate the area of the plate including its uncertainty.
+                        </p>
+                        
+                        <div class="key-concept">
+                            <h4 class="text-lg font-semibold text-light mb-2">Key Concept</h4>
+                            <p class="text-gray-300">For multiplication, the relative uncertainty is the sum of the relative uncertainties of the factors.</p>
+                        </div>
+                        
+                        <div class="step">
+                            <h4 class="text-lg font-semibold text-light mb-2">Step-by-Step Solution</h4>
+                            <p class="text-gray-300 mb-2"><span class="step-number">1</span> Identify the given values:</p>
+                            <div class="equation">
+                                Length = 21.3 ± 0.2 cm, Width = 9.8 ± 0.1 cm
+                            </div>
+                            
+                            <p class="text-gray-300 mb-2"><span class="step-number">2</span> Calculate the nominal area:</p>
+                            <div class="equation">
+                                A = 21.3 cm × 9.8 cm = 208.74 cm²
+                            </div>
+                            
+                            <p class="text-gray-300 mb-2"><span class="step-number">3</span> Calculate relative uncertainties:</p>
+                            <div class="equation">
+                                Relative uncertainty in length = 0.2 / 21.3 = 0.00939 (0.939%)
+                            </div>
+                            <div class="equation">
+                                Relative uncertainty in width = 0.1 / 9.8 = 0.01020 (1.020%)
+                            </div>
+                            
+                            <p class="text-gray-300 mb-2"><span class="step-number">4</span> Calculate relative uncertainty in area:</p>
+                            <div class="equation">
+                                Relative uncertainty in area = 0.00939 + 0.01020 = 0.01959 (1.959%)
+                            </div>
+                            
+                            <p class="text-gray-300 mb-2"><span class="step-number">5</span> Calculate absolute uncertainty in area:</p>
+                            <div class="equation">
+                                Absolute uncertainty = 208.74 cm² × 0.01959 = 4.087 cm²
+                            </div>
+                            
+                            <p class="text-gray-300 mb-2"><span class="step-number">6</span> Round uncertainty to appropriate significant figures:</p>
+                            <p class="text-gray-300 ml-6">- The uncertainties (0.2 and 0.1) have 1 significant figure</p>
+                            <p class="text-gray-300 ml-6">- The absolute uncertainty should be rounded to 1 significant figure</p>
+                            <div class="equation">
+                                4.087 cm² → 4 cm² (1 significant figure)
+                            </div>
+                            
+                            <p class="text-gray-300 mb-2"><span class="step-number">7</span> Round area to match uncertainty:</p>
+                            <div class="equation">
+                                208.74 cm² → 209 cm² (rounded to match uncertainty of 4 cm²)
+                            </div>
+                        </div>
+                        
+                        <div class="final-answer">
+                            <h4 class="text-lg font-semibold text-light mb-2">Final Answer</h4>
+                            <div class="equation">
+                                Area = 209 ± 4 cm²
+                            </div>
+                        </div>
+                        
+                        <div class="solution-note">
+                            <h4 class="text-lg font-semibold text-light mb-2">Note</h4>
+                            <p class="text-gray-300">For multiplication, the relative uncertainty of the product is the sum of the relative uncertainties of the factors. The absolute uncertainty should be rounded to 1 significant figure, and the measured value should be rounded to the same decimal place as the uncertainty.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Problem 4 Solutions -->
+                <div class="tab-content" id="problem4">
+                    <div class="solution-card">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-semibold text-light">Problem 4: SI Prefixes - Solutions</h3>
+                            <span class="bg-accent text-dark px-3 py-1 rounded-full text-sm font-semibold">12 pts</span>
+                        </div>
+                        
+                        <p class="text-gray-300 mb-4">
+                            Express the following using appropriate SI prefixes:
+                        </p>
+                        
+                        <div class="key-concept">
+                            <h4 class="text-lg font-semibold text-light mb-2">Key Concept</h4>
+                            <p class="text-gray-300">SI prefixes represent powers of 10. Common prefixes: milli (10⁻³), micro (10⁻⁶), nano (10⁻⁹), pico (10⁻¹²), kilo (10³), mega (10⁶), giga (10⁹).</p>
+                        </div>
+                        
+                        <div class="step">
+                            <h4 class="text-lg font-semibold text-light mb-2">Step-by-Step Solution</h4>
+                            
+                            <p class="text-gray-300 mb-2"><span class="step-number">1</span> (a) 0.00085 L</p>
+                            <div class="equation">
+                                0.00085 L = 8.5 × 10⁻⁴ L = 0.85 mL (milliliters)
+                            </div>
+                            
+                            <p class="text-gray-300 mb-2"><span class="step-number">2</span> (b) 5.44 × 10⁻¹¹ g</p>
+                            <div class="equation">
+                                5.44 × 10⁻¹¹ g = 54.4 × 10⁻¹² g = 54.4 pg (picograms)
+                            </div>
+                            
+                            <p class="text-gray-300 mb-2"><span class="step-number">3</span> (c) 73,000,000 m</p>
+                            <div class="equation">
+                                73,000,000 m = 7.3 × 10⁷ m = 73 Mm (megameters)
+                            </div>
+                            
+                            <p class="text-gray-300 mb-2"><span class="step-number">4</span> (d) 9.450 s</p>
+                            <p class="text-gray-300 ml-6">This value is already in a convenient form with appropriate significant figures. No prefix needed.</p>
+                            <div class="equation">
+                                9.450 s (no prefix needed)
+                            </div>
+                        </div>
+                        
+                        <div class="final-answer">
+                            <h4 class="text-lg font-semibold text-light mb-2">Final Answers</h4>
+                            <div class="equation">
+                                (a) 0.85 mL<br>
+                                (b) 54.4 pg<br>
+                                (c) 73 Mm<br>
+                                (d) 9.450 s
+                            </div>
+                        </div>
+                        
+                        <div class="solution-note">
+                            <h4 class="text-lg font-semibold text-light mb-2">Note</h4>
+                            <p class="text-gray-300">When using SI prefixes, choose the prefix that gives a numerical value between 1 and 1000 when possible. For example, 73,000,000 m is better expressed as 73 Mm rather than 0.073 Gm or 73,000 km.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Problem 5 Solutions -->
+                <div class="tab-content" id="problem5">
+                    <div class="solution-card">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-semibold text-light">Problem 5: Dimensional Analysis - Solutions</h3>
+                            <span class="bg-accent text-dark px-3 py-1 rounded-full text-sm font-semibold">13 pts</span>
+                        </div>
+                        
+                        <p class="text-gray-300 mb-4">
+                            Analyze the following equations to determine whether dimensionally correct or not:
+                        </p>
+                        
+                        <div class="key-concept">
+                            <h4 class="text-lg font-semibold text-light mb-2">Key Concept</h4>
+                            <p class="text-gray-300">For an equation to be dimensionally correct, all terms must have the same dimensions. Trigonometric functions are dimensionless.</p>
+                        </div>
+                        
+                        <div class="step">
+                            <h4 class="text-lg font-semibold text-light mb-2">Step-by-Step Solution</h4>
+                            
+                            <p class="text-gray-300 mb-2"><span class="step-number">1</span> (a) v = u + ax</p>
+                            <p class="text-gray-300 ml-6">Dimensions:</p>
+                            <div class="equation">
+                                [v] = [u] = L/T (velocity)<br>
+                                [a] = L/T² (acceleration)<br>
+                                [x] = L (distance)<br>
+                                [ax] = (L/T²) × L = L²/T²
+                            </div>
+                            <p class="text-gray-300 ml-6">The equation adds L/T (velocity) and L²/T² (acceleration × distance), which have different dimensions.</p>
+                            <div class="equation">
+                                L/T ≠ L²/T² → Dimensionally INCONSISTENT
+                            </div>
+                            
+                            <p class="text-gray-300 mb-2"><span class="step-number">2</span> (b) y = (2m)cos(kx) where k = 2m⁻¹</p>
+                            <p class="text-gray-300 ml-6">Dimensions:</p>
+                            <div class="equation">
+                                [y] = L (length)<br>
+                                [2m] = M (mass)<br>
+                                [cos(kx)] = dimensionless (trigonometric function)<br>
+                                [k] = L⁻¹ (given as m⁻¹, where m is meter)<br>
+                                [x] = L (length)<br>
+                                [kx] = L⁻¹ × L = dimensionless
+                            </div>
+                            <p class="text-gray-300 ml-6">The equation equates L (length) with M (mass), which have different dimensions.</p>
+                            <div class="equation">
+                                L ≠ M → Dimensionally INCONSISTENT
+                            </div>
+                        </div>
+                        
+                        <div class="final-answer">
+                            <h4 class="text-lg font-semibold text-light mb-2">Final Answers</h4>
+                            <div class="equation">
+                                (a) Dimensionally INCONSISTENT<br>
+                                (b) Dimensionally INCONSISTENT
+                            </div>
+                        </div>
+                        
+                        <div class="solution-note">
+                            <h4 class="text-lg font-semibold text-light mb-2">Note</h4>
+                            <p class="text-gray-300">Dimensional analysis is a powerful tool to check the validity of equations. If an equation is dimensionally inconsistent, it cannot be physically correct. However, dimensional consistency doesn't guarantee the equation is correct - it only ensures the units match.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Problem 6 Solutions -->
+                <div class="tab-content" id="problem6">
+                    <div class="solution-card">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-semibold text-light">Problem 6: Vector Addition - Solutions</h3>
+                            <span class="bg-accent text-dark px-3 py-1 rounded-full text-sm font-semibold">13 pts</span>
+                        </div>
+                        
+                        <p class="text-gray-300 mb-4">
+                            Vector A has a magnitude of 10 units and makes 60° with the positive x-axis. Vector B has a magnitude of 5 units and is directed along the negative x-axis. Find the vector:
+                        </p>
+                        
+                        <div class="key-concept">
+                            <h4 class="text-lg font-semibold text-light mb-2">Key Concept</h4>
+                            <p class="text-gray-300">Vectors can be added by breaking them into components and then adding the components.</p>
+                        </div>
+
+                        <!-- Vector Visualization -->
+                        <div class="vector-diagram">
+                            <canvas class="vector-canvas" id="vector-canvas-1"></canvas>
+                        </div>
+                        
+                        <div class="step">
+                            <h4 class="text-lg font-semibold text-light mb-2">Step-by-Step Solution</h4>
+                            
+                            <p class="text-gray-300 mb-2"><span class="step-number">1</span> Break vectors into components:</p>
+                            <div class="equation">
+                                Aₓ = |A|cosθ = 10 cos60° = 10 × 0.5 = 5 units<br>
+                                Aᵧ = |A|sinθ = 10 sin60° = 10 × 0.866 = 8.66 units<br>
+                                Bₓ = |B|cos180° = 5 × (-1) = -5 units<br>
+                                Bᵧ = |B|sin180° = 5 × 0 = 0 units
+                            </div>
+                            
+                            <p class="text-gray-300 mb-2"><span class="step-number">2</span> (a) Calculate A + B:</p>
+                            <div class="equation">
+                                (A + B)ₓ = Aₓ + Bₓ = 5 + (-5) = 0 units<br>
+                                (A + B)ᵧ = Aᵧ + Bᵧ = 8.66 + 0 = 8.66 units
+                            </div>
+                            
+                            <p class="text-gray-300 mb-2"><span class="step-number">3</span> Find magnitude and direction of A + B:</p>
+                            <div class="equation">
+                                |A + B| = √(0² + 8.66²) = √75 = 8.66 units<br>
+                                Direction: tanθ = 8.66/0 (undefined) → θ = 90° (along positive y-axis)
+                            </div>
+                            
+                            <p class="text-gray-300 mb-2"><span class="step-number">4</span> (b) Calculate A - B:</p>
+                            <div class="equation">
+                                (A - B)ₓ = Aₓ - Bₓ = 5 - (-5) = 10 units<br>
+                                (A - B)ᵧ = Aᵧ - Bᵧ = 8.66 - 0 = 8.66 units
+                            </div>
+                            
+                            <p class="text-gray-300 mb-2"><span class="step-number">5</span> Find magnitude and direction of A - B:</p>
+                            <div class="equation">
+                                |A - B| = √(10² + 8.66²) = √(100 + 75) = √175 = 13.23 units<br>
+                                Direction: tanθ = 8.66/10 = 0.866 → θ = tan⁻¹(0.866) = 40.9°
+                            </div>
+                        </div>
+                        
+                        <div class="final-answer">
+                            <h4 class="text-lg font-semibold text-light mb-2">Final Answers</h4>
+                            <div class="equation">
+                                (a) A + B = 8.66 units along positive y-axis<br>
+                                (b) A - B = 13.23 units at 40.9° above positive x-axis
+                            </div>
+                        </div>
+                        
+                        <div class="solution-note">
+                            <h4 class="text-lg font-semibold text-light mb-2">Note</h4>
+                            <p class="text-gray-300">Vector subtraction A - B is equivalent to adding A and -B. The negative of a vector has the same magnitude but opposite direction.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Problem 7 Solutions -->
+                <div class="tab-content" id="problem7">
+                    <div class="solution-card">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-semibold text-light">Problem 7: Vector Operations - Solutions</h3>
+                            <span class="bg-accent text-dark px-3 py-1 rounded-full text-sm font-semibold">13 pts</span>
+                        </div>
+                        
+                        <p class="text-gray-300 mb-4">
+                            Find the cross product of A × B where A = 2i + 3j, B = -i + 2j.
+                        </p>
+                        
+                        <div class="key-concept">
+                            <h4 class="text-lg font-semibold text-light mb-2">Key Concept</h4>
+                            <p class="text-gray-300">For 2D vectors in the xy-plane, the cross product gives a vector in the z-direction: A × B = (AₓBᵧ - AᵧBₓ)k.</p>
+                        </div>
+                        
+                        <div class="step">
+                            <h4 class="text-lg font-semibold text-light mb-2">Step-by-Step Solution</h4>
+                            
+                            <p class="text-gray-300 mb-2"><span class="step-number">1</span> Identify the components:</p>
+                            <div class="equation">
+                                Aₓ = 2, Aᵧ = 3, A_z = 0<br>
+                                Bₓ = -1, Bᵧ = 2, B_z = 0
+                            </div>
+                            
+                            <p class="text-gray-300 mb-2"><span class="step-number">2</span> Apply the cross product formula:</p>
+                            <div class="equation">
+                                A × B = (AᵧB_z - A_zBᵧ)i + (A_zBₓ - AₓB_z)j + (AₓBᵧ - AᵧBₓ)k
+                            </div>
+                            
+                            <p class="text-gray-300 mb-2"><span class="step-number">3</span> Calculate each component:</p>
+                            <div class="equation">
+                                i-component: AᵧB_z - A_zBᵧ = (3)(0) - (0)(2) = 0<br>
+                                j-component: A_zBₓ - AₓB_z = (0)(-1) - (2)(0) = 0<br>
+                                k-component: AₓBᵧ - AᵧBₓ = (2)(2) - (3)(-1) = 4 - (-3) = 7
+                            </div>
+                            
+                            <p class="text-gray-300 mb-2"><span class="step-number">4</span> Write the cross product:</p>
+                            <div class="equation">
+                                A × B = 0i + 0j + 7k = 7k
+                            </div>
+                            
+                            <p class="text-gray-300 mb-2"><span class="step-number">5</span> For 2D vectors, we can use the simplified formula:</p>
+                            <div class="equation">
+                                A × B = (AₓBᵧ - AᵧBₓ)k = (2×2 - 3×(-1))k = (4 + 3)k = 7k
+                            </div>
+                        </div>
+                        
+                        <div class="final-answer">
+                            <h4 class="text-lg font-semibold text-light mb-2">Final Answer</h4>
+                            <div class="equation">
+                                A × B = 7k
+                            </div>
+                        </div>
+                        
+                        <div class="solution-note">
+                            <h4 class="text-lg font-semibold text-light mb-2">Note</h4>
+                            <p class="text-gray-300">The cross product of two vectors is always perpendicular to both vectors. For 2D vectors in the xy-plane, the cross product points in the z-direction (either positive or negative). The magnitude of the cross product equals the area of the parallelogram formed by the two vectors.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Problem 8 Solutions -->
+                <div class="tab-content" id="problem8">
+                    <div class="solution-card">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-semibold text-light">Problem 8: Physical Applications - Solutions</h3>
+                            <span class="bg-accent text-dark px-3 py-1 rounded-full text-sm font-semibold">13 pts</span>
+                        </div>
+                        
+                        <p class="text-gray-300 mb-4">
+                            A ship is steaming due east at a speed of 12 m/s. A passenger runs across the deck at a speed of 5 m/s toward north. What is the resultant velocity of the passenger relative to the sea?
+                        </p>
+                        
+                        <div class="key-concept">
+                            <h4 class="text-lg font-semibold text-light mb-2">Key Concept</h4>
+                            <p class="text-gray-300">The resultant velocity is the vector sum of the ship's velocity and the passenger's velocity relative to the ship.</p>
+                        </div>
+
+                        <!-- Vector Visualization -->
+                        <div class="vector-diagram">
+                            <canvas class="vector-canvas" id="vector-canvas-2"></canvas>
+                        </div>
+                        
+                        <div class="step">
+                            <h4 class="text-lg font-semibold text-light mb-2">Step-by-Step Solution</h4>
+                            
+                            <p class="text-gray-300 mb-2"><span class="step-number">1</span> Identify the velocities:</p>
+                            <div class="equation">
+                                Ship's velocity: v_ship = 12 m/s (east)<br>
+                                Passenger's velocity relative to ship: v_passenger/ship = 5 m/s (north)
+                            </div>
+                            
+                            <p class="text-gray-300 mb-2"><span class="step-number">2</span> Break velocities into components:</p>
+                            <div class="equation">
+                                v_ship = 12i + 0j m/s<br>
+                                v_passenger/ship = 0i + 5j m/s
+                            </div>
+                            
+                            <p class="text-gray-300 mb-2"><span class="step-number">3</span> Calculate resultant velocity:</p>
+                            <div class="equation">
+                                v_resultant = v_ship + v_passenger/ship = (12i + 0j) + (0i + 5j) = 12i + 5j m/s
+                            </div>
+                            
+                            <p class="text-gray-300 mb-2"><span class="step-number">4</span> Find magnitude of resultant velocity:</p>
+                            <div class="equation">
+                                |v_resultant| = √(12² + 5²) = √(144 + 25) = √169 = 13 m/s
+                            </div>
+                            
+                            <p class="text-gray-300 mb-2"><span class="step-number">5</span> Find direction of resultant velocity:</p>
+                            <div class="equation">
+                                tanθ = (5/12) = 0.4167<br>
+                                θ = tan⁻¹(0.4167) = 22.6° north of east
+                            </div>
+                        </div>
+                        
+                        <div class="final-answer">
+                            <h4 class="text-lg font-semibold text-light mb-2">Final Answer</h4>
+                            <div class="equation">
+                                Resultant velocity = 13 m/s at 22.6° north of east
+                            </div>
+                        </div>
+                        
+                        <div class="solution-note">
+                            <h4 class="text-lg font-semibold text-light mb-2">Note</h4>
+                            <p class="text-gray-300">This is an example of relative velocity. The passenger's velocity relative to the sea is the vector sum of the ship's velocity relative to the sea and the passenger's velocity relative to the ship. The magnitude follows the Pythagorean theorem since the velocities are perpendicular.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Download Section -->
+                <div class="bg-dark-card rounded-xl p-6 mt-8 border border-gray-800">
+                    <h3 class="text-xl font-semibold text-light mb-4">Download Solutions</h3>
+                    <p class="text-gray-300 mb-4">You can download a PDF version of these solutions for offline reference.</p>
+                    <button class="btn-primary">
+                        <i class="fas fa-download mr-2"></i>
+                        Download PDF Solutions
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="py-8 border-t border-gray-800 mt-8">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <p class="text-gray-400 text-sm">© 2024 Physics 110: Introductory Mechanics - Robert Sichomba</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Unlock solutions
+            document.getElementById('unlock-btn').addEventListener('click', function() {
+                document.getElementById('access-notice').style.display = 'none';
+                document.getElementById('solutions-content').classList.remove('hidden');
+                
+                // Draw vector diagrams
+                drawVectorDiagram1();
+                drawVectorDiagram2();
+            });
+            
+            // Tab functionality
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs
+                    tabs.forEach(t => t.classList.remove('active'));
+                    
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    // Hide all tab content
+                    const tabContents = document.querySelectorAll('.tab-content');
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    
+                    // Show corresponding tab content
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+            
+            // Vector diagram for Problem 6
+            function drawVectorDiagram1() {
+                const canvas = document.getElementById('vector-canvas-1');
+                const ctx = canvas.getContext('2d');
+                const width = canvas.parentElement.clientWidth;
+                const height = canvas.parentElement.clientHeight;
+                
+                canvas.width = width;
+                canvas.height = height;
+                
+                // Clear canvas
+                ctx.clearRect(0, 0, width, height);
+                
+                // Set origin at center
+                const originX = width / 2;
+                const originY = height / 2;
+                const scale = 15;
+                
+                // Draw coordinate system
+                ctx.strokeStyle = '#374151';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(0, originY);
+                ctx.lineTo(width, originY);
+                ctx.moveTo(originX, 0);
+                ctx.lineTo(originX, height);
+                ctx.stroke();
+                
+                // Draw vector A (10 units at 60°)
+                const Ax = 10 * Math.cos(60 * Math.PI / 180);
+                const Ay = 10 * Math.sin(60 * Math.PI / 180);
+                
+                ctx.strokeStyle = '#3b82f6';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(originX, originY);
+                ctx.lineTo(originX + Ax * scale, originY - Ay * scale);
+                ctx.stroke();
+                
+                // Draw vector B (5 units along negative x-axis)
+                ctx.strokeStyle = '#ef4444';
+                ctx.beginPath();
+                ctx.moveTo(originX, originY);
+                ctx.lineTo(originX - 5 * scale, originY);
+                ctx.stroke();
+                
+                // Draw resultant A + B
+                const Rx = Ax - 5;
+                const Ry = Ay;
+                
+                ctx.strokeStyle = '#10b981';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.moveTo(originX, originY);
+                ctx.lineTo(originX + Rx * scale, originY - Ry * scale);
+                ctx.stroke();
+                
+                // Draw resultant A - B
+                const R2x = Ax + 5;
+                const R2y = Ay;
+                
+                ctx.strokeStyle = '#8b5cf6';
+                ctx.lineWidth = 3;
+                ctx.setLineDash([5, 5]);
+                ctx.beginPath();
+                ctx.moveTo(originX, originY);
+                ctx.lineTo(originX + R2x * scale, originY - R2y * scale);
+                ctx.stroke();
+                ctx.setLineDash([]);
+                
+                // Add labels
+                ctx.fillStyle = '#ffffff';
+                ctx.font = '12px Arial';
+                ctx.fillText('A', originX + Ax * scale / 2, originY - Ay * scale / 2 - 5);
+                ctx.fillText('B', originX - 2.5 * scale, originY + 15);
+                ctx.fillText('A+B', originX + Rx * scale / 2, originY - Ry * scale / 2 - 5);
+                ctx.fillText('A-B', originX + R2x * scale / 2, originY - R2y * scale / 2 - 5);
+            }
+            
+            // Vector diagram for Problem 8
+            function drawVectorDiagram2() {
+                const canvas = document.getElementById('vector-canvas-2');
+                const ctx = canvas.getContext('2d');
+                const width = canvas.parentElement.clientWidth;
+                const height = canvas.parentElement.clientHeight;
+                
+                canvas.width = width;
+                canvas.height = height;
+                
+                // Clear canvas
+                ctx.clearRect(0, 0, width, height);
+                
+                // Set origin at center
+                const originX = width / 2;
+                const originY = height / 2;
+                const scale = 10;
+                
+                // Draw coordinate system
+                ctx.strokeStyle = '#374151';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(0, originY);
+                ctx.lineTo(width, originY);
+                ctx.moveTo(originX, 0);
+                ctx.lineTo(originX, height);
+                ctx.stroke();
+                
+                // Draw ship velocity (12 m/s east)
+                ctx.strokeStyle = '#3b82f6';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(originX, originY);
+                ctx.lineTo(originX + 12 * scale, originY);
+                ctx.stroke();
+                
+                // Draw passenger velocity (5 m/s north)
+                ctx.strokeStyle = '#ef4444';
+                ctx.beginPath();
+                ctx.moveTo(originX, originY);
+                ctx.lineTo(originX, originY - 5 * scale);
+                ctx.stroke();
+                
+                // Draw resultant velocity
+                ctx.strokeStyle = '#10b981';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.moveTo(originX, originY);
+                ctx.lineTo(originX + 12 * scale, originY - 5 * scale);
+                ctx.stroke();
+                
+                // Add labels
+                ctx.fillStyle = '#ffffff';
+                ctx.font = '12px Arial';
+                ctx.fillText('Ship (12 m/s)', originX + 6 * scale, originY + 15);
+                ctx.fillText('Passenger (5 m/s)', originX - 40, originY - 2.5 * scale);
+                ctx.fillText('Resultant (13 m/s)', originX + 6 * scale, originY - 2.5 * scale);
+                
+                // Draw angle
+                ctx.strokeStyle = '#f59e0b';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.arc(originX, originY, 30, 0, Math.atan2(-5, 12));
+                ctx.stroke();
+                
+                ctx.fillStyle = '#f59e0b';
+                ctx.font = '10px Arial';
+                ctx.fillText('22.6°', originX + 20, originY - 10);
+            }
+            
+            // Add a simple progress tracker
+            const progressContainer = document.createElement('div');
+            progressContainer.className = 'fixed bottom-4 right-4 bg-dark-card p-4 rounded-xl border border-gray-800 shadow-lg z-50';
+            progressContainer.innerHTML = `
+                <div class="text-sm text-gray-300 mb-2">Solutions Progress</div>
+                <div class="w-32 bg-gray-700 rounded-full h-2">
+                    <div id="solutions-progress" class="bg-accent h-2 rounded-full" style="width: 0%"></div>
+                </div>
+                <div class="text-xs text-gray-400 mt-1" id="solutions-progress-text">0/8 problems</div>
+            `;
+            document.body.appendChild(progressContainer);
+            
+            // Update progress as user views solutions
+            const tabsContainer = document.querySelector('.tab-container');
+            const tabsCount = document.querySelectorAll('.tab').length;
+            
+            tabsContainer.addEventListener('click', function() {
+                const activeTab = document.querySelector('.tab.active');
+                const activeIndex = Array.from(document.querySelectorAll('.tab')).indexOf(activeTab);
+                
+                const progress = ((activeIndex + 1) / tabsCount) * 100;
+                document.getElementById('solutions-progress').style.width = progress + '%';
+                document.getElementById('solutions-progress-text').textContent = `${activeIndex + 1}/${tabsCount} problems`;
+            });
+        });
+    </script>
+</body>
+</html>

@@ -15,6 +15,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Source+Serif+Pro:wght@400;600;700&display=swap" rel="stylesheet">
     
+    <!-- MathJax for equations -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
     <script>
         tailwind.config = {
             theme: {
@@ -68,6 +72,12 @@
             border-radius: 0.75rem;
             padding: 1.5rem;
             margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .problem-card:hover {
+            border-color: #3b82f6;
+            transform: translateY(-2px);
         }
         
         .equation {
@@ -78,6 +88,14 @@
             font-family: 'Courier New', monospace;
             text-align: center;
             border: 1px solid #374151;
+        }
+        
+        .step {
+            background-color: rgba(59, 130, 246, 0.1);
+            border-left: 3px solid #3b82f6;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 0.5rem 0.5rem 0;
         }
         
         .nav-link {
@@ -134,11 +152,13 @@
             color: #ffffff;
             width: 100%;
             margin: 0.5rem 0;
+            transition: all 0.3s ease;
         }
         
         .input-field:focus {
             border-color: #3b82f6;
             outline: none;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
         }
         
         .submit-btn {
@@ -155,6 +175,155 @@
         .submit-btn:hover {
             background-color: #059669;
             transform: translateY(-2px);
+        }
+        
+        .hint-box {
+            background-color: rgba(245, 158, 11, 0.1);
+            border-left: 4px solid #f59e0b;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 0.5rem 0.5rem 0;
+            display: none;
+        }
+        
+        .hint-toggle {
+            color: #f59e0b;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            margin-top: 0.5rem;
+        }
+        
+        .problem-difficulty {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.8rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 1rem;
+            margin-left: 0.5rem;
+        }
+        
+        .difficulty-easy {
+            background-color: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+        
+        .difficulty-medium {
+            background-color: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+        }
+        
+        .difficulty-hard {
+            background-color: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+        
+        .progress-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .progress-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #374151;
+            transition: all 0.3s ease;
+        }
+        
+        .progress-dot.completed {
+            background-color: #10b981;
+        }
+        
+        .progress-dot.current {
+            background-color: #3b82f6;
+            transform: scale(1.2);
+        }
+        
+        .calculator-tool {
+            background-color: rgba(59, 130, 246, 0.1);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin: 1rem 0;
+            display: none;
+        }
+        
+        .tool-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .tool-input {
+            background-color: #2a2a2a;
+            border: 1px solid #374151;
+            border-radius: 0.25rem;
+            padding: 0.5rem;
+            color: #ffffff;
+            width: 120px;
+        }
+        
+        .tool-result {
+            background-color: rgba(16, 185, 129, 0.1);
+            border: 1px solid #10b981;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-top: 1rem;
+            display: none;
+        }
+        
+        .vector-visualization {
+            width: 100%;
+            height: 200px;
+            background-color: #1a1a1a;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .vector-canvas {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .unit-converter {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 1rem;
+            align-items: center;
+            margin: 1rem 0;
+        }
+        
+        .conversion-arrow {
+            text-align: center;
+            font-size: 1.5rem;
+            color: #3b82f6;
+        }
+        
+        .file-upload-area {
+            border: 2px dashed #374151;
+            border-radius: 0.5rem;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .file-upload-area:hover {
+            border-color: #3b82f6;
+            background-color: rgba(59, 130, 246, 0.05);
+        }
+        
+        .file-upload-area.dragover {
+            border-color: #10b981;
+            background-color: rgba(16, 185, 129, 0.05);
         }
     </style>
 </head>
@@ -188,11 +357,11 @@
             <div class="flex items-center justify-between mb-6">
                 <div>
                     <h1 class="text-4xl font-bold text-light mb-2">Homework 1: Units & Vectors</h1>
-                    <p class="text-gray-400">Problems covering vector operations, unit conversions, and significant figures.</p>
+                    <p class="text-gray-400">Problems covering unit conversions, dimensional analysis, and vector operations.</p>
                 </div>
                 <div class="text-right">
                     <span class="bg-warning text-dark px-3 py-1 rounded-full text-sm font-semibold">Due: Dec 18, 2024</span>
-                    <p class="text-gray-400 text-sm mt-2">5 problems • 100 points</p>
+                    <p class="text-gray-400 text-sm mt-2">8 problems • 100 points</p>
                 </div>
             </div>
 
@@ -208,51 +377,186 @@
                     <li>• Include units in all calculations and answers</li>
                     <li>• Submit PDF solutions through the course portal</li>
                     <li>• This homework counts for 5% of your final grade</li>
+                    <li>• Use hints and interactive tools to help solve problems</li>
                 </ul>
             </div>
 
+            <!-- Progress Indicator -->
+            <div class="bg-dark-card rounded-xl p-4 mb-6 border border-gray-800">
+                <h3 class="text-lg font-semibold text-light mb-3">Progress Tracker</h3>
+                <div class="progress-indicator">
+                    <div class="progress-dot current" data-problem="1"></div>
+                    <div class="progress-dot" data-problem="2"></div>
+                    <div class="progress-dot" data-problem="3"></div>
+                    <div class="progress-dot" data-problem="4"></div>
+                    <div class="progress-dot" data-problem="5"></div>
+                    <div class="progress-dot" data-problem="6"></div>
+                    <div class="progress-dot" data-problem="7"></div>
+                    <div class="progress-dot" data-problem="8"></div>
+                </div>
+                <p class="text-gray-400 text-sm">Click on dots to navigate between problems</p>
+            </div>
+
             <!-- Problem 1 -->
-            <div class="problem-card">
+            <div class="problem-card" id="problem-1">
                 <div class="flex justify-between items-start mb-4">
-                    <h3 class="text-xl font-semibold text-light">Problem 1: Unit Conversions (20 points)</h3>
-                    <span class="bg-accent text-dark px-3 py-1 rounded-full text-sm font-semibold">20 pts</span>
+                    <div>
+                        <h3 class="text-xl font-semibold text-light">Problem 1: Unit Conversions (12 points)</h3>
+                        <span class="problem-difficulty difficulty-easy">
+                            <i class="fas fa-star"></i> Easy
+                        </span>
+                    </div>
+                    <span class="bg-accent text-dark px-3 py-1 rounded-full text-sm font-semibold">12 pts</span>
                 </div>
                 
                 <p class="text-gray-300 mb-4">
-                    Convert the following quantities to SI units (meters, kilograms, seconds):
+                    A carpet is to be installed in a room whose length is measured to be 13.71 m and whose width is measured to be 4.46 m. Find the area of the room.
                 </p>
+
+                <div class="hint-box" id="hint-1">
+                    <h4 class="text-lg font-semibold text-light mb-2">Hint</h4>
+                    <p class="text-gray-300">Area = length × width. Pay attention to significant figures in your final answer.</p>
+                </div>
                 
-                <div class="space-y-3 mb-6">
-                    <div class="flex items-center">
-                        <span class="text-gray-300 mr-4 w-8">(a)</span>
-                        <span class="text-gray-300">15.6 km to meters</span>
+                <div class="hint-toggle" onclick="toggleHint(1)">
+                    <i class="fas fa-lightbulb"></i> Show Hint
+                </div>
+
+                <!-- Interactive Calculator -->
+                <div class="calculator-tool" id="calculator-1">
+                    <h4 class="text-lg font-semibold text-light mb-2">Area Calculator</h4>
+                    <div class="tool-controls">
+                        <div>
+                            <label class="text-gray-300 text-sm">Length (m):</label>
+                            <input type="number" id="length-input" class="tool-input" value="13.71" step="0.01">
+                        </div>
+                        <div>
+                            <label class="text-gray-300 text-sm">Width (m):</label>
+                            <input type="number" id="width-input" class="tool-input" value="4.46" step="0.01">
+                        </div>
                     </div>
-                    <div class="flex items-center">
-                        <span class="text-gray-300 mr-4 w-8">(b)</span>
-                        <span class="text-gray-300">45 mph to m/s</span>
-                    </div>
-                    <div class="flex items-center">
-                        <span class="text-gray-300 mr-4 w-8">(c)</span>
-                        <span class="text-gray-300">2.3 × 10⁴ g to kg</span>
-                    </div>
-                    <div class="flex items-center">
-                        <span class="text-gray-300 mr-4 w-8">(d)</span>
-                        <span class="text-gray-300">1.5 days to seconds</span>
-                    </div>
+                    <button class="btn-primary mt-2" onclick="calculateArea()">
+                        <i class="fas fa-calculator mr-2"></i>
+                        Calculate Area
+                    </button>
+                    <div class="tool-result" id="area-result"></div>
+                </div>
+                
+                <div class="hint-toggle" onclick="toggleCalculator(1)">
+                    <i class="fas fa-calculator"></i> Use Calculator Tool
                 </div>
 
                 <!-- Answer Input -->
                 <div class="mt-4">
                     <label class="block text-light font-semibold mb-2">Your Answer:</label>
-                    <textarea class="input-field" rows="4" placeholder="Show your work and final answers here..."></textarea>
+                    <textarea class="input-field" rows="4" placeholder="Show your work and final answer here..." oninput="markProgress(1)"></textarea>
                 </div>
             </div>
 
             <!-- Problem 2 -->
-            <div class="problem-card">
+            <div class="problem-card" id="problem-2">
                 <div class="flex justify-between items-start mb-4">
-                    <h3 class="text-xl font-semibold text-light">Problem 2: Scientific Notation & Prefixes (20 points)</h3>
-                    <span class="bg-accent text-dark px-3 py-1 rounded-full text-sm font-semibold">20 pts</span>
+                    <div>
+                        <h3 class="text-xl font-semibold text-light">Problem 2: Volume Calculation (12 points)</h3>
+                        <span class="problem-difficulty difficulty-easy">
+                            <i class="fas fa-star"></i> Easy
+                        </span>
+                    </div>
+                    <span class="bg-accent text-dark px-3 py-1 rounded-full text-sm font-semibold">12 pts</span>
+                </div>
+                
+                <p class="text-gray-300 mb-4">
+                    An object in the shape of rectangular parallelepiped measures 2.0 in × 3.5 in × 6.5 in. Determine the volume of the object in m³.
+                </p>
+
+                <div class="hint-box" id="hint-2">
+                    <h4 class="text-lg font-semibold text-light mb-2">Hint</h4>
+                    <p class="text-gray-300">Volume = length × width × height. Convert inches to meters first (1 in = 0.0254 m).</p>
+                </div>
+                
+                <div class="hint-toggle" onclick="toggleHint(2)">
+                    <i class="fas fa-lightbulb"></i> Show Hint
+                </div>
+
+                <!-- Unit Converter -->
+                <div class="calculator-tool" id="calculator-2">
+                    <h4 class="text-lg font-semibold text-light mb-2">Unit Converter</h4>
+                    <div class="unit-converter">
+                        <div>
+                            <input type="number" id="inches-input" class="tool-input" value="1" step="0.1">
+                            <select class="tool-input">
+                                <option>inches</option>
+                            </select>
+                        </div>
+                        <div class="conversion-arrow">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                        <div>
+                            <input type="text" id="meters-output" class="tool-input" readonly>
+                            <select class="tool-input">
+                                <option>meters</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn-primary mt-2" onclick="convertInchesToMeters()">
+                        <i class="fas fa-sync-alt mr-2"></i>
+                        Convert
+                    </button>
+                </div>
+                
+                <div class="hint-toggle" onclick="toggleCalculator(2)">
+                    <i class="fas fa-ruler"></i> Use Unit Converter
+                </div>
+
+                <!-- Answer Input -->
+                <div class="mt-4">
+                    <label class="block text-light font-semibold mb-2">Your Answer:</label>
+                    <textarea class="input-field" rows="4" placeholder="Show your work and final answer here..." oninput="markProgress(2)"></textarea>
+                </div>
+            </div>
+
+            <!-- Problem 3 -->
+            <div class="problem-card" id="problem-3">
+                <div class="flex justify-between items-start mb-4">
+                    <div>
+                        <h3 class="text-xl font-semibold text-light">Problem 3: Significant Figures (12 points)</h3>
+                        <span class="problem-difficulty difficulty-medium">
+                            <i class="fas fa-star-half-alt"></i> Medium
+                        </span>
+                    </div>
+                    <span class="bg-accent text-dark px-3 py-1 rounded-full text-sm font-semibold">12 pts</span>
+                </div>
+                
+                <p class="text-gray-300 mb-4">
+                    A rectangular plate has a length of (21.3 ± 0.2) cm and a width of (9.8 ± 0.1) cm. Calculate the area of the plate including its uncertainty.
+                </p>
+
+                <div class="hint-box" id="hint-3">
+                    <h4 class="text-lg font-semibold text-light mb-2">Hint</h4>
+                    <p class="text-gray-300">For multiplication, the relative uncertainty is the sum of the relative uncertainties of the factors. Relative uncertainty = (uncertainty / value).</p>
+                </div>
+                
+                <div class="hint-toggle" onclick="toggleHint(3)">
+                    <i class="fas fa-lightbulb"></i> Show Hint
+                </div>
+
+                <!-- Answer Input -->
+                <div class="mt-4">
+                    <label class="block text-light font-semibold mb-2">Your Answer:</label>
+                    <textarea class="input-field" rows="4" placeholder="Show your work and final answer here..." oninput="markProgress(3)"></textarea>
+                </div>
+            </div>
+
+            <!-- Problem 4 -->
+            <div class="problem-card" id="problem-4">
+                <div class="flex justify-between items-start mb-4">
+                    <div>
+                        <h3 class="text-xl font-semibold text-light">Problem 4: SI Prefixes (12 points)</h3>
+                        <span class="problem-difficulty difficulty-medium">
+                            <i class="fas fa-star-half-alt"></i> Medium
+                        </span>
+                    </div>
+                    <span class="bg-accent text-dark px-3 py-1 rounded-full text-sm font-semibold">12 pts</span>
                 </div>
                 
                 <p class="text-gray-300 mb-4">
@@ -262,149 +566,218 @@
                 <div class="space-y-3 mb-6">
                     <div class="flex items-center">
                         <span class="text-gray-300 mr-4 w-8">(a)</span>
-                        <span class="text-gray-300">3.2 × 10⁹ watts</span>
+                        <span class="text-gray-300">0.00085 L</span>
                     </div>
                     <div class="flex items-center">
                         <span class="text-gray-300 mr-4 w-8">(b)</span>
-                        <span class="text-gray-300">4.7 × 10⁻⁶ meters</span>
+                        <span class="text-gray-300">5.44 × 10⁻¹¹ g</span>
                     </div>
                     <div class="flex items-center">
                         <span class="text-gray-300 mr-4 w-8">(c)</span>
-                        <span class="text-gray-300">8.9 × 10³ grams</span>
+                        <span class="text-gray-300">73,000,000 m</span>
                     </div>
                     <div class="flex items-center">
                         <span class="text-gray-300 mr-4 w-8">(d)</span>
-                        <span class="text-gray-300">5.6 × 10⁻¹² seconds</span>
+                        <span class="text-gray-300">9.450 s</span>
                     </div>
                 </div>
 
-                <p class="text-gray-300 mb-4">
-                    Also, write the following prefix expressions in scientific notation:
-                </p>
+                <div class="hint-box" id="hint-4">
+                    <h4 class="text-lg font-semibold text-light mb-2">Hint</h4>
+                    <p class="text-gray-300">Common SI prefixes: milli (10⁻³), micro (10⁻⁶), nano (10⁻⁹), pico (10⁻¹²), kilo (10³), mega (10⁶), giga (10⁹).</p>
+                </div>
                 
-                <div class="space-y-3 mb-6">
-                    <div class="flex items-center">
-                        <span class="text-gray-300 mr-4 w-8">(e)</span>
-                        <span class="text-gray-300">15.3 MW</span>
-                    </div>
-                    <div class="flex items-center">
-                        <span class="text-gray-300 mr-4 w-8">(f)</span>
-                        <span class="text-gray-300">0.45 ns</span>
-                    </div>
+                <div class="hint-toggle" onclick="toggleHint(4)">
+                    <i class="fas fa-lightbulb"></i> Show Hint
                 </div>
 
                 <!-- Answer Input -->
                 <div class="mt-4">
                     <label class="block text-light font-semibold mb-2">Your Answer:</label>
-                    <textarea class="input-field" rows="6" placeholder="Show your work and final answers here..."></textarea>
+                    <textarea class="input-field" rows="6" placeholder="Show your work and final answers here..." oninput="markProgress(4)"></textarea>
                 </div>
             </div>
 
-            <!-- Problem 3 -->
-            <div class="problem-card">
+            <!-- Problem 5 -->
+            <div class="problem-card" id="problem-5">
                 <div class="flex justify-between items-start mb-4">
-                    <h3 class="text-xl font-semibold text-light">Problem 3: Dimensional Analysis (20 points)</h3>
-                    <span class="bg-accent text-dark px-3 py-1 rounded-full text-sm font-semibold">20 pts</span>
+                    <div>
+                        <h3 class="text-xl font-semibold text-light">Problem 5: Dimensional Analysis (13 points)</h3>
+                        <span class="problem-difficulty difficulty-medium">
+                            <i class="fas fa-star-half-alt"></i> Medium
+                        </span>
+                    </div>
+                    <span class="bg-accent text-dark px-3 py-1 rounded-full text-sm font-semibold">13 pts</span>
                 </div>
                 
                 <p class="text-gray-300 mb-4">
-                    Using dimensional analysis, determine if the following equations are dimensionally consistent. Show your reasoning.
+                    Analyze the following equations to determine whether dimensionally correct or not:
                 </p>
                 
                 <div class="space-y-4 mb-6">
                     <div>
-                        <p class="text-gray-300 font-semibold mb-2">(a) v² = v₀² + 2as</p>
-                        <p class="text-gray-400 text-sm">where v and v₀ are velocities, a is acceleration, and s is distance</p>
+                        <p class="text-gray-300 font-semibold mb-2">(a) v = u + ax</p>
+                        <p class="text-gray-400 text-sm">where v and u are velocities, a is acceleration, and x is distance</p>
                     </div>
                     
                     <div>
-                        <p class="text-gray-300 font-semibold mb-2">(b) T = 2π√(L/g)</p>
-                        <p class="text-gray-400 text-sm">where T is time, L is length, and g is acceleration</p>
+                        <p class="text-gray-300 font-semibold mb-2">(b) y = (2m)cos(kx) where k = 2m⁻¹</p>
+                        <p class="text-gray-400 text-sm">where y and x are lengths, m is mass, and k has dimension of inverse length</p>
                     </div>
-                    
-                    <div>
-                        <p class="text-gray-300 font-semibold mb-2">(c) F = mv²/r</p>
-                        <p class="text-gray-400 text-sm">where F is force, m is mass, v is velocity, and r is distance</p>
-                    </div>
+                </div>
+
+                <div class="hint-box" id="hint-5">
+                    <h4 class="text-lg font-semibold text-light mb-2">Hint</h4>
+                    <p class="text-gray-300">Check if all terms in the equation have the same dimensions. Remember that trigonometric functions are dimensionless.</p>
+                </div>
+                
+                <div class="hint-toggle" onclick="toggleHint(5)">
+                    <i class="fas fa-lightbulb"></i> Show Hint
                 </div>
 
                 <!-- Answer Input -->
                 <div class="mt-4">
                     <label class="block text-light font-semibold mb-2">Your Answer:</label>
-                    <textarea class="input-field" rows="6" placeholder="Show your dimensional analysis for each equation..."></textarea>
+                    <textarea class="input-field" rows="6" placeholder="Show your dimensional analysis for each equation..." oninput="markProgress(5)"></textarea>
                 </div>
             </div>
 
-            <!-- Problem 4 -->
-            <div class="problem-card">
+            <!-- Problem 6 -->
+            <div class="problem-card" id="problem-6">
                 <div class="flex justify-between items-start mb-4">
-                    <h3 class="text-xl font-semibold text-light">Problem 4: Vector Operations (20 points)</h3>
-                    <span class="bg-accent text-dark px-3 py-1 rounded-full text-sm font-semibold">20 pts</span>
+                    <div>
+                        <h3 class="text-xl font-semibold text-light">Problem 6: Vector Addition (13 points)</h3>
+                        <span class="problem-difficulty difficulty-hard">
+                            <i class="fas fa-star"></i> Hard
+                        </span>
+                    </div>
+                    <span class="bg-accent text-dark px-3 py-1 rounded-full text-sm font-semibold">13 pts</span>
                 </div>
                 
                 <p class="text-gray-300 mb-4">
-                    Given two vectors: <strong>A</strong> = 3<strong>i</strong> + 4<strong>j</strong> and <strong>B</strong> = -2<strong>i</strong> + 6<strong>j</strong>
+                    Vector A has a magnitude of 10 units and makes 60° with the positive x-axis. Vector B has a magnitude of 5 units and is directed along the negative x-axis. Find the vector:
                 </p>
                 
                 <div class="space-y-3 mb-6">
                     <div class="flex items-center">
                         <span class="text-gray-300 mr-4 w-8">(a)</span>
-                        <span class="text-gray-300">Calculate the magnitude of vector <strong>A</strong></span>
+                        <span class="text-gray-300">sum A + B</span>
                     </div>
                     <div class="flex items-center">
                         <span class="text-gray-300 mr-4 w-8">(b)</span>
-                        <span class="text-gray-300">Calculate the dot product <strong>A</strong> · <strong>B</strong></span>
+                        <span class="text-gray-300">difference A - B</span>
                     </div>
-                    <div class="flex items-center">
-                        <span class="text-gray-300 mr-4 w-8">(c)</span>
-                        <span class="text-gray-300">Calculate the cross product <strong>A</strong> × <strong>B</strong> (assume 2D vectors in xy-plane)</span>
+                </div>
+
+                <div class="hint-box" id="hint-6">
+                    <h4 class="text-lg font-semibold text-light mb-2">Hint</h4>
+                    <p class="text-gray-300">Break vectors into components. A = (10cos60°, 10sin60°), B = (-5, 0). Then add/subtract components.</p>
+                </div>
+                
+                <div class="hint-toggle" onclick="toggleHint(6)">
+                    <i class="fas fa-lightbulb"></i> Show Hint
+                </div>
+
+                <!-- Vector Visualization -->
+                <div class="calculator-tool" id="calculator-6">
+                    <h4 class="text-lg font-semibold text-light mb-2">Vector Visualization</h4>
+                    <div class="vector-visualization">
+                        <canvas class="vector-canvas" id="vector-canvas-1"></canvas>
                     </div>
-                    <div class="flex items-center">
-                        <span class="text-gray-300 mr-4 w-8">(d)</span>
-                        <span class="text-gray-300">Find the angle between vectors <strong>A</strong> and <strong>B</strong></span>
-                    </div>
+                    <button class="btn-primary mt-2" onclick="drawVectors()">
+                        <i class="fas fa-sync-alt mr-2"></i>
+                        Update Visualization
+                    </button>
+                </div>
+                
+                <div class="hint-toggle" onclick="toggleCalculator(6)">
+                    <i class="fas fa-vector-square"></i> Use Vector Visualizer
                 </div>
 
                 <!-- Answer Input -->
                 <div class="mt-4">
                     <label class="block text-light font-semibold mb-2">Your Answer:</label>
-                    <textarea class="input-field" rows="6" placeholder="Show your calculations and final answers..."></textarea>
+                    <textarea class="input-field" rows="6" placeholder="Show your calculations and final answers..." oninput="markProgress(6)"></textarea>
                 </div>
             </div>
 
-            <!-- Problem 5 -->
-            <div class="problem-card">
+            <!-- Problem 7 -->
+            <div class="problem-card" id="problem-7">
                 <div class="flex justify-between items-start mb-4">
-                    <h3 class="text-xl font-semibold text-light">Problem 5: Physical Applications (20 points)</h3>
-                    <span class="bg-accent text-dark px-3 py-1 rounded-full text-sm font-semibold">20 pts</span>
+                    <div>
+                        <h3 class="text-xl font-semibold text-light">Problem 7: Vector Operations (13 points)</h3>
+                        <span class="problem-difficulty difficulty-hard">
+                            <i class="fas fa-star"></i> Hard
+                        </span>
+                    </div>
+                    <span class="bg-accent text-dark px-3 py-1 rounded-full text-sm font-semibold">13 pts</span>
                 </div>
                 
                 <p class="text-gray-300 mb-4">
-                    A particle moves in a circular path of radius 5 meters with a constant speed of 10 m/s.
+                    Find the cross product of A × B where A = 2i + 3j, B = -i + 2j.
                 </p>
+
+                <div class="hint-box" id="hint-7">
+                    <h4 class="text-lg font-semibold text-light mb-2">Hint</h4>
+                    <p class="text-gray-300">For 2D vectors in the xy-plane, the cross product gives a vector in the z-direction: A × B = (AₓBᵧ - AᵧBₓ)k.</p>
+                </div>
                 
-                <div class="space-y-4 mb-6">
-                    <div>
-                        <p class="text-gray-300 mb-2">(a) Using dimensional analysis, show that the centripetal acceleration a is proportional to v²/r, where v is speed and r is radius.</p>
-                    </div>
-                    
-                    <div>
-                        <p class="text-gray-300 mb-2">(b) Calculate the centripetal acceleration of the particle.</p>
-                    </div>
-                    
-                    <div>
-                        <p class="text-gray-300 mb-2">(c) If the particle has a mass of 2 kg, calculate the centripetal force required to maintain this motion.</p>
-                    </div>
-                    
-                    <div>
-                        <p class="text-gray-300 mb-2">(d) Express your answer from part (c) in both newtons and kilonewtons.</p>
-                    </div>
+                <div class="hint-toggle" onclick="toggleHint(7)">
+                    <i class="fas fa-lightbulb"></i> Show Hint
                 </div>
 
                 <!-- Answer Input -->
                 <div class="mt-4">
                     <label class="block text-light font-semibold mb-2">Your Answer:</label>
-                    <textarea class="input-field" rows="8" placeholder="Show your work and final answers..."></textarea>
+                    <textarea class="input-field" rows="4" placeholder="Show your work and final answer here..." oninput="markProgress(7)"></textarea>
+                </div>
+            </div>
+
+            <!-- Problem 8 -->
+            <div class="problem-card" id="problem-8">
+                <div class="flex justify-between items-start mb-4">
+                    <div>
+                        <h3 class="text-xl font-semibold text-light">Problem 8: Physical Applications (13 points)</h3>
+                        <span class="problem-difficulty difficulty-hard">
+                            <i class="fas fa-star"></i> Hard
+                        </span>
+                    </div>
+                    <span class="bg-accent text-dark px-3 py-1 rounded-full text-sm font-semibold">13 pts</span>
+                </div>
+                
+                <p class="text-gray-300 mb-4">
+                    A ship is steaming due east at a speed of 12 m/s. A passenger runs across the deck at a speed of 5 m/s toward north. What is the resultant velocity of the passenger relative to the sea?
+                </p>
+
+                <div class="hint-box" id="hint-8">
+                    <h4 class="text-lg font-semibold text-light mb-2">Hint</h4>
+                    <p class="text-gray-300">The resultant velocity is the vector sum of the ship's velocity and the passenger's velocity relative to the ship.</p>
+                </div>
+                
+                <div class="hint-toggle" onclick="toggleHint(8)">
+                    <i class="fas fa-lightbulb"></i> Show Hint
+                </div>
+
+                <!-- Vector Visualization -->
+                <div class="calculator-tool" id="calculator-8">
+                    <h4 class="text-lg font-semibold text-light mb-2">Velocity Vector Visualization</h4>
+                    <div class="vector-visualization">
+                        <canvas class="vector-canvas" id="vector-canvas-2"></canvas>
+                    </div>
+                    <button class="btn-primary mt-2" onclick="drawVelocityVectors()">
+                        <i class="fas fa-sync-alt mr-2"></i>
+                        Update Visualization
+                    </button>
+                </div>
+                
+                <div class="hint-toggle" onclick="toggleCalculator(8)">
+                    <i class="fas fa-vector-square"></i> Use Vector Visualizer
+                </div>
+
+                <!-- Answer Input -->
+                <div class="mt-4">
+                    <label class="block text-light font-semibold mb-2">Your Answer:</label>
+                    <textarea class="input-field" rows="4" placeholder="Show your work and final answer here..." oninput="markProgress(8)"></textarea>
                 </div>
             </div>
 
@@ -416,7 +789,7 @@
                     <div>
                         <h4 class="text-lg font-semibold text-light mb-3">Online Submission</h4>
                         <p class="text-gray-300 mb-4">You can submit your answers directly through this form:</p>
-                        <button class="submit-btn w-full">
+                        <button class="submit-btn w-full" id="submit-btn">
                             <i class="fas fa-paper-plane mr-2"></i>
                             Submit Answers
                         </button>
@@ -425,15 +798,17 @@
                     <div>
                         <h4 class="text-lg font-semibold text-light mb-3">PDF Submission</h4>
                         <p class="text-gray-300 mb-4">Or upload a PDF of your handwritten solutions:</p>
-                        <div class="border-2 border-dashed border-gray-600 rounded-lg p-6 text-center">
+                        <div class="file-upload-area" id="file-upload-area">
                             <i class="fas fa-file-pdf text-3xl text-gray-500 mb-2"></i>
                             <p class="text-gray-400">Drag and drop your PDF here</p>
                             <p class="text-gray-500 text-sm">or</p>
-                            <button class="btn-primary mt-2">
+                            <button class="btn-primary mt-2" id="file-select-btn">
                                 <i class="fas fa-upload mr-2"></i>
                                 Choose File
                             </button>
+                            <input type="file" id="file-input" accept=".pdf" class="hidden">
                         </div>
+                        <div id="file-name" class="text-gray-400 text-sm mt-2"></div>
                     </div>
                 </div>
                 
@@ -466,78 +841,353 @@
     </footer>
 
     <script>
+        // Homework functionality
         document.addEventListener('DOMContentLoaded', function() {
-            // Add functionality for the submit button
-            const submitBtn = document.querySelector('.submit-btn');
-            if (submitBtn) {
-                submitBtn.addEventListener('click', function() {
-                    // Check if user is logged in
-                    const currentUser = JSON.parse(localStorage.getItem('physics110_currentUser') || 'null');
-                    
-                    if (!currentUser) {
-                        alert('Please log in to submit your homework.');
-                        return;
-                    }
-                    
-                    // Show confirmation dialog
-                    const confirmed = confirm('Are you sure you want to submit your homework? You cannot make changes after submission.');
-                    
-                    if (confirmed) {
-                        // In a real application, this would send data to a server
-                        // For now, we'll just show a success message
-                        this.innerHTML = '<i class="fas fa-check mr-2"></i>Submitted!';
-                        this.style.backgroundColor = '#10b981';
-                        this.disabled = true;
-                        
-                        // Update user progress
-                        const users = JSON.parse(localStorage.getItem('physics110_users') || '[]');
-                        const userIndex = users.findIndex(u => u.email === currentUser.email);
-                        
-                        if (userIndex !== -1) {
-                            users[userIndex].progress.submittedHomework += 1;
-                            localStorage.setItem('physics110_users', JSON.stringify(users));
-                            localStorage.setItem('physics110_currentUser', JSON.stringify(users[userIndex]));
-                        }
-                        
-                        alert('Homework submitted successfully! You can view the solutions now.');
-                    }
-                });
-            }
+            // Initialize progress tracking
+            initializeProgress();
             
-            // Add progress tracking
-            const progressContainer = document.createElement('div');
-            progressContainer.className = 'fixed bottom-4 right-4 bg-dark-card p-4 rounded-xl border border-gray-800 shadow-lg';
-            progressContainer.innerHTML = `
-                <div class="text-sm text-gray-300 mb-2">Homework Progress</div>
-                <div class="w-32 bg-gray-700 rounded-full h-2">
-                    <div id="homework-progress" class="bg-accent h-2 rounded-full" style="width: 0%"></div>
-                </div>
-                <div class="text-xs text-gray-400 mt-1" id="homework-progress-text">0/5 problems</div>
-            `;
-            document.body.appendChild(progressContainer);
+            // Set up problem navigation
+            setupProblemNavigation();
             
-            // Update progress as user types in textareas
+            // Set up file upload
+            setupFileUpload();
+            
+            // Set up submission button
+            setupSubmission();
+            
+            // Draw initial vector diagrams
+            drawVectors();
+            drawVelocityVectors();
+        });
+
+        // Progress tracking
+        function initializeProgress() {
             const textareas = document.querySelectorAll('textarea');
             textareas.forEach(textarea => {
-                textarea.addEventListener('input', updateHomeworkProgress);
+                textarea.addEventListener('input', updateProgress);
+            });
+        }
+
+        function updateProgress() {
+            let completed = 0;
+            const textareas = document.querySelectorAll('textarea');
+            
+            textareas.forEach(textarea => {
+                if (textarea.value.trim().length > 10) {
+                    completed++;
+                }
             });
             
-            function updateHomeworkProgress() {
-                let completed = 0;
+            const progress = (completed / textareas.length) * 100;
+            document.getElementById('homework-progress').style.width = progress + '%';
+            document.getElementById('homework-progress-text').textContent = `${completed}/${textareas.length} problems`;
+        }
+
+        function markProgress(problemNum) {
+            const dots = document.querySelectorAll('.progress-dot');
+            dots[problemNum - 1].classList.add('completed');
+            updateProgress();
+        }
+
+        // Problem navigation
+        function setupProblemNavigation() {
+            const dots = document.querySelectorAll('.progress-dot');
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', function() {
+                    // Remove current class from all dots
+                    dots.forEach(d => d.classList.remove('current'));
+                    
+                    // Add current class to clicked dot
+                    this.classList.add('current');
+                    
+                    // Scroll to corresponding problem
+                    const problemId = `problem-${index + 1}`;
+                    document.getElementById(problemId).scrollIntoView({ behavior: 'smooth' });
+                });
+            });
+        }
+
+        // Hint functionality
+        function toggleHint(problemNum) {
+            const hint = document.getElementById(`hint-${problemNum}`);
+            const toggle = event.target;
+            
+            if (hint.style.display === 'block') {
+                hint.style.display = 'none';
+                toggle.innerHTML = '<i class="fas fa-lightbulb"></i> Show Hint';
+            } else {
+                hint.style.display = 'block';
+                toggle.innerHTML = '<i class="fas fa-times"></i> Hide Hint';
+            }
+        }
+
+        // Calculator functionality
+        function toggleCalculator(problemNum) {
+            const calculator = document.getElementById(`calculator-${problemNum}`);
+            const toggle = event.target;
+            
+            if (calculator.style.display === 'block') {
+                calculator.style.display = 'none';
+                toggle.innerHTML = '<i class="fas fa-calculator"></i> Use Calculator Tool';
+            } else {
+                calculator.style.display = 'block';
+                toggle.innerHTML = '<i class="fas fa-times"></i> Hide Calculator';
+            }
+        }
+
+        function calculateArea() {
+            const length = parseFloat(document.getElementById('length-input').value);
+            const width = parseFloat(document.getElementById('width-input').value);
+            
+            if (!isNaN(length) && !isNaN(width)) {
+                const area = length * width;
+                document.getElementById('area-result').innerHTML = `
+                    <strong>Area:</strong> ${area.toFixed(2)} m²
+                    <br><small class="text-gray-400">Using significant figures: ${area.toPrecision(3)} m²</small>
+                `;
+                document.getElementById('area-result').style.display = 'block';
+            }
+        }
+
+        function convertInchesToMeters() {
+            const inches = parseFloat(document.getElementById('inches-input').value);
+            
+            if (!isNaN(inches)) {
+                const meters = inches * 0.0254;
+                document.getElementById('meters-output').value = meters.toFixed(4);
+            }
+        }
+
+        // Vector visualization
+        function drawVectors() {
+            const canvas = document.getElementById('vector-canvas-1');
+            const ctx = canvas.getContext('2d');
+            const width = canvas.parentElement.clientWidth;
+            const height = canvas.parentElement.clientHeight;
+            
+            canvas.width = width;
+            canvas.height = height;
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, width, height);
+            
+            // Set origin at center
+            const originX = width / 2;
+            const originY = height / 2;
+            const scale = 15;
+            
+            // Draw coordinate system
+            ctx.strokeStyle = '#374151';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(0, originY);
+            ctx.lineTo(width, originY);
+            ctx.moveTo(originX, 0);
+            ctx.lineTo(originX, height);
+            ctx.stroke();
+            
+            // Draw vector A (10 units at 60°)
+            const Ax = 10 * Math.cos(60 * Math.PI / 180);
+            const Ay = 10 * Math.sin(60 * Math.PI / 180);
+            
+            ctx.strokeStyle = '#3b82f6';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(originX, originY);
+            ctx.lineTo(originX + Ax * scale, originY - Ay * scale);
+            ctx.stroke();
+            
+            // Draw vector B (5 units along negative x-axis)
+            ctx.strokeStyle = '#ef4444';
+            ctx.beginPath();
+            ctx.moveTo(originX, originY);
+            ctx.lineTo(originX - 5 * scale, originY);
+            ctx.stroke();
+            
+            // Draw resultant A + B
+            const Rx = Ax - 5;
+            const Ry = Ay;
+            
+            ctx.strokeStyle = '#10b981';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(originX, originY);
+            ctx.lineTo(originX + Rx * scale, originY - Ry * scale);
+            ctx.stroke();
+            
+            // Add labels
+            ctx.fillStyle = '#ffffff';
+            ctx.font = '12px Arial';
+            ctx.fillText('A', originX + Ax * scale / 2, originY - Ay * scale / 2 - 5);
+            ctx.fillText('B', originX - 2.5 * scale, originY + 15);
+            ctx.fillText('A+B', originX + Rx * scale / 2, originY - Ry * scale / 2 - 5);
+        }
+
+        function drawVelocityVectors() {
+            const canvas = document.getElementById('vector-canvas-2');
+            const ctx = canvas.getContext('2d');
+            const width = canvas.parentElement.clientWidth;
+            const height = canvas.parentElement.clientHeight;
+            
+            canvas.width = width;
+            canvas.height = height;
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, width, height);
+            
+            // Set origin at center
+            const originX = width / 2;
+            const originY = height / 2;
+            const scale = 10;
+            
+            // Draw coordinate system
+            ctx.strokeStyle = '#374151';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(0, originY);
+            ctx.lineTo(width, originY);
+            ctx.moveTo(originX, 0);
+            ctx.lineTo(originX, height);
+            ctx.stroke();
+            
+            // Draw ship velocity (12 m/s east)
+            ctx.strokeStyle = '#3b82f6';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(originX, originY);
+            ctx.lineTo(originX + 12 * scale, originY);
+            ctx.stroke();
+            
+            // Draw passenger velocity (5 m/s north)
+            ctx.strokeStyle = '#ef4444';
+            ctx.beginPath();
+            ctx.moveTo(originX, originY);
+            ctx.lineTo(originX, originY - 5 * scale);
+            ctx.stroke();
+            
+            // Draw resultant velocity
+            ctx.strokeStyle = '#10b981';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(originX, originY);
+            ctx.lineTo(originX + 12 * scale, originY - 5 * scale);
+            ctx.stroke();
+            
+            // Add labels
+            ctx.fillStyle = '#ffffff';
+            ctx.font = '12px Arial';
+            ctx.fillText('Ship (12 m/s)', originX + 6 * scale, originY + 15);
+            ctx.fillText('Passenger (5 m/s)', originX - 40, originY - 2.5 * scale);
+            ctx.fillText('Resultant', originX + 6 * scale, originY - 2.5 * scale);
+        }
+
+        // File upload functionality
+        function setupFileUpload() {
+            const fileInput = document.getElementById('file-input');
+            const fileSelectBtn = document.getElementById('file-select-btn');
+            const fileUploadArea = document.getElementById('file-upload-area');
+            const fileName = document.getElementById('file-name');
+            
+            fileSelectBtn.addEventListener('click', function() {
+                fileInput.click();
+            });
+            
+            fileInput.addEventListener('change', function() {
+                if (this.files.length > 0) {
+                    fileName.textContent = `Selected: ${this.files[0].name}`;
+                }
+            });
+            
+            // Drag and drop functionality
+            fileUploadArea.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                this.classList.add('dragover');
+            });
+            
+            fileUploadArea.addEventListener('dragleave', function() {
+                this.classList.remove('dragover');
+            });
+            
+            fileUploadArea.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.classList.remove('dragover');
+                
+                if (e.dataTransfer.files.length > 0) {
+                    const file = e.dataTransfer.files[0];
+                    if (file.type === 'application/pdf') {
+                        fileInput.files = e.dataTransfer.files;
+                        fileName.textContent = `Selected: ${file.name}`;
+                    } else {
+                        alert('Please upload a PDF file.');
+                    }
+                }
+            });
+        }
+
+        // Submission functionality
+        function setupSubmission() {
+            const submitBtn = document.getElementById('submit-btn');
+            
+            submitBtn.addEventListener('click', function() {
+                // Check if user is logged in
+                const currentUser = JSON.parse(localStorage.getItem('physics110_currentUser') || 'null');
+                
+                if (!currentUser) {
+                    alert('Please log in to submit your homework.');
+                    return;
+                }
+                
+                // Check if all problems have some content
+                const textareas = document.querySelectorAll('textarea');
+                let emptyCount = 0;
+                
                 textareas.forEach(textarea => {
-                    if (textarea.value.trim().length > 10) { // Consider completed if they've typed something meaningful
-                        completed++;
+                    if (textarea.value.trim().length < 10) {
+                        emptyCount++;
                     }
                 });
                 
-                const progress = (completed / textareas.length) * 100;
-                document.getElementById('homework-progress').style.width = progress + '%';
-                document.getElementById('homework-progress-text').textContent = `${completed}/${textareas.length} problems`;
-            }
-            
-            // Initial call
-            updateHomeworkProgress();
-        });
+                if (emptyCount > 0) {
+                    const confirmSubmit = confirm(`You have ${emptyCount} problems with minimal or no work shown. Are you sure you want to submit?`);
+                    if (!confirmSubmit) return;
+                }
+                
+                // Show confirmation dialog
+                const confirmed = confirm('Are you sure you want to submit your homework? You cannot make changes after submission.');
+                
+                if (confirmed) {
+                    // In a real application, this would send data to a server
+                    // For now, we'll just show a success message
+                    this.innerHTML = '<i class="fas fa-check mr-2"></i>Submitted!';
+                    this.style.backgroundColor = '#10b981';
+                    this.disabled = true;
+                    
+                    // Update user progress
+                    const users = JSON.parse(localStorage.getItem('physics110_users') || '[]');
+                    const userIndex = users.findIndex(u => u.email === currentUser.email);
+                    
+                    if (userIndex !== -1) {
+                        users[userIndex].progress.submittedHomework += 1;
+                        localStorage.setItem('physics110_users', JSON.stringify(users));
+                        localStorage.setItem('physics110_currentUser', JSON.stringify(users[userIndex]));
+                    }
+                    
+                    alert('Homework submitted successfully! You can view the solutions now.');
+                }
+            });
+        }
+
+        // Add progress tracking element
+        const progressContainer = document.createElement('div');
+        progressContainer.className = 'fixed bottom-4 right-4 bg-dark-card p-4 rounded-xl border border-gray-800 shadow-lg z-50';
+        progressContainer.innerHTML = `
+            <div class="text-sm text-gray-300 mb-2">Homework Progress</div>
+            <div class="w-32 bg-gray-700 rounded-full h-2">
+                <div id="homework-progress" class="bg-accent h-2 rounded-full" style="width: 0%"></div>
+            </div>
+            <div class="text-xs text-gray-400 mt-1" id="homework-progress-text">0/8 problems</div>
+        `;
+        document.body.appendChild(progressContainer);
     </script>
 </body>
 </html>

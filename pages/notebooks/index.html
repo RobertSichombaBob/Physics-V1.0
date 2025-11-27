@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physics 110 Notebook: Units & Vectors</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Pyodide for Python in browser -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.23.4/full/pyodide.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#0a0a0a',
+                        light: '#ffffff',
+                        accent: '#3b82f6',
+                        secondary: '#8b5cf6',
+                        success: '#10b981',
+                        warning: '#f59e0b',
+                        danger: '#ef4444',
+                        'dark-card': '#1a1a1a',
+                        'dark-hover': '#2a2a2a',
+                        'dark-border': '#2a2a2a',
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif'],
+                        'serif': ['Source Serif Pro', 'Georgia', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: #0a0a0a;
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+        }
+        
+        .content-card {
+            background-color: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .notebook-cell {
+            background-color: #2a2a2a;
+            border: 1px solid #374151;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .markdown-cell {
+            background-color: #2a2a2a;
+            border: 1px solid #374151;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .code-cell {
+            background-color: #1a1a1a;
+            border: 1px solid #374151;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+        
+        .equation {
+            background-color: #1a1a1a;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            border: 1px solid #374151;
+        }
+        
+        .nav-link {
+            position: relative;
+            color: #ffffff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: #3b82f6;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: #3b82f6;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .btn-primary {
+            background-color: #1a1a1a;
+            color: #ffffff;
+            border: 1px solid #2a2a2a;
+            transition: all 0.3s ease;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+        }
+        
+        .btn-primary:hover {
+            background-color: #3b82f6;
+            color: #ffffff;
+            border-color: #3b82f6;
+            transform: translateY(-2px);
+        }
+        
+        .run-btn {
+            background-color: #10b981;
+            color: #ffffff;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.5rem 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 0.5rem;
+        }
+        
+        .run-btn:hover {
+            background-color: #059669;
+            transform: translateY(-2px);
+        }
+        
+        .output-cell {
+            background-color: #1a1a1a;
+            border: 1px solid #374151;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            min-height: 50px;
+        }
+        
+        .python-keyword {
+            color: #ff79c6;
+            font-weight: bold;
+        }
+        
+        .python-function {
+            color: #50fa7b;
+        }
+        
+        .python-string {
+            color: #f1fa8c;
+        }
+        
+        .python-comment {
+            color: #6272a4;
+        }
+        
+        .python-number {
+            color: #bd93f9;
+        }
+        
+        .tab-container {
+            display: flex;
+            border-bottom: 1px solid #374151;
+            margin-bottom: 1.5rem;
+            overflow-x: auto;
+        }
+        
+        .tab {
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        
+        .tab.active {
+            border-bottom-color: #3b82f6;
+            color: #3b82f6;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .example-box {
+            background-color: rgba(59, 130, 246, 0.1);
+            border-left: 4px solid #3b82f6;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+        
+        .definition-box {
+            background-color: rgba(139, 92, 246, 0.1);
+            border-left: 4px solid #8b5cf6;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+        
+        .vector-diagram {
+            width: 100%;
+            height: 300px;
+            background-color: #1a1a1a;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .vector-canvas {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .interactive-tool {
+            background-color: rgba(16, 185, 129, 0.1);
+            border-left: 4px solid #10b981;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+        
+        .tool-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .tool-input {
+            background-color: #2a2a2a;
+            border: 1px solid #374151;
+            border-radius: 0.25rem;
+            padding: 0.5rem;
+            color: #ffffff;
+            width: 120px;
+        }
+        
+        .tool-result {
+            background-color: rgba(16, 185, 129, 0.1);
+            border: 1px solid #10b981;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-top: 1rem;
+            display: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-dark bg-opacity-90 backdrop-blur-sm border-b border-gray-800 py-4 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center">
+                <a href="../../../index.html" class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-dark-card rounded-xl flex items-center justify-center border border-gray-800">
+                        <i class="fas fa-atom text-accent text-lg"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-lg font-bold text-light">Physics 110</h1>
+                        <p class="text-xs text-gray-400 -mt-1">Introductory Mechanics</p>
+                    </div>
+                </a>
+                
+                <div class="flex items-center space-x-6">
+                    <a href="../../../index.html" class="nav-link">Home</a>
+                    <a href="../lectures/lecture1.html" class="nav-link">Lecture</a>
+                    <a href="../homework/hw1.html" class="nav-link">Homework</a>
+                    <a href="../solutions/sol1.html" class="nav-link">Solutions</a>
+                    <a href="../quizzes/quiz1.html" class="nav-link">Quiz</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Notebook Content -->
+    <div class="max-w-6xl mx-auto px-4 py-8">
+        <div class="content-card">
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <h1 class="text-4xl font-bold text-light mb-2">Physics 110 Notebook: Units & Vectors</h1>
+                    <p class="text-gray-400">Interactive notebook with Python code examples for solving physics problems</p>
+                </div>
+                <div class="text-right">
+                    <span class="bg-accent text-dark px-3 py-1 rounded-full text-sm font-semibold">Chapter 1</span>
+                    <p class="text-gray-400 text-sm mt-2">Run code directly in your browser</p>
+                </div>
+            </div>
+
+            <!-- Python Environment Status -->
+            <div class="bg-yellow-900 bg-opacity-20 border border-yellow-700 rounded-xl p-6 mb-8">
+                <h3 class="text-xl font-semibold text-light mb-3 flex items-center">
+                    <i class="fas fa-code text-yellow-400 mr-2"></i>
+                    Python Environment
+                </h3>
+                <p class="text-gray-300 mb-4">This notebook uses Pyodide to run Python directly in your browser. The environment is loading...</p>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="pyodide-progress" style="width: 0%"></div>
+                </div>
+                <p class="text-gray-400 text-sm mt-2" id="pyodide-status">Initializing Python runtime...</p>
+            </div>
+
+            <!-- Table of Contents -->
+            <div class="bg-dark-card rounded-xl p-6 mb-8 border border-gray-800">
+                <h2 class="text-xl font-bold text-light mb-4">Table of Contents</h2>
+                <ul class="space-y-2 text-gray-300">
+                    <li class="flex items-center">
+                        <i class="fas fa-chevron-right text-accent mr-3 text-sm"></i>
+                        <a href="#section1" class="hover:text-accent transition-colors">1.1 Unit Conversions</a>
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-chevron-right text-accent mr-3 text-sm"></i>
+                        <a href="#section2" class="hover:text-accent transition-colors">1.2 Significant Figures</a>
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-chevron-right text-accent mr-3 text-sm"></i>
+                        <a href="#section3" class="hover:text-accent transition-colors">1.3 Dimensional Analysis</a>
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-chevron-right text-accent mr-3 text-sm"></i>
+                        <a href="#section4" class="hover:text-accent transition-colors">1.4 Vector Operations</a>
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-chevron-right text-accent mr-3 text-sm"></i>
+                        <a href="#section5" class="hover:text-accent transition-colors">1.5 Physical Applications</a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Section 1: Unit Conversions -->
+            <section id="section1" class="mb-12">
+                <h2 class="text-3xl font-bold text-light mb-6 border-b border-gray-800 pb-2">1.1 Unit Conversions</h2>
+                
+                <div class="markdown-cell">
+                    <h3 class="text-xl font-semibold text-light mb-4">Introduction to Unit Conversions</h3>
+                    <p class="text-gray-300 mb-4">
+                        In physics, we often need to convert between different units. The key is to use conversion factors that equal 1, so we don't change the value, just the units.
+                    </p>
+                    <p class="text-gray-300 mb-4">
+                        For example: 1 km = 1000 m, so 1 km/1000 m = 1 and 1000 m/1 km = 1.
+                    </p>
+                </div>
+
+                <div class="notebook-cell">
+                    <h3 class="text-xl font-semibold text-light mb-4">Example 1: Converting Kilometers to Meters</h3>
+                    <p class="text-gray-300 mb-4">
+                        Let's convert 15.6 km to meters using Python:
+                    </p>
+                    
+                    <div class="code-cell" id="code-1">
+# Convert kilometers to meters
+distance_km = 15.6
+distance_m = distance_km * 1000  # 1 km = 1000 m
+
+print(f"{distance_km} km = {distance_m} m")
+                    </div>
+                    
+                    <button class="run-btn" onclick="runCode('code-1', 'output-1')">
+                        <i class="fas fa-play mr-2"></i>
+                        Run Code
+                    </button>
+                    
+                    <div class="output-cell" id="output-1">
+                        <!-- Output will appear here -->
+                    </div>
+                </div>
+
+                <div class="notebook-cell">
+                    <h3 class="text-xl font-semibold text-light mb-4">Example 2: Converting mph to m/s</h3>
+                    <p class="text-gray-300 mb-4">
+                        Convert 45 miles per hour to meters per second:
+                    </p>
+                    
+                    <div class="code-cell" id="code-2">
+# Convert mph to m/s
+speed_mph = 45
+speed_ms = speed_mph * 1609.34 / 3600  # 1 mile = 1609.34 m, 1 hour = 3600 s
+
+print(f"{speed_mph} mph = {speed_ms:.2f} m/s")
+                    </div>
+                    
+                    <button class="run-btn" onclick="runCode('code-2', 'output-2')">
+                        <i class="fas fa-play mr-2"></i>
+                        Run Code
+                    </button>
+                    
+                    <div class="output-cell" id="output-2">
+                        <!-- Output will appear here -->
+                    </div>
+                </div>
+
+                <div class="interactive-tool">
+                    <h3 class="text-xl font-semibold text-light mb-4">Interactive Unit Converter</h3>
+                    <p class="text-gray-300 mb-4">
+                        Use this tool to convert between different units:
+                    </p>
+                    
+                    <div class="tool-controls">
+                        <div>
+                            <label class="text-gray-300 text-sm">Value:</label>
+                            <input type="number" id="converter-value" class="tool-input" value="1" step="0.1">
+                        </div>
+                        <div>
+                            <label class="text-gray-300 text-sm">From:</label>
+                            <select id="converter-from" class="tool-input">
+                                <option value="km">Kilometers (km)</option>
+                                <option value="m">Meters (m)</option>
+                                <option value="mi">Miles (mi)</option>
+                                <option value="ft">Feet (ft)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-gray-300 text-sm">To:</label>
+                            <select id="converter-to" class="tool-input">
+                                <option value="m">Meters (m)</option>
+                                <option value="km">Kilometers (km)</option>
+                                <option value="mi">Miles (mi)</option>
+                                <option value="ft">Feet (ft)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <button class="run-btn" onclick="runUnitConverter()">
+                        <i class="fas fa-sync-alt mr-2"></i>
+                        Convert
+                    </button>
+                    
+                    <div class="tool-result" id="converter-result"></div>
+                </div>
+            </section>
+
+            <!-- Section 2: Significant Figures -->
+            <section id="section2" class="mb-12">
+                <h2 class="text-3xl font-bold text-light mb-6 border-b border-gray-800 pb-2">1.2 Significant Figures</h2>
+                
+                <div class="markdown-cell">
+                    <h3 class="text-xl font-semibold text-light mb-4">Understanding Significant Figures</h3>
+                    <p class="text-gray-300 mb-4">
+                        Significant figures represent the precision of a measurement. The rules are:
+                    </p>
+                    <ul class="text-gray-300 ml-6 space-y-2">
+                        <li>• All non-zero digits are significant</li>
+                        <li>• Zeros between non-zero digits are significant</li>
+                        <li>• Leading zeros are not significant</li>
+                        <li>• Trailing zeros in a number with a decimal point are significant</li>
+                    </ul>
+                </div>
+
+                <div class="notebook-cell">
+                    <h3 class="text-xl font-semibold text-light mb-4">Example: Counting Significant Figures</h3>
+                    <p class="text-gray-300 mb-4">
+                        Let's write a Python function to count significant figures:
+                    </p>
+                    
+                    <div class="code-cell" id="code-3">
+def count_significant_figures(number):
+    """
+    Count the number of significant figures in a number.
+    This is a simplified version that works for many cases.
+    """
+    # Convert to string to analyze digits
+    num_str = str(number)
+    
+    # Remove decimal point for counting
+    if '.' in num_str:
+        # For numbers with decimal point
+        # Remove any negative sign
+        if num_str[0] == '-':
+            num_str = num_str[1:]
+        
+        # Split into integer and fractional parts
+        parts = num_str.split('.')
+        integer_part = parts[0]
+        fractional_part = parts[1]
+        
+        # Count significant figures
+        # All digits in integer part are significant (except leading zeros)
+        # All digits in fractional part are significant
+        
+        # Remove leading zeros from integer part
+        integer_part = integer_part.lstrip('0')
+        
+        # Count all digits
+        sig_figs = len(integer_part) + len(fractional_part)
+        
+        return sig_figs
+    else:
+        # For numbers without decimal point
+        # Remove any negative sign
+        if num_str[0] == '-':
+            num_str = num_str[1:]
+        
+        # Remove leading zeros
+        num_str = num_str.lstrip('0')
+        
+        # Count all digits (trailing zeros may or may not be significant)
+        # In this simplified version, we'll count them
+        return len(num_str)
+
+# Test the function
+test_numbers = [123, 0.00123, 1.2300, 100, 100.0]
+
+for num in test_numbers:
+    sig_figs = count_significant_figures(num)
+    print(f"{num} has {sig_figs} significant figures")
+                    </div>
+                    
+                    <button class="run-btn" onclick="runCode('code-3', 'output-3')">
+                        <i class="fas fa-play mr-2"></i>
+                        Run Code
+                    </button>
+                    
+                    <div class="output-cell" id="output-3">
+                        <!-- Output will appear here -->
+                    </div>
+                </div>
+
+                <div class="notebook-cell">
+                    <h3 class="text-xl font-semibold text-light mb-4">Example: Calculating Area with Significant Figures</h3>
+                    <p class="text-gray-300 mb-4">
+                        Calculate the area of a rectangle with length = 21.3 cm and width = 9.8 cm, considering significant figures:
+                    </p>
+                    
+                    <div class="code-cell" id="code-4">
+# Calculate area with significant figures
+length = 21.3  # 3 significant figures
+width = 9.8    # 2 significant figures
+
+# Calculate area
+area = length * width
+
+# The result should have 2 significant figures (same as the measurement with fewer sig figs)
+# Round to 2 significant figures
+area_rounded = round(area, 1 - len(str(int(area))))
+
+print(f"Length: {length} cm")
+print(f"Width: {width} cm")
+print(f"Area: {area} cm²")
+print(f"Area (with sig figs): {area_rounded} cm²")
+                    </div>
+                    
+                    <button class="run-btn" onclick="runCode('code-4', 'output-4')">
+                        <i class="fas fa-play mr-2"></i>
+                        Run Code
+                    </button>
+                    
+                    <div class="output-cell" id="output-4">
+                        <!-- Output will appear here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 3: Dimensional Analysis -->
+            <section id="section3" class="mb-12">
+                <h2 class="text-3xl font-bold text-light mb-6 border-b border-gray-800 pb-2">1.3 Dimensional Analysis</h2>
+                
+                <div class="markdown-cell">
+                    <h3 class="text-xl font-semibold text-light mb-4">Introduction to Dimensional Analysis</h3>
+                    <p class="text-gray-300 mb-4">
+                        Dimensional analysis is a method to check the consistency of physical equations. 
+                        The basic dimensions are:
+                    </p>
+                    <ul class="text-gray-300 ml-6 space-y-2">
+                        <li>• Length [L]</li>
+                        <li>• Time [T]</li>
+                        <li>• Mass [M]</li>
+                    </ul>
+                    <p class="text-gray-300 mb-4">
+                        For an equation to be dimensionally consistent, all terms must have the same dimensions.
+                    </p>
+                </div>
+
+                <div class="notebook-cell">
+                    <h3 class="text-xl font-semibold text-light mb-4">Example: Checking Dimensional Consistency</h3>
+                    <p class="text-gray-300 mb-4">
+                        Let's check if the equation v² = u² + 2as is dimensionally consistent:
+                    </p>
+                    
+                    <div class="code-cell" id="code-5">
+# Define dimensions
+# [L] = length, [T] = time
+
+# Dimensions of each term:
+# v²: (velocity)² = (L/T)² = L²/T²
+# u²: (velocity)² = (L/T)² = L²/T²
+# 2as: (acceleration × distance) = (L/T² × L) = L²/T²
+
+# All terms have dimensions L²/T², so the equation is dimensionally consistent
+
+print("v² has dimensions: L²/T²")
+print("u² has dimensions: L²/T²")
+print("2as has dimensions: L²/T²")
+print("The equation v² = u² + 2as is dimensionally consistent!")
+                    </div>
+                    
+                    <button class="run-btn" onclick="runCode('code-5', 'output-5')">
+                        <i class="fas fa-play mr-2"></i>
+                        Run Code
+                    </button>
+                    
+                    <div class="output-cell" id="output-5">
+                        <!-- Output will appear here -->
+                    </div>
+                </div>
+
+                <div class="notebook-cell">
+                    <h3 class="text-xl font-semibold text-light mb-4">Example: Finding Dimensions of Unknowns</h3>
+                    <p class="text-gray-300 mb-4">
+                        The centripetal force F depends on mass m, velocity v, and radius r: F ∝ mᵃ vᵇ rᶜ
+                        Find the values of a, b, and c using dimensional analysis:
+                    </p>
+                    
+                    <div class="code-cell" id="code-6">
+# Dimensions:
+# Force F: [M L T⁻²]
+# Mass m: [M]
+# Velocity v: [L T⁻¹]
+# Radius r: [L]
+
+# The equation: F = k mᵃ vᵇ rᶜ (where k is a dimensionless constant)
+
+# Dimensions: [M L T⁻²] = [M]ᵃ [L T⁻¹]ᵇ [L]ᶜ
+#            [M L T⁻²] = [Mᵃ Lᵇ⁺ᶜ T⁻ᵇ]
+
+# Equating exponents:
+# For M: 1 = a
+# For L: 1 = b + c
+# For T: -2 = -b
+
+# Solving:
+a = 1
+b = 2
+c = 1 - b  # From L: 1 = b + c => c = 1 - b
+
+print(f"a = {a}, b = {b}, c = {c}")
+print("So the formula is: F ∝ m v² / r")
+                    </div>
+                    
+                    <button class="run-btn" onclick="runCode('code-6', 'output-6')">
+                        <i class="fas fa-play mr-2"></i>
+                        Run Code
+                    </button>
+                    
+                    <div class="output-cell" id="output-6">
+                        <!-- Output will appear here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 4: Vector Operations -->
+            <section id="section4" class="mb-12">
+                <h2 class="text-3xl font-bold text-light mb-6 border-b border-gray-800 pb-2">1.4 Vector Operations</h2>
+                
+                <div class="markdown-cell">
+                    <h3 class="text-xl font-semibold text-light mb-4">Introduction to Vectors</h3>
+                    <p class="text-gray-300 mb-4">
+                        Vectors have both magnitude and direction. We can represent them using components:
+                    </p>
+                    <div class="equation">
+                        A = Aₓ i + Aᵧ j
+                    </div>
+                    <p class="text-gray-300 mb-4">
+                        Where i and j are unit vectors in the x and y directions.
+                    </p>
+                </div>
+
+                <div class="notebook-cell">
+                    <h3 class="text-xl font-semibold text-light mb-4">Example: Vector Operations in Python</h3>
+                    <p class="text-gray-300 mb-4">
+                        Let's create a Vector class to perform vector operations:
+                    </p>
+                    
+                    <div class="code-cell" id="code-7">
+class Vector:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+    
+    def __str__(self):
+        return f"({self.x}, {self.y})"
+    
+    def magnitude(self):
+        return (self.x**2 + self.y**2)**0.5
+    
+    def direction(self):
+        # Returns angle in degrees from positive x-axis
+        import math
+        angle_rad = math.atan2(self.y, self.x)
+        return math.degrees(angle_rad)
+    
+    def __add__(self, other):
+        return Vector(self.x + other.x, self.y + other.y)
+    
+    def __sub__(self, other):
+        return Vector(self.x - other.x, self.y - other.y)
+    
+    def dot(self, other):
+        return self.x * other.x + self.y * other.y
+    
+    def cross(self, other):
+        # For 2D vectors, cross product gives a scalar (z-component)
+        return self.x * other.y - self.y * other.x
+
+# Create vectors
+A = Vector(3, 4)
+B = Vector(-2, 6)
+
+print(f"Vector A = {A}")
+print(f"Vector B = {B}")
+print(f"Magnitude of A = {A.magnitude():.2f}")
+print(f"Direction of A = {A.direction():.2f}°")
+print(f"A + B = {A + B}")
+print(f"A - B = {A - B}")
+print(f"A · B = {A.dot(B)}")
+print(f"A × B = {A.cross(B)}")
+                    </div>
+                    
+                    <button class="run-btn" onclick="runCode('code-7', 'output-7')">
+                        <i class="fas fa-play mr-2"></i>
+                        Run Code
+                    </button>
+                    
+                    <div class="output-cell" id="output-7">
+                        <!-- Output will appear here -->
+                    </div>
+                </div>
+
+                <div class="notebook-cell">
+                    <h3 class="text-xl font-semibold text-light mb-4">Example: Vector Addition Visualization</h3>
+                    <p class="text-gray-300 mb-4">
+                        Let's visualize vector addition:
+                    </p>
+                    
+                    <div class="code-cell" id="code-8">
+# We'll create a simple text-based visualization
+def visualize_vectors(A, B, result):
+    print("Vector Visualization:")
+    print("====================")
+    print(f"A = ({A.x}, {A.y})")
+    print(f"B = ({B.x}, {B.y})")
+    print(f"A + B = ({result.x}, {result.y})")
+    print()
+    print("Graphical representation (simplified):")
+    print("  y")
+    print("  ↑")
+    print("  |")
+    
+    # Find the maximum y-value to scale our visualization
+    max_y = max(A.y, B.y, result.y, 0)
+    
+    # Create a simple text-based graph
+    for y in range(int(max_y), -1, -1):
+        line = f"{y:2d} |"
+        for x in range(0, int(max(A.x, B.x, result.x, 0)) + 1):
+            if A.x == x and A.y == y:
+                line += " A"
+            elif B.x == x and B.y == y:
+                line += " B"
+            elif result.x == x and result.y == y:
+                line += " R"
+            else:
+                line += " ."
+        print(line)
+    
+    print("   " + "-" * (2 * (int(max(A.x, B.x, result.x, 0)) + 1)))
+    print("    " + " ".join(str(i) for i in range(0, int(max(A.x, B.x, result.x, 0)) + 1)) + " → x")
+
+# Create vectors
+A = Vector(3, 4)
+B = Vector(2, 2)
+result = A + B
+
+visualize_vectors(A, B, result)
+                    </div>
+                    
+                    <button class="run-btn" onclick="runCode('code-8', 'output-8')">
+                        <i class="fas fa-play mr-2"></i>
+                        Run Code
+                    </button>
+                    
+                    <div class="output-cell" id="output-8">
+                        <!-- Output will appear here -->
+                    </div>
+
+                    <div class="vector-diagram">
+                        <canvas class="vector-canvas" id="vector-canvas-1"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 5: Physical Applications -->
+            <section id="section5" class="mb-12">
+                <h2 class="text-3xl font-bold text-light mb-6 border-b border-gray-800 pb-2">1.5 Physical Applications</h2>
+                
+                <div class="markdown-cell">
+                    <h3 class="text-xl font-semibold text-light mb-4">Applying Physics Concepts</h3>
+                    <p class="text-gray-300 mb-4">
+                        Now let's apply what we've learned to solve real physics problems.
+                    </p>
+                </div>
+
+                <div class="notebook-cell">
+                    <h3 class="text-xl font-semibold text-light mb-4">Example: Centripetal Force Calculation</h3>
+                    <p class="text-gray-300 mb-4">
+                        A particle moves in a circle of radius 5 m with speed 10 m/s. If its mass is 2 kg, calculate the centripetal force:
+                    </p>
+                    
+                    <div class="code-cell" id="code-9">
+# Centripetal force calculation
+def centripetal_force(mass, velocity, radius):
+    """
+    Calculate centripetal force: F = m v² / r
+    """
+    return mass * velocity**2 / radius
+
+# Given values
+mass = 2  # kg
+velocity = 10  # m/s
+radius = 5  # m
+
+# Calculate centripetal force
+force = centripetal_force(mass, velocity, radius)
+
+print(f"Mass: {mass} kg")
+print(f"Velocity: {velocity} m/s")
+print(f"Radius: {radius} m")
+print(f"Centripetal force: {force} N")
+print(f"Centripetal force in kN: {force/1000} kN")
+                    </div>
+                    
+                    <button class="run-btn" onclick="runCode('code-9', 'output-9')">
+                        <i class="fas fa-play mr-2"></i>
+                        Run Code
+                    </button>
+                    
+                    <div class="output-cell" id="output-9">
+                        <!-- Output will appear here -->
+                    </div>
+                </div>
+
+                <div class="notebook-cell">
+                    <h3 class="text-xl font-semibold text-light mb-4">Example: Relative Velocity</h3>
+                    <p class="text-gray-300 mb-4">
+                        A ship moves east at 12 m/s. A passenger runs north at 5 m/s relative to the ship. 
+                        What is the passenger's velocity relative to the sea?
+                    </p>
+                    
+                    <div class="code-cell" id="code-10">
+# Relative velocity calculation
+import math
+
+# Velocities
+v_ship = 12  # m/s, east
+v_passenger_relative = 5  # m/s, north relative to ship
+
+# The passenger's velocity relative to sea is the vector sum
+# v_passenger = v_ship + v_passenger_relative
+
+# In component form:
+# v_ship = (12, 0)
+# v_passenger_relative = (0, 5)
+v_passenger_x = 12
+v_passenger_y = 5
+
+# Magnitude of resultant velocity
+v_passenger = math.sqrt(v_passenger_x**2 + v_passenger_y**2)
+
+# Direction (angle from east)
+angle = math.degrees(math.atan2(v_passenger_y, v_passenger_x))
+
+print(f"Ship velocity: {v_ship} m/s east")
+print(f"Passenger velocity relative to ship: {v_passenger_relative} m/s north")
+print(f"Passenger velocity relative to sea: {v_passenger:.2f} m/s")
+print(f"Direction: {angle:.2f}° north of east")
+                    </div>
+                    
+                    <button class="run-btn" onclick="runCode('code-10', 'output-10')">
+                        <i class="fas fa-play mr-2"></i>
+                        Run Code
+                    </button>
+                    
+                    <div class="output-cell" id="output-10">
+                        <!-- Output will appear here -->
+                    </div>
+
+                    <div class="vector-diagram">
+                        <canvas class="vector-canvas" id="vector-canvas-2"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Download Section -->
+            <div class="bg-dark-card rounded-xl p-6 mt-8 border border-gray-800">
+                <h3 class="text-xl font-semibold text-light mb-4">Download Notebook</h3>
+                <p class="text-gray-300 mb-4">You can download this notebook as a Python file to run on your local machine or upload to GitHub.</p>
+                <button class="btn-primary" onclick="downloadNotebook()">
+                    <i class="fas fa-download mr-2"></i>
+                    Download Python Notebook
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="py-8 border-t border-gray-800 mt-8">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <p class="text-gray-400 text-sm">© 2024 Physics 110: Introductory Mechanics - Robert Sichomba</p>
+        </div>
+    </footer>
+
+    <script>
+        // Pyodide initialization
+        let pyodide;
+        
+        async function initializePyodide() {
+            try {
+                document.getElementById('pyodide-status').textContent = 'Loading Pyodide...';
+                document.getElementById('pyodide-progress').style.width = '30%';
+                
+                pyodide = await loadPyodide();
+                
+                document.getElementById('pyodide-status').textContent = 'Loading NumPy...';
+                document.getElementById('pyodide-progress').style.width = '60%';
+                
+                await pyodide.loadPackage("numpy");
+                
+                document.getElementById('pyodide-status').textContent = 'Python environment ready!';
+                document.getElementById('pyodide-progress').style.width = '100%';
+                
+                // Change status color to green
+                document.getElementById('pyodide-status').classList.add('text-green-400');
+                
+                console.log('Pyodide loaded successfully');
+            } catch (error) {
+                console.error('Error loading Pyodide:', error);
+                document.getElementById('pyodide-status').textContent = 'Error loading Python environment';
+                document.getElementById('pyodide-status').classList.add('text-red-400');
+            }
+        }
+        
+        // Initialize Pyodide when page loads
+        initializePyodide();
+        
+        // Function to run Python code
+        async function runCode(codeElementId, outputElementId) {
+            if (!pyodide) {
+                alert('Python environment is still loading. Please wait...');
+                return;
+            }
+            
+            const codeElement = document.getElementById(codeElementId);
+            const outputElement = document.getElementById(outputElementId);
+            
+            if (!codeElement || !outputElement) {
+                console.error('Code or output element not found');
+                return;
+            }
+            
+            try {
+                // Get the code text
+                let code = codeElement.textContent || codeElement.innerText;
+                
+                // Clean up the code (remove leading/trailing whitespace)
+                code = code.trim();
+                
+                // Run the code
+                const result = await pyodide.runPythonAsync(code);
+                
+                // Display the output
+                if (result !== undefined) {
+                    outputElement.innerHTML = `<pre class="text-green-400">${result}</pre>`;
+                } else {
+                    outputElement.innerHTML = '<pre class="text-gray-400">Code executed successfully (no output)</pre>';
+                }
+            } catch (error) {
+                console.error('Error running Python code:', error);
+                outputElement.innerHTML = `<pre class="text-red-400">Error: ${error.message}</pre>`;
+            }
+        }
+        
+        // Unit converter function
+        function runUnitConverter() {
+            const value = parseFloat(document.getElementById('converter-value').value);
+            const fromUnit = document.getElementById('converter-from').value;
+            const toUnit = document.getElementById('converter-to').value;
+            
+            if (isNaN(value)) {
+                alert('Please enter a valid number');
+                return;
+            }
+            
+            // Conversion factors to meters
+            const factors = {
+                'km': 1000,
+                'm': 1,
+                'mi': 1609.34,
+                'ft': 0.3048
+            };
+            
+            const result = value * factors[fromUnit] / factors[toUnit];
+            
+            document.getElementById('converter-result').innerHTML = `
+                <strong>${value} ${fromUnit} = ${result.toFixed(4)} ${toUnit}</strong>
+            `;
+            document.getElementById('converter-result').style.display = 'block';
+        }
+        
+        // Download notebook function
+        function downloadNotebook() {
+            // Create a text file with all the Python code examples
+            let notebookContent = '# Physics 110 Notebook: Units & Vectors\n';
+            notebookContent += '# Generated from interactive notebook\n\n';
+            
+            // Add all code examples
+            for (let i = 1; i <= 10; i++) {
+                const codeElement = document.getElementById(`code-${i}`);
+                if (codeElement) {
+                    notebookContent += `# Example ${i}\n`;
+                    notebookContent += codeElement.textContent || codeElement.innerText;
+                    notebookContent += '\n\n';
+                }
+            }
+            
+            // Create a blob and download link
+            const blob = new Blob([notebookContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'physics110_notebook_chapter1.py';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+        
+        // Draw vector diagrams
+        function drawVectorDiagrams() {
+            // Vector diagram for Example 8
+            const canvas1 = document.getElementById('vector-canvas-1');
+            const ctx1 = canvas1.getContext('2d');
+            const width1 = canvas1.parentElement.clientWidth;
+            const height1 = canvas1.parentElement.clientHeight;
+            
+            canvas1.width = width1;
+            canvas1.height = height1;
+            
+            // Set origin
+            const originX1 = width1 / 2;
+            const originY1 = height1 / 2;
+            const scale1 = 20;
+            
+            // Draw coordinate system
+            ctx1.strokeStyle = '#374151';
+            ctx1.lineWidth = 1;
+            ctx1.beginPath();
+            ctx1.moveTo(0, originY1);
+            ctx1.lineTo(width1, originY1);
+            ctx1.moveTo(originX1, 0);
+            ctx1.lineTo(originX1, height1);
+            ctx1.stroke();
+            
+            // Draw vector A (3,4)
+            ctx1.strokeStyle = '#3b82f6';
+            ctx1.lineWidth = 2;
+            ctx1.beginPath();
+            ctx1.moveTo(originX1, originY1);
+            ctx1.lineTo(originX1 + 3 * scale1, originY1 - 4 * scale1);
+            ctx1.stroke();
+            
+            // Draw vector B (2,2)
+            ctx1.strokeStyle = '#ef4444';
+            ctx1.beginPath();
+            ctx1.moveTo(originX1, originY1);
+            ctx1.lineTo(originX1 + 2 * scale1, originY1 - 2 * scale1);
+            ctx1.stroke();
+            
+            // Draw resultant A+B (5,6)
+            ctx1.strokeStyle = '#10b981';
+            ctx1.lineWidth = 3;
+            ctx1.beginPath();
+            ctx1.moveTo(originX1, originY1);
+            ctx1.lineTo(originX1 + 5 * scale1, originY1 - 6 * scale1);
+            ctx1.stroke();
+            
+            // Add labels
+            ctx1.fillStyle = '#ffffff';
+            ctx1.font = '12px Arial';
+            ctx1.fillText('A (3,4)', originX1 + 1.5 * scale1, originY1 - 2 * scale1);
+            ctx1.fillText('B (2,2)', originX1 + 1 * scale1, originY1 - 1 * scale1);
+            ctx1.fillText('A+B (5,6)', originX1 + 2.5 * scale1, originY1 - 3 * scale1);
+            
+            // Vector diagram for Example 10
+            const canvas2 = document.getElementById('vector-canvas-2');
+            const ctx2 = canvas2.getContext('2d');
+            const width2 = canvas2.parentElement.clientWidth;
+            const height2 = canvas2.parentElement.clientHeight;
+            
+            canvas2.width = width2;
+            canvas2.height = height2;
+            
+            // Set origin
+            const originX2 = width2 / 2;
+            const originY2 = height2 / 2;
+            const scale2 = 15;
+            
+            // Draw coordinate system
+            ctx2.strokeStyle = '#374151';
+            ctx2.lineWidth = 1;
+            ctx2.beginPath();
+            ctx2.moveTo(0, originY2);
+            ctx2.lineTo(width2, originY2);
+            ctx2.moveTo(originX2, 0);
+            ctx2.lineTo(originX2, height2);
+            ctx2.stroke();
+            
+            // Draw ship velocity (12,0)
+            ctx2.strokeStyle = '#3b82f6';
+            ctx2.lineWidth = 2;
+            ctx2.beginPath();
+            ctx2.moveTo(originX2, originY2);
+            ctx2.lineTo(originX2 + 12 * scale2, originY2);
+            ctx2.stroke();
+            
+            // Draw passenger velocity relative to ship (0,5)
+            ctx2.strokeStyle = '#ef4444';
+            ctx2.beginPath();
+            ctx2.moveTo(originX2 + 12 * scale2, originY2);
+            ctx2.lineTo(originX2 + 12 * scale2, originY2 - 5 * scale2);
+            ctx2.stroke();
+            
+            // Draw resultant velocity (12,5)
+            ctx2.strokeStyle = '#10b981';
+            ctx2.lineWidth = 3;
+            ctx2.beginPath();
+            ctx2.moveTo(originX2, originY2);
+            ctx2.lineTo(originX2 + 12 * scale2, originY2 - 5 * scale2);
+            ctx2.stroke();
+            
+            // Add labels
+            ctx2.fillStyle = '#ffffff';
+            ctx2.font = '12px Arial';
+            ctx2.fillText('Ship (12 m/s)', originX2 + 6 * scale2, originY2 + 15);
+            ctx2.fillText('Passenger (5 m/s)', originX2 + 12 * scale2 + 5, originY2 - 2.5 * scale2);
+            ctx2.fillText('Resultant (13 m/s)', originX2 + 6 * scale2, originY2 - 2.5 * scale2);
+            
+            // Draw angle
+            ctx2.strokeStyle = '#f59e0b';
+            ctx2.lineWidth = 1;
+            ctx2.beginPath();
+            ctx2.arc(originX2, originY2, 30, 0, Math.atan2(-5, 12));
+            ctx2.stroke();
+            
+            ctx2.fillStyle = '#f59e0b';
+            ctx2.font = '10px Arial';
+            ctx2.fillText('22.6°', originX2 + 20, originY2 - 10);
+        }
+        
+        // Draw vector diagrams when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            drawVectorDiagrams();
+            
+            // Add smooth scrolling for table of contents links
+            const tocLinks = document.querySelectorAll('a[href^="#"]');
+            tocLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 100,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+        
+        // Syntax highlighting for code cells
+        function highlightPythonCode() {
+            const codeCells = document.querySelectorAll('.code-cell');
+            codeCells.forEach(cell => {
+                let code = cell.textContent;
+                
+                // Simple Python syntax highlighting
+                code = code.replace(/\b(def|class|if|else|elif|for|while|return|import|from|as|try|except|finally|with)\b/g, '<span class="python-keyword">$1</span>');
+                code = code.replace(/\b(print|range|len|str|int|float|round)\b/g, '<span class="python-function">$1</span>');
+                code = code.replace(/#.*$/gm, '<span class="python-comment">$&</span>');
+                code = code.replace(/"([^"]*)"/g, '<span class="python-string">"$1"</span>');
+                code = code.replace(/'([^']*)'/g, '<span class="python-string">\'$1\'</span>');
+                code = code.replace(/\b(\d+\.?\d*)\b/g, '<span class="python-number">$1</span>');
+                
+                cell.innerHTML = code;
+            });
+        }
+        
+        // Apply syntax highlighting when page loads
+        document.addEventListener('DOMContentLoaded', highlightPythonCode);
+    </script>
+</body>
+</html>
