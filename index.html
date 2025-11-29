@@ -393,6 +393,38 @@
             background-color: #f8f9fa;
         }
         
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+        }
+        
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .back-to-top:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+        }
+        
         /* Responsive Improvements */
         @media (max-width: 768px) {
             .lecture-timeline::before {
@@ -423,6 +455,13 @@
                 transform: none;
                 border: none;
                 background: transparent;
+            }
+            
+            .back-to-top {
+                bottom: 20px;
+                right: 20px;
+                width: 45px;
+                height: 45px;
             }
         }
         
@@ -516,6 +555,11 @@
 </head>
 
 <body class="font-sans antialiased">
+    <!-- Back to Top Button -->
+    <button id="backToTop" class="back-to-top">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
     <!-- Navigation -->
     <nav class="bg-white sticky top-0 z-50 border-b border-gray-200 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -2747,76 +2791,6 @@
                         }, 300);
                     }
                 }, 5000);
-            }
-        }
-
-        // Course Management
-        class CourseManager {
-            constructor() {
-                this.init();
-            }
-
-            init() {
-                // Any initialization needed
-            }
-
-            enroll(courseId) {
-                // Check if user is logged in
-                if (!window.auth || !window.auth.currentUser) {
-                    window.auth.showModal('signup');
-                    return;
-                }
-
-                const course = COURSES[courseId];
-                if (!course) {
-                    window.auth.showToast('Course not found', 'error');
-                    return;
-                }
-
-                // Get current user
-                const user = window.auth.currentUser;
-                
-                // Check if user is already enrolled
-                if (user.courses && user.courses.find(c => c.id === courseId)) {
-                    window.auth.showToast(`You are already enrolled in ${course.title}`, 'info');
-                    window.router.navigateToCourse(courseId, 'home');
-                    return;
-                }
-
-                // Add course to user's enrolled courses
-                if (!user.courses) user.courses = [];
-                user.courses.push({
-                    id: courseId,
-                    status: 'enrolled',
-                    enrolledAt: new Date().toISOString(),
-                    progress: {
-                        lecturesCompleted: 0,
-                        assignmentsSubmitted: 0,
-                        quizzesCompleted: 0
-                    }
-                });
-
-                // Update user stats
-                user.stats.enrolledCourses = user.courses.filter(c => c.status === 'enrolled').length;
-
-                // Save updated user data
-                const users = JSON.parse(localStorage.getItem('harvardx_users') || '[]');
-                const userIndex = users.findIndex(u => u.id === user.id);
-                if (userIndex !== -1) {
-                    users[userIndex] = user;
-                    localStorage.setItem('harvardx_users', JSON.stringify(users));
-                    localStorage.setItem('harvardx_currentUser', JSON.stringify(user));
-                    window.auth.currentUser = user;
-                }
-
-                // Show success message and navigate to course
-                window.auth.showToast(`Successfully enrolled in ${course.title}`, 'success');
-                window.router.navigateToCourse(courseId, 'home');
-            }
-
-            completeCourse(courseId) {
-                // This would be called when a user completes a course
-                // Implementation would update user progress and issue certificate
             }
         }
 
